@@ -22,6 +22,9 @@ resource "routeros_container" "busybox" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
+- `___skip___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
 - `auto_restart_interval` (String) Specify an interval at which Container will be restarted on Container failure.
 - `check_certificate` (Boolean) Enables trust chain validation from local certificate store.
 - `cmd` (String) The main purpose of a CMD is to provide defaults for an executing container. These defaults can include an executable, or they can omit the executable, in which case you must specify an ENTRYPOINT instruction as well.

@@ -17,6 +17,8 @@ resource "routeros_ip_dhcp_client" "client" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `add_default_route` (String) Whether to install default route in routing table received from DHCP server.
 - `allow_reconfigure` (Boolean)
 - `check_gateway` (String) Method on how to check gateway reachability.

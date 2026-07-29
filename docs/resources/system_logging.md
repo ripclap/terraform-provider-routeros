@@ -18,6 +18,8 @@ resource "routeros_system_logging" "log_snmp_disk" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `disabled` (Boolean)
 - `prefix` (String) prefix added at the beginning of log messages
 - `regex` (String) Regex which will be used in order to match or not match message. If the regex is not matched, then even if topic is configured to be logged, but log message does not match regex, action will not be performed.

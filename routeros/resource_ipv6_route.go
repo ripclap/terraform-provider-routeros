@@ -55,7 +55,7 @@ func ResourceIPv6Route() *schema.Resource {
 		},
 		"gateway": {
 			Type:     schema.TypeString,
-			Required: true,
+			Optional: true,
 			Description: "Array of IP addresses or interface names. Specifies which host or interface packets should " +
 				"be sent to (IP | interface | IP%interface | IP@table[, IP | string, [..]]).",
 		},
@@ -83,10 +83,10 @@ func ResourceIPv6Route() *schema.Resource {
 		"scope": {
 			Type:     schema.TypeInt,
 			Optional: true,
-			Default:  30,
 			Description: "Used in nexthop resolution. Route can resolve nexthop only through routes that have scope " +
 				"less than or equal to the target-scope of this route.",
 			ValidateFunc: validation.IntBetween(0, 255),
+			Computed:     true,
 		},
 		"static": {
 			Type:     schema.TypeBool,
@@ -99,10 +99,10 @@ func ResourceIPv6Route() *schema.Resource {
 		"target_scope": {
 			Type:     schema.TypeInt,
 			Optional: true,
-			Default:  10,
 			Description: "Used in nexthop resolution. This is the maximum value of scope for a route through which a " +
 				"nexthop of this route can be resolved.",
 			ValidateFunc: validation.IntBetween(0, 255),
+			Computed:     true,
 		},
 		"vrf_interface": {
 			Type:        schema.TypeString,

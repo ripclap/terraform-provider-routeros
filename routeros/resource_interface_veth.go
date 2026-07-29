@@ -22,8 +22,8 @@ import (
 // https://help.mikrotik.com/docs/display/ROS/Container
 func ResourceInterfaceVeth() *schema.Resource {
 	resSchema := map[string]*schema.Schema{
-		MetaResourcePath:   PropResourcePath("/interface/veth"),
-		MetaId:             PropId(Id),
+		MetaResourcePath: PropResourcePath("/interface/veth"),
+		MetaId:           PropId(Id),
 
 		"address": {
 			Type:        schema.TypeSet,
@@ -36,23 +36,36 @@ func ResourceInterfaceVeth() *schema.Resource {
 		},
 		KeyComment:  PropCommentRw,
 		KeyDisabled: PropDisabledRw,
+		"container_mac_address": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Computed:    true,
+			Description: "MAC address presented to the container side of the veth pair.",
+		},
 		"dhcp": {
 			Type:             schema.TypeBool,
 			Optional:         true,
 			Description:      "",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
+		"dhcp_address": {
+			Type:        schema.TypeString,
+			Computed:    true,
+			Description: "Address obtained by the veth DHCP client, when dhcp is enabled.",
+		},
 		"gateway": {
-			Type:         schema.TypeString,
-			Optional:     true,
-			Description:  "Gateway IP address.",
-			ValidateFunc: validation.IsIPv4Address,
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Gateway IP address.",
+			// The device reports an empty string when no gateway is set.
+			ValidateFunc: validation.Any(validation.StringIsEmpty, validation.IsIPv4Address),
 		},
 		"gateway6": {
-			Type:         schema.TypeString,
-			Optional:     true,
-			Description:  "Gateway IPv6 address.",
-			ValidateFunc: validation.IsIPv6Address,
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Gateway IPv6 address.",
+			// The device reports an empty string when no gateway is set.
+			ValidateFunc: validation.Any(validation.StringIsEmpty, validation.IsIPv6Address),
 		},
 		KeyMacAddress: {
 			Type:         schema.TypeString,

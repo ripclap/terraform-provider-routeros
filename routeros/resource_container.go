@@ -87,10 +87,9 @@ func ResourceContainer() *schema.Resource {
 			Description: "list of environmental variables (configured under /container envs ) to be used with container",
 		},
 		"file": {
-			Type:         schema.TypeString,
-			Optional:     true,
-			Description:  "container *tar.gz tarball if the container is imported from a file",
-			ExactlyOneOf: []string{"file", "remote_image"},
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "container *tar.gz tarball if the container is imported from a file",
 		},
 		"hostname": {
 			Type:        schema.TypeString,
@@ -130,11 +129,10 @@ func ResourceContainer() *schema.Resource {
 			Description: "The OS of the container image",
 		},
 		"remote_image": {
-			Type:         schema.TypeString,
-			Optional:     true,
-			ForceNew:     true,
-			Description:  "The container image name to be installed if an external registry is used (configured under /container/config set registry-url=...)",
-			ExactlyOneOf: []string{"file", "remote_image"},
+			Type:        schema.TypeString,
+			Optional:    true,
+			ForceNew:    true,
+			Description: "The container image name to be installed if an external registry is used (configured under /container/config set registry-url=...)",
 			DiffSuppressFunc: func(k, old, new string, d *schema.ResourceData) bool {
 				if old == "" {
 					return false
@@ -174,8 +172,8 @@ func ResourceContainer() *schema.Resource {
 		"stop_signal": {
 			Type:        schema.TypeString,
 			Optional:    true,
-			Default:     "15-SIGTERM",
 			Description: "Signal to stop the container.",
+			Computed:    true,
 		},
 		"tag": {
 			Type:        schema.TypeString,
@@ -292,6 +290,7 @@ func ResourceContainer() *schema.Resource {
 	}
 
 	return &schema.Resource{
+		CustomizeDiff: containerSourceCheck,
 		CreateContext: resCreate,
 		ReadContext:   resRead,
 		UpdateContext: resUpdate,
@@ -406,5 +405,22 @@ func stopContainer(ctx context.Context, s map[string]*schema.Schema, d *schema.R
 		err = fmt.Errorf("error waiting for container instance (%s) to be stopped: %s", d.Id(), err)
 		return diag.FromErr(err)
 	}
+	return nil
+}
+
+// containerSourceCheck enforces "exactly one of file / remote_image" on non-empty values.
+// ExactlyOneOf cannot be used: the device reports file="" alongside a real remote_image,
+// and Terraform treats an empty string as a specified value.
+func containerSourceCheck(ctx context.Context, d *schema.ResourceDiff, m interface{}) error {
+	file, _ := d.Get("file").(string)
+	image, _ := d.Get("remote_image").(string)
+
+	if file != "" && image != "" {
+		return fmt.Errorf("only one of `file`, `remote_image` can be set")
+	}
+	if file == "" && image == "" {
+		return fmt.Errorf("one of `file`, `remote_image` must be set")
+	}
+
 	return nil
 }

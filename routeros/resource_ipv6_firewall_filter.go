@@ -199,8 +199,8 @@ func ResourceIPv6FirewallFilter() *schema.Resource {
 		"log": {
 			Type:        schema.TypeBool,
 			Optional:    true,
-			Default:     false,
 			Description: "Add a message to the system log.",
+			Computed:    true,
 		},
 		"log_prefix": {
 			Type:     schema.TypeString,

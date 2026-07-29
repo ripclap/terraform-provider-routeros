@@ -22,6 +22,9 @@ resource "routeros_system_script" "script" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
+- `___skip___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
 - `comment` (String)
 - `dont_require_permissions` (Boolean) Bypass permissions check when the script is being executed, useful when scripts are being executed from services that have limited permissions, such as Netwatch.
 - `launch_trigger` (String) Changing the attribute value causes the script to run.

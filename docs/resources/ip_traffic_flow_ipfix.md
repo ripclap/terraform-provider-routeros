@@ -14,6 +14,9 @@ resource "routeros_ip_traffic_flow_ipfix" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
+- `___unset___` (String) <em>A set of fields that require setting/unsetting. This is an internal service field, setting a value is not required.</em>
 - `bytes` (String) Total number of bytes processed in the flow.
 - `dst_address` (String) The destination IP address of the flow.
 - `dst_address_mask` (String) Network mask for the destination address.

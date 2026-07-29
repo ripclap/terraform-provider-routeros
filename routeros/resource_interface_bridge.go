@@ -49,6 +49,12 @@ func ResourceInterfaceBridge() *schema.Resource {
 		},
 		KeyDisabled: PropDisabledRw,
 		KeyDynamic:  PropDynamicRo,
+		"dhcpv6_snooping": {
+			Type:        schema.TypeBool,
+			Optional:    true,
+			Computed:    true,
+			Description: "Enables DHCPv6 snooping. Requires trusted-dhcpv6 on server/trunk ports. NOTE: changing this resets the switch chip.",
+		},
 		"ether_type": {
 			Type:             schema.TypeString,
 			Optional:         true,
@@ -163,6 +169,24 @@ func ResourceInterfaceBridge() *schema.Resource {
 			DiffSuppressFunc: TimeEqual,
 			RequiredWith:     []string{"igmp_snooping"},
 		},
+		"mlag_heartbeat": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Computed:    true,
+			Description: "MLAG heartbeat interval.",
+		},
+		"mlag_peer_port": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Computed:    true,
+			Description: "Interface used as the MLAG peer port, or none.",
+		},
+		"mlag_priority": {
+			Type:        schema.TypeInt,
+			Optional:    true,
+			Computed:    true,
+			Description: "MLAG priority, lower wins.",
+		},
 		"mld_version": {
 			Type:     schema.TypeInt,
 			Optional: true,
@@ -272,6 +296,12 @@ func ResourceInterfaceBridge() *schema.Resource {
 			RequiredWith:     []string{"igmp_snooping", "multicast_querier"},
 		},
 		KeyRunning: PropRunningRo,
+		"ra_guard": {
+			Type:        schema.TypeBool,
+			Optional:    true,
+			Computed:    true,
+			Description: "Enables IPv6 RA Guard: RA messages from untrusted ports are dropped. Requires trusted-ra on ports that legitimately forward RAs. NOTE: changing this resets the switch chip and flaps every port.",
+		},
 		"region_name": {
 			Type:        schema.TypeString,
 			Optional:    true,

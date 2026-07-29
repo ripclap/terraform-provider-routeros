@@ -15,6 +15,8 @@
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `add_default_route` (Boolean) Whether to add L2TP remote address as a default route.
 - `add_sni` (Boolean) Enables/disables service.
 - `authentication` (Set of String) Authentication algorithm.

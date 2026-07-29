@@ -34,11 +34,17 @@ func TestAccInterfaceListMemberTest_basic(t *testing.T) {
 }
 
 func testAccInterfaceListMemberConfig() string {
+	// The interface list must exist before a member can reference it, else RouterOS answers
+	// "input does not match any value of list".
 	return providerConfig + `
+
+resource "routeros_interface_list" "test_member_list" {
+	name = "test_member_list"
+}
 
 resource "routeros_interface_list_member" "test_list_member" {
 	interface      = "ether1"
-	list           = "list"
+	list           = routeros_interface_list.test_member_list.name
 }
 `
 }

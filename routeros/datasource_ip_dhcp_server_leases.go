@@ -55,8 +55,8 @@ func DatasourceIpDhcpServerLeases() *schema.Resource {
 							Computed: true,
 						},
 						"allow_dual_stack_queue": {
-    						Type:     schema.TypeBool,
-    						Computed: true,
+							Type:     schema.TypeBool,
+							Computed: true,
 						},
 						"blocked": { // Sample = blocked: "false"
 							Type:     schema.TypeBool,

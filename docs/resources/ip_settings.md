@@ -13,6 +13,9 @@ resource "routeros_ip_settings" "settings" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
+- `___skip___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
 - `accept_redirects` (Boolean) Whether to accept ICMP redirect messages. Typically should be enabled on the host and disabled on routers.
 - `accept_source_route` (Boolean) Whether to accept packets with the SRR option. Typically should be enabled on the router.
 - `allow_fast_path` (Boolean) Allows Fast Path.

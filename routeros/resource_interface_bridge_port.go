@@ -92,6 +92,11 @@ func ResourceInterfaceBridgePort() *schema.Resource {
 			Type:     schema.TypeString,
 			Computed: true,
 		},
+		"actual_path_cost": {
+			Type:        schema.TypeInt,
+			Computed:    true,
+			Description: "Path cost currently in effect, as computed by STP.",
+		},
 		"auto_isolate": {
 			Type:     schema.TypeBool,
 			Optional: true,
@@ -256,7 +261,9 @@ func ResourceInterfaceBridgePort() *schema.Resource {
 			Description: "Changes the state of a bridge port whether IGMP membership reports are going to be " +
 				"forwarded to this port.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
-			ValidateFunc:     validation.StringInSlice([]string{"disabled", "permanent", "temporary-query"}, false),
+			ValidateFunc: validation.StringInSlice([]string{"disabled", "permanent", "temporary-query",
+				// RouterOS REST reports permanent/disabled as true/false.
+				"true", "false"}, false),
 		},
 		"mvrp_applicant_state": {
 			Type:     schema.TypeString,
@@ -422,6 +429,18 @@ func ResourceInterfaceBridgePort() *schema.Resource {
 				"Mainly used to limit unauthorized servers to provide malicious information for users. " +
 				"This property only has effect when dhcp-snooping is set to yes.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+		},
+		"trusted_dhcpv6": {
+			Type:        schema.TypeBool,
+			Optional:    true,
+			Computed:    true,
+			Description: "Port is trusted to forward DHCPv6 server messages when bridge dhcpv6-snooping is enabled.",
+		},
+		"trusted_ra": {
+			Type:        schema.TypeBool,
+			Optional:    true,
+			Computed:    true,
+			Description: "Port is trusted to forward IPv6 Router Advertisements when bridge ra-guard is enabled.",
 		},
 		"unknown_multicast_flood": {
 			Type:             schema.TypeBool,

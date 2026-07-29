@@ -8,6 +8,8 @@
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `from` (String) Name or email address that will be shown as a receiver.
 - `password` (String, Sensitive) Password used for authenticating to an SMTP server.
 - `port` (String) SMTP server's port.

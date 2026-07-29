@@ -67,6 +67,10 @@ resource "routeros_move_items" "bridge_filter_rules" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
+- `___skip___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
+- `___unset___` (String) <em>A set of fields that require setting/unsetting. This is an internal service field, setting a value is not required.</em>
 - `arp_dst_mac_address` (String) ARP destination MAC address
 - `arp_gratuitous` (Boolean) Matches ARP gratuitous packets.
 - `arp_hardware_type` (Number) ARP hardware type. This is normally Ethernet (Type 1).

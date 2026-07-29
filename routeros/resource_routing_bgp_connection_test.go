@@ -40,12 +40,20 @@ func TestAccBGPConnectionTest_basic(t *testing.T) {
 
 func testAccBGPConnectionConfig() string {
 	return providerConfig + `
+resource "routeros_routing_bgp_instance" "test" {
+	name      = "bgp-inst-test"
+	as        = "65550"
+	router_id = "0.0.0.1"
+	cluster_id = "0.0.0.0"
+}
+
 resource "routeros_routing_bgp_connection" "test" {
-	add_path_out            = "none"
-	address_families        = "ip"
-	as                      = "65550/5"
+	// ROS 7.20 renamed 'address-families' to 'afi' and moved 'cluster-id', 'router-id'
+	// and 'input.ignore-as-path-len' to /routing/bgp/instance.
+	afi                     = "ip"
+	as                      = "65550"
+	instance                = routeros_routing_bgp_instance.test.name
 	cisco_vpls_nlri_len_fmt = "auto-bits"
-	cluster_id              = "0.0.0.0"
 	connect                 = true
 	hold_time               = "infinity"
 	input {
@@ -53,11 +61,10 @@ resource "routeros_routing_bgp_connection" "test" {
 		accept_ext_communities    = "222"
 		accept_large_communities  = "444"
 		accept_nlri               = ""
-		accept_unknown            = ""
+		add_path                  = "ip"
 		affinity                  = "alone"
 		allow_as                  = "0"
 		filter                    = ""
-		ignore_as_path_len        = true
 		limit_process_routes_ipv4 = 5
 		limit_process_routes_ipv6 = 2
 	}
@@ -73,6 +80,8 @@ resource "routeros_routing_bgp_connection" "test" {
 	name           = "neighbor-test"
 	nexthop_choice = "default"
 	output {
+		// ROS >= 7.20 replaced the top level 'add-path-out' with 'output.add-path'.
+		add_path                       = "ip"
 		affinity                       = "alone"
 		as_override                    = true
 		default_originate              = "never"
@@ -93,13 +102,12 @@ resource "routeros_routing_bgp_connection" "test" {
 		port       = "11223"
 		ttl        = "5"
 	}
-	router_id     = "0.0.0.1"
 	routing_table = "main"
 	save_to       = "bgp.dump"
 	tcp_md5_key   = "poipoipoipoipoi"
 	templates     = []
 	use_bfd       = "true"
 	vrf           = "main"
-}	  
+}
 `
 }

@@ -35,6 +35,8 @@ resource "routeros_ip_ipsec_identity" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `auth_method` (String) Authentication method:
   * digital-signature - authenticate using a pair of RSA certificates;
   * eap - IKEv2 EAP authentication for initiator (peer with a netmask of `/32`). Must be used together with eap-methods;

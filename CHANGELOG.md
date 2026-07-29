@@ -1,3 +1,68 @@
+## [2.0.0] (2026-07-29)
+
+First release of this fork. Based on upstream, rebased onto `main` after v1.99.1.
+See [FORK.md](FORK.md).
+
+### ⚠ BREAKING CHANGES
+
+* **ip-cloud:** `ddns_enabled` is now a boolean instead of a string. RouterOS reports the
+  field as `true`/`false`, so the string form produced a permanent diff for anyone who
+  wrote `"yes"`. Existing state is migrated automatically by a v0 -> v1 state upgrader
+  (`yes`/`true`/`1` -> `true`, everything else -> `false`, empty -> unset); configurations
+  must change `ddns_enabled = "yes"` to `ddns_enabled = true`.
+
+* **routing-bgp-vpn:** `instance` is now required. RouterOS rejects an entry created
+  without it (`missing =instance=`), so every working configuration already sets it. The
+  change turns a device-side 400 at apply time into a plan-time error.
+
+### Features
+
+* **coverage:** 411 resources, up from 255; 363 of 547 RouterOS menus represented. New
+  resources for menus not previously modelled, plus schema fields that RouterOS returns
+  but were dropped on read, so drift in them was invisible.
+* **routing-bgp-connection:** add `afi` and the nested `add_path` attribute for
+  input/output; deprecate `address_families` and `add_path_out`.
+* **routing-bgp-template:** add nested `add_path`.
+* **ovpn-server:** support devices that expose `/interface/ovpn-server/server` as a list
+  of named instances as well as those that expose a single settings object. The layout is
+  detected from the device response rather than a version table.
+* **ip-cloud:** add `ResourceIpCloudV0` and a reusable `stateMigrationStringToBool` helper.
+
+### Bug Fixes
+
+* **validators:** `ValidationMultiValInSlice` and `ValidationValInSlice` no longer reject an
+  empty value. A device reports an unset optional attribute as an empty string, and
+  `strings.Split("", ",")` yields `[""]`, so every affected attribute was unimportable.
+  Affects 80 attributes across 28 resources.
+* **schema:** attributes whose names begin with a digit cannot be written in HCL at all,
+  so `-generate-config-out` failed for any device that had them. `6to4_interface` becomes
+  `six_to_four_interface` and `3gpp_info`/`3gpp_raw` become `three_gpp_info`/`three_gpp_raw`,
+  mapped back to the RouterOS parameter with `MetaTransformSet`.
+* **interface-veth:** `gateway` and `gateway6` accept the empty string the device returns
+  when no gateway is set.
+* **container:** replace `ExactlyOneOf{file, remote_image}` with a `CustomizeDiff` that
+  compares non-empty values. The device reports `file=""` alongside a real `remote_image`,
+  and Terraform counts an empty string as a specified value.* **drift:** correct the 7.21 `/ip/ssh` entry. It named the Terraform attribute with
+  hyphens while the drift map is keyed by the snake_case attribute name, so the rename to
+  `password-authentication` never applied and RouterOS 7.21+ rejected the old parameter.
+* **drift:** `GetDriftMap` no longer calls `log.Fatal` when the RouterOS version is
+  unknown, which aborted the whole test binary. An unknown version now simply applies
+  no version-gated renames, and the unit tests no longer require `ROS_VERSION`.
+* **schema:** remove `Default:` from attributes RouterOS does not report, which caused a
+  permanent non-empty plan. Affects `container`, `routing_bgp_*`, `ip_firewall_*` and the
+  route resources.
+* **interface-vxlan:** `hw` no longer diffs when the device supplies it.
+* **ip-dhcp-server:** `dynamic_lease_identifiers` no longer diffs against the device
+  default `client-mac,client-id`.
+* **ip-hotspot-ip-binding:** `server` no longer diffs against the device default `all`.
+* **routing-gmp**, **routing-ospf-interface:** drop `comment`; RouterOS answers
+  `unknown parameter comment` on both `add` and `set`.
+* **tests:** `interface_ethernet` restores the factory port name on destroy. Renaming a
+  physical port cannot be undone by Terraform, so the old test left `ether2` renamed and
+  every later test referring to it failed.
+* **tests:** `interface_ethernet` skips when the target port has no link, instead of
+  asserting `running` on a port with nothing plugged in.
+
 ## [1.100.0](https://github.com/terraform-routeros/terraform-provider-routeros/compare/v1.99.1...v1.100.0) (2026-03-13)
 
 ### Features

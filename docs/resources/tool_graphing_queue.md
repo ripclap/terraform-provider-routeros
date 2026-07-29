@@ -17,6 +17,8 @@ resource "routeros_tool_graphing_queue" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `allow_address` (String) IP address range from which is allowed to access graphing information.
 - `allow_target` (Boolean) Whether to allow access to graphs from queue's target-address.
 - `disabled` (Boolean)

@@ -74,7 +74,7 @@ func ResourceToolNetwatch() *schema.Resource {
 			Description:      "The time interval between probe tests.",
 			DiffSuppressFunc: TimeEqual,
 		},
-		KeyName: PropName("Task name."),
+		KeyName: PropNameOptional("Task name."),
 		"src_address": {
 			Type:     schema.TypeString,
 			Optional: true,

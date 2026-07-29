@@ -13,6 +13,8 @@ resource "routeros_ip_tftp_settings" "tftp_settings" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `max_block_size` (Number) Maximum accepted block size value. During transfer negotiation phase, RouterOS device will not negotiate larger value than this.
 
 ### Read-Only

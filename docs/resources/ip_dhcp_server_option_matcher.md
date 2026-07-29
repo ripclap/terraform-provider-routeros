@@ -26,6 +26,8 @@ resource "routeros_ip_dhcp_server_option_matcher" "dhcp1_ip_by_vendor_class" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `address_pool` (String) IP pool, from which to take IP addresses for the clients. If set to static-only, then only the clients that have a static lease (added in lease submenu) will be allowed.
 - `comment` (String)
 - `disabled` (Boolean)

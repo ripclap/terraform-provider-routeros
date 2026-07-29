@@ -62,6 +62,8 @@ resource "routeros_interface_ovpn_server" "user1" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `auth` (Set of String) Authentication methods that the server will accept.
 - `certificate` (String) Name of the certificate that the OVPN server will use.
 - `cipher` (Set of String) Allowed ciphers.
@@ -73,6 +75,7 @@ resource "routeros_interface_ovpn_server" "user1" {
 - `mac_address` (String) Automatically generated MAC address of the server.
 - `max_mtu` (Number) Maximum Transmission Unit. Max packet size that the OVPN interface will be able to send without packet fragmentation.
 - `mode` (String) Layer3 or layer2 tunnel mode (alternatively tun, tap)
+- `name` (String) Name of the server instance to manage. Newer RouterOS versions keep a list of OVPN servers instead of a single settings object; when the attribute is omitted the first (default) instance is used. The attribute is ignored on devices that still expose a single object.
 - `netmask` (Number) Subnet mask to be applied to the client.
 - `port` (Number) Port to run the server on.
 - `protocol` (String) indicates the protocol to use when connecting with the remote endpoint.

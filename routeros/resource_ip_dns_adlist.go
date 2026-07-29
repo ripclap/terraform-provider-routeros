@@ -22,6 +22,12 @@ func ResourceDnsAdlist() *schema.Resource {
 		MetaSkipFields:   PropSkipFields("match_count", "name_count"),
 
 		KeyDisabled: PropDisabledRw,
+		"comment": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Computed:    true,
+			Description: "Short description of the adlist entry.",
+		},
 		"file": {
 			Type:         schema.TypeString,
 			Optional:     true,

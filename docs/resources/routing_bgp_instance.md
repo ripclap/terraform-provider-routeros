@@ -16,6 +16,8 @@ resource "routeros_routing_bgp_instance" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `as` (String) 32-bit BGP autonomous system number. Value can be entered in AS-Plain and AS-Dot formats. The parameter is also used to set up the BGP confederation, in the following format: confederation_as/as. For example, if your AS is 34 and your confederation AS is 43, then as configuration should be as=43/34.
 - `cluster_id` (String) In case this instance is a route reflector: the cluster ID of the router reflector cluster to this instance belongs. This attribute helps to recognize routing updates that come from another route reflector in this cluster and avoid routing information looping. Note that normally there is only one route reflector in a cluster; in this case, `cluster-id` does not need to be configured and BGP router ID is used instead.
 - `comment` (String)

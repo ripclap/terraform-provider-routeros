@@ -613,6 +613,12 @@ var (
 				return
 			}
 
+			// An unset optional attribute reads back as an empty string, which is not a
+			// value to validate against the list.
+			if v == "" {
+				return
+			}
+
 			var negative []string
 			if mikrotikNegative {
 				for _, str := range valid {
@@ -655,6 +661,12 @@ var (
 					Detail:   fmt.Sprintf("Value should be a string: %v (type = %T)", v, v),
 				})
 
+				return
+			}
+
+			// An unset optional attribute reads back as an empty string, which is not a
+			// value to validate against the list.
+			if v == "" {
 				return
 			}
 
@@ -911,10 +923,10 @@ var (
 // the ROS API omits it for single hosts. ImplicitSingleHostCIDR should only be used where ROS does otherwise
 // admit a prefix length, i.e. `192.168.1.2/24` would both write and read back as such for the same parameter.
 func ImplicitSingleHostCIDR4(k, old, new string, d *schema.ResourceData) bool {
-	return new == old + "/32"
+	return new == old+"/32"
 }
 func ImplicitSingleHostCIDR6(k, old, new string, d *schema.ResourceData) bool {
-	return new == old + "/128"
+	return new == old+"/128"
 }
 
 func buildReadFilter(m map[string]any) []string {

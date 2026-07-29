@@ -21,6 +21,8 @@ resource "routeros_ip_dns_forwarders" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `comment` (String)
 - `disabled` (Boolean)
 - `dns_servers` (Set of String) An IP address or DNS name of a domain name server. Can contain multiple records.

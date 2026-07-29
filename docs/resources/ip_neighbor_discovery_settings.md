@@ -16,6 +16,8 @@ resource "routeros_ip_neighbor_discovery_settings" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `discover_interface_list` (String) Interface list on which members the discovery protocol will run on.
 - `discover_interval` (String) An option to adjust the frequency at which neighbor discovery packets are transmitted. The setting is available since RouterOS version 7.16.
 - `lldp_dcbx` (Boolean) Whether to send Data Center Bridging Capabilities Exchange Protocol (DCBX) TLVs, which allows to communicate switch QoS settings and capabilities with other neighboring devices using LLDP. **Only applies to CRS3xx, CRS5xx, CCR2116 and CCR2216 devices.**

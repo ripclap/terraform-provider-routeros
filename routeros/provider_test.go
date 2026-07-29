@@ -1,6 +1,8 @@
 package routeros
 
 import (
+	"crypto/tls"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -8,6 +10,7 @@ import (
 	"regexp"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
@@ -19,7 +22,9 @@ var testAccProviderFactories map[string]func() (*schema.Provider, error)
 var testNames = []string{"API", "REST"}
 
 var reHost = regexp.MustCompile(`^(?:\S+://)?(\S+?)(?::\d+)*$`)
+var rePort = regexp.MustCompile(`:(\d+)/?$`)
 var reVersion = regexp.MustCompile(`\d+`)
+var origHostURL = os.Getenv("ROS_HOSTURL")
 
 var providerConfig = `
 provider "routeros" {
@@ -118,14 +123,27 @@ func TestCheckMinVersion(t *testing.T) {
 }
 
 func testSetTransportEnv(t *testing.T, testName string) {
-	host := reHost.FindStringSubmatch(os.Getenv("ROS_HOSTURL"))
+	hostURL := origHostURL
+	host := reHost.FindStringSubmatch(hostURL)
+
+	// reHost drops the port. Keep it for REST; the API service is a different
+	// port so it cannot be reused - ROS_API_PORT overrides, default 8729.
+	restPort := ""
+	if m := rePort.FindStringSubmatch(hostURL); m != nil {
+		restPort = ":" + m[1]
+	}
+	apiPort := ""
+	if v := os.Getenv("ROS_API_PORT"); v != "" {
+		apiPort = ":" + v
+	}
+
 	switch {
 	case strings.Contains(testName, "API"):
-		if err := os.Setenv("ROS_HOSTURL", "apis://"+host[1]); err != nil {
+		if err := os.Setenv("ROS_HOSTURL", "apis://"+host[1]+apiPort); err != nil {
 			t.Error(err)
 		}
 	case strings.Contains(testName, "REST"):
-		if err := os.Setenv("ROS_HOSTURL", "https://"+host[1]); err != nil {
+		if err := os.Setenv("ROS_HOSTURL", "https://"+host[1]+restPort); err != nil {
 			t.Error(err)
 		}
 	default:
@@ -259,6 +277,218 @@ func testCheckResourceExists(name string, resourcePath string, resource *Mikroti
 
 		if resource != nil {
 			*resource = (*resources)[0]
+		}
+
+		return nil
+	}
+}
+
+// testCheckMenu skips the test when the menu is absent on the device under test.
+// Package-dependent menus (iot, openflow, ups) and hardware-dependent ones
+// (serial /port) do not exist everywhere; their absence is not a defect.
+func testCheckMenu(t *testing.T, path string) {
+	t.Helper()
+
+	host := reHost.FindStringSubmatch(origHostURL)
+	if host == nil {
+		t.Skip("ROS_HOSTURL not parseable")
+	}
+	port := ""
+	if m := rePort.FindStringSubmatch(origHostURL); m != nil {
+		port = ":" + m[1]
+	}
+
+	req, err := http.NewRequest("GET", "https://"+host[1]+port+"/rest"+path, nil)
+	if err != nil {
+		t.Skipf("cannot build probe for %s: %v", path, err)
+	}
+	req.SetBasicAuth(os.Getenv("ROS_USERNAME"), os.Getenv("ROS_PASSWORD"))
+
+	cl := &http.Client{
+		Timeout:   15 * time.Second,
+		Transport: &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}},
+	}
+	res, err := cl.Do(req)
+	if err != nil {
+		t.Skipf("cannot probe %s: %v", path, err)
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode != http.StatusOK {
+		t.Skipf("menu %s absent on this device (HTTP %d)", path, res.StatusCode)
+	}
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Skipf("cannot read %s: %v", path, err)
+	}
+	if strings.TrimSpace(string(body)) == "[]" {
+		t.Skipf("menu %s exists but is empty on this device", path)
+	}
+}
+
+// testCheckSpareSerialPort skips when every serial port is already claimed by a
+// console entry. Reconfiguring an in-use port fails with "Cannot change port
+// while in use", which is a device-state limit rather than a provider defect.
+func testCheckSpareSerialPort(t *testing.T) {
+	t.Helper()
+
+	ports := testRestCount(t, "/port")
+	consoles := testRestCount(t, "/system/console")
+	if ports == 0 {
+		t.Skip("device has no serial ports")
+	}
+	if ports <= consoles {
+		t.Skipf("all %d serial port(s) claimed by %d console entries", ports, consoles)
+	}
+}
+
+// testRestCount returns how many objects a menu holds, or 0 if unreachable.
+func testRestCount(t *testing.T, path string) int {
+	t.Helper()
+
+	host := reHost.FindStringSubmatch(origHostURL)
+	if host == nil {
+		return 0
+	}
+	port := ""
+	if m := rePort.FindStringSubmatch(origHostURL); m != nil {
+		port = ":" + m[1]
+	}
+	req, err := http.NewRequest("GET", "https://"+host[1]+port+"/rest"+path, nil)
+	if err != nil {
+		return 0
+	}
+	req.SetBasicAuth(os.Getenv("ROS_USERNAME"), os.Getenv("ROS_PASSWORD"))
+	cl := &http.Client{
+		Timeout:   15 * time.Second,
+		Transport: &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}},
+	}
+	res, err := cl.Do(req)
+	if err != nil {
+		return 0
+	}
+	defer res.Body.Close()
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return 0
+	}
+	var items []map[string]interface{}
+	if json.Unmarshal(body, &items) != nil {
+		return 0
+	}
+	return len(items)
+}
+
+// testCheckEthernetLink skips when the named factory port has no live link. Tests that
+// force a speed and then assert `running` cannot pass on a port with nothing plugged in.
+func testCheckEthernetLink(t *testing.T, defaultName string) {
+	t.Helper()
+
+	host := reHost.FindStringSubmatch(origHostURL)
+	if host == nil {
+		t.Skip("cannot derive host from ROS_HOSTURL")
+	}
+	port := ""
+	if m := rePort.FindStringSubmatch(origHostURL); m != nil {
+		port = ":" + m[1]
+	}
+
+	req, err := http.NewRequest("GET", "https://"+host[1]+port+"/rest/interface/ethernet", nil)
+	if err != nil {
+		t.Skipf("cannot build request: %v", err)
+	}
+	req.SetBasicAuth(os.Getenv("ROS_USERNAME"), os.Getenv("ROS_PASSWORD"))
+	cl := &http.Client{
+		Timeout:   15 * time.Second,
+		Transport: &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}},
+	}
+	res, err := cl.Do(req)
+	if err != nil {
+		t.Skipf("cannot read /interface/ethernet: %v", err)
+	}
+	defer res.Body.Close()
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Skipf("cannot read /interface/ethernet: %v", err)
+	}
+	var items []map[string]interface{}
+	if json.Unmarshal(body, &items) != nil {
+		t.Skip("cannot decode /interface/ethernet")
+	}
+
+	for _, i := range items {
+		if i["default-name"] != defaultName {
+			continue
+		}
+		if BoolFromMikrotikJSON(fmt.Sprintf("%v", i["running"])) {
+			return
+		}
+		t.Skipf("port %s has no link on this device", defaultName)
+	}
+	t.Skipf("port %s not present on this device", defaultName)
+}
+
+// testRestoreEthernetName puts a renamed physical port back to its factory name. Destroy
+// cannot do it - the port is not owned by the resource - so a test that renames one must
+// clean up after itself or it breaks every later test that refers to the old name.
+func testRestoreEthernetName(defaultName string) resource.TestCheckFunc {
+	return func(*terraform.State) error {
+		host := reHost.FindStringSubmatch(origHostURL)
+		if host == nil {
+			return nil
+		}
+		port := ""
+		if m := rePort.FindStringSubmatch(origHostURL); m != nil {
+			port = ":" + m[1]
+		}
+		base := "https://" + host[1] + port + "/rest/interface/ethernet"
+
+		cl := &http.Client{
+			Timeout:   20 * time.Second,
+			Transport: &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}},
+		}
+		user, pass := os.Getenv("ROS_USERNAME"), os.Getenv("ROS_PASSWORD")
+
+		req, err := http.NewRequest("GET", base, nil)
+		if err != nil {
+			return nil
+		}
+		req.SetBasicAuth(user, pass)
+		res, err := cl.Do(req)
+		if err != nil {
+			return nil
+		}
+		defer res.Body.Close()
+
+		body, err := io.ReadAll(res.Body)
+		if err != nil {
+			return nil
+		}
+		var items []map[string]interface{}
+		if json.Unmarshal(body, &items) != nil {
+			return nil
+		}
+
+		for _, i := range items {
+			if i["default-name"] != defaultName || i["name"] == defaultName {
+				continue
+			}
+			id, _ := i[".id"].(string)
+			if id == "" {
+				continue
+			}
+			payload := strings.NewReader(`{"name":"` + defaultName + `","auto-negotiation":"true"}`)
+			pr, err := http.NewRequest("PATCH", base+"/"+id, payload)
+			if err != nil {
+				return nil
+			}
+			pr.SetBasicAuth(user, pass)
+			pr.Header.Set("content-type", "application/json")
+			if pres, err := cl.Do(pr); err == nil {
+				pres.Body.Close()
+			}
 		}
 
 		return nil

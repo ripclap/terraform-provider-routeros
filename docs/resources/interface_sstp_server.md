@@ -8,6 +8,8 @@
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `authentication` (Set of String) Authentication algorithm.
 - `certificate` (String) Name of the certificate in use.
 - `ciphers` (String) Allowed ciphers.

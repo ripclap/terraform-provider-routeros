@@ -32,6 +32,8 @@ resource "routeros_routing_bgp_evpn" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `comment` (String)
 - `disabled` (Boolean)
 - `export` (Block List, Max: 1) A group of parameters associated with the route export. (see [below for nested schema](#nestedblock--export))

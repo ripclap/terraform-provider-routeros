@@ -57,12 +57,15 @@ func ResourceRoutingBgpTemplate() *schema.Resource {
 		MetaResourcePath: PropResourcePath("/routing/bgp/template"),
 		MetaId:           PropId(Id),
 
+		// Removed in ROS 7.20 in favour of 'input.add-path' / 'output.add-path'. No schema Default: it would
+		// send 'add-path-out' on every create, which a >=7.20 device rejects with "unknown parameter add-path-out".
 		"add_path_out": {
-			Type:         schema.TypeString,
-			Optional:     true,
-			Description:  "",
-			Default:      "none",
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Enables BGP Additional Paths (RFC 7911) advertisement for all address families. " +
+				"Removed in RouterOS v7.20, use the 'output.add_path' attribute instead.",
 			ValidateFunc: validation.StringInSlice([]string{"all", "none"}, false),
+			Deprecated:   DeprecatedInfo("7.20"),
 		},
 		"address_families": {
 			Type:     schema.TypeString,
@@ -128,6 +131,15 @@ func ResourceRoutingBgpTemplate() *schema.Resource {
 			MaxItems:    1,
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
+					// Since ROS 7.20 the top level 'add-path-out' attribute was replaced
+					// by the per-direction 'input.add-path' / 'output.add-path' attributes.
+					"add_path": {
+						Type:     schema.TypeString,
+						Optional: true,
+						Description: "A list of address families for which BGP Additional Paths (RFC 7911) are " +
+							"accepted from the peer. Available since RouterOS v7.20.",
+						ValidateDiagFunc: ValidationMultiValInSlice([]string{"ip", "ipv6"}, false, false),
+					},
 					"accept_comunities": {
 						Type:     schema.TypeString,
 						Optional: true,
@@ -325,6 +337,15 @@ func ResourceRoutingBgpTemplate() *schema.Resource {
 			MaxItems:    1,
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
+					// Since ROS 7.20 the top level 'add-path-out' attribute was replaced
+					// by the per-direction 'input.add-path' / 'output.add-path' attributes.
+					"add_path": {
+						Type:     schema.TypeString,
+						Optional: true,
+						Description: "A list of address families for which BGP Additional Paths (RFC 7911) are " +
+							"advertised to the peer. Available since RouterOS v7.20.",
+						ValidateDiagFunc: ValidationMultiValInSlice([]string{"ip", "ipv6"}, false, false),
+					},
 					// May be "0" ?!?
 					// affinity (afi | alone | instance | main | remote-as | vrf; Default: )
 					"affinity": {

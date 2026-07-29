@@ -18,6 +18,9 @@ resource "routeros_interface_wireless_connect_list" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
+- `___ts___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
 - `allow_signal_out_of_range` (String)
 - `area_prefix` (String) Rule matches if area value of AP (a proprietary extension) begins with specified value.area value is a proprietary extension.
 - `comment` (String)

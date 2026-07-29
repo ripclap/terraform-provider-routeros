@@ -1,3 +1,5 @@
+> **This is a fork.** See [FORK.md](FORK.md) for what differs from upstream and [NOTICE](NOTICE) for attribution.
+
 # Terraform Provider RouterOS
 
 ![module testing workflow](https://github.com/GNewbury1/terraform-provider-routeros/actions/workflows/release.yml/badge.svg?branch=main)

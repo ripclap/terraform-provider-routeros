@@ -1,4 +1,4 @@
-module github.com/terraform-routeros/terraform-provider-routeros
+module github.com/ripclap/terraform-provider-routeros
 
 go 1.25.0
 

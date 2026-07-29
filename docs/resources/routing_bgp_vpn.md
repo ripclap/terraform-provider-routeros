@@ -12,6 +12,7 @@ resource "routeros_routing_bgp_vpn" "test" {
   import {
     route_targets = ["1:2"]
   }
+  instance                = "bgp-instance-1"
   label_allocation_policy = "per-vrf"
   name                    = "bgp-mpls-vpn-test"
   route_distinguisher     = "1.2.3.4:1"
@@ -24,15 +25,17 @@ resource "routeros_routing_bgp_vpn" "test" {
 
 ### Required
 
+- `instance` (String) Name of the BGP instance (`/routing/bgp/instance`) this VPN is assigned to. RouterOS rejects an entry created without it: `missing =instance=`.
 - `name` (String) VPN instance name.
 - `route_distinguisher` (String) Helps to distinguish between overlapping routes from multiple VRFs. Should be unique per VRF. Accepts 3 types of formats.
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `disabled` (Boolean)
 - `export` (Block List, Max: 1) A group of parameters associated with the route export. (see [below for nested schema](#nestedblock--export))
 - `import` (Block List, Max: 1) A group of parameters associated with the route import. (see [below for nested schema](#nestedblock--import))
-- `instance` (String) Name of the instance this VPN is assigned to.
 - `label_allocation_policy` (String) Label allocationpolicy.
 - `vrf` (String) The VRF table this resource operates on.
 

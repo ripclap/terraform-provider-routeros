@@ -71,21 +71,37 @@ func ResourceRoutingBgpConnection() *schema.Resource {
 		MetaId:             PropId(Id),
 		MetaSetUnsetFields: PropSetUnsetFields("hold_time", "keepalive_time"),
 
+		// This attribute was removed in ROS 7.20 in favour of 'input.add-path' / 'output.add-path'.
 		"add_path_out": {
-			Type:         schema.TypeString,
-			Optional:     true,
-			Description:  "",
-			Default:      "none",
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Enables BGP Additional Paths (RFC 7911) advertisement for all address families. " +
+				"Removed in RouterOS v7.20, use the 'output.add_path' attribute instead.",
 			ValidateFunc: validation.StringInSlice([]string{"all", "none"}, false),
+			Computed:     true,
+			Deprecated:   DeprecatedInfo("7.20"),
 		},
+		// Renamed to 'afi' in ROS 7.20.
 		"address_families": {
 			Type:     schema.TypeString,
 			Optional: true,
-			Default:  "ip",
 			Description: "List of address families about which this peer will exchange routing information. The " +
 				"remote peer must support (they usually do) BGP capabilities optional parameter to " +
-				"negotiate any other families than IP.",
+				"negotiate any other families than IP. Renamed to 'afi' in RouterOS v7.20.",
 			ValidateDiagFunc: ValidationMultiValInSlice([]string{"ip", "ipv6", "l2vpn", "l2vpn-cisco", "vpnv4"}, false, false),
+			Computed:         true,
+			Deprecated:       DeprecatedInfo("7.20"),
+		},
+		// Since ROS 7.20 this attribute replaces 'address-families'.
+		"afi": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "List of address families about which this peer will exchange routing information. " +
+				"The remote peer must support (they usually do) the BGP capabilities optional parameter to " +
+				"negotiate any other families than IP. Replaces 'address_families' since RouterOS v7.20.",
+			ValidateDiagFunc: ValidationMultiValInSlice(
+				[]string{"evpn", "ip", "ipv6", "l2vpn", "l2vpn-cisco", "vpnv4", "vpnv6"}, false, false),
+			Computed: true,
 		},
 		"as": {
 			Type:     schema.TypeString,
@@ -117,8 +133,8 @@ func ResourceRoutingBgpConnection() *schema.Resource {
 		"connect": {
 			Type:        schema.TypeBool,
 			Optional:    true,
-			Default:     true,
 			Description: "Whether to allow the router to initiate the connection.",
+			Computed:    true,
 		},
 		"hold_time": {
 			Type:     schema.TypeString,
@@ -143,6 +159,15 @@ func ResourceRoutingBgpConnection() *schema.Resource {
 			MaxItems:    1,
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
+					// Since ROS 7.20 the top level 'add-path-out' attribute was replaced
+					// by the per-direction 'input.add-path' / 'output.add-path' attributes.
+					"add_path": {
+						Type:     schema.TypeString,
+						Optional: true,
+						Description: "A list of address families for which BGP Additional Paths (RFC 7911) are " +
+							"accepted from the peer. Available since RouterOS v7.20.",
+						ValidateDiagFunc: ValidationMultiValInSlice([]string{"ip", "ipv6"}, false, false),
+					},
 					"accept_communities": {
 						Type:     schema.TypeString,
 						Optional: true,
@@ -309,15 +334,15 @@ func ResourceRoutingBgpConnection() *schema.Resource {
 		"keepalive_time": {
 			Type:             schema.TypeString,
 			Optional:         true,
-			Default:          "3m",
 			Description:      "How long to keep the BGP session open after the last received 'keepalive' message.",
 			DiffSuppressFunc: TimeEqual,
+			Computed:         true,
 		},
 		"listen": {
 			Type:        schema.TypeBool,
 			Optional:    true,
-			Default:     true,
 			Description: "Whether to listen for incoming connections.",
+			Computed:    true,
 		},
 		"local": {
 			Type:        schema.TypeList,
@@ -368,7 +393,7 @@ func ResourceRoutingBgpConnection() *schema.Resource {
 						Type:         schema.TypeInt,
 						Optional:     true,
 						Description:  "Time To Live (hop limit) that will be recorded in sent TCP packets.",
-						ValidateFunc: validation.IntBetween(1, 255),
+						ValidateFunc: validation.IntBetween(0, 255),
 					},
 				},
 			},
@@ -389,7 +414,6 @@ func ResourceRoutingBgpConnection() *schema.Resource {
 		"nexthop_choice": {
 			Type:     schema.TypeString,
 			Optional: true,
-			Default:  "default",
 			Description: "Affects the outgoing NEXT_HOP attribute selection. Note that next-hops set in filters " +
 				"always take precedence. Also note that the next-hop is not changed on route reflection, " +
 				"except when it's set in the filter. default - select the next-hop as described in RFC " +
@@ -398,6 +422,7 @@ func ResourceRoutingBgpConnection() *schema.Resource {
 				"i.e. if the route has BGP NEXT_HOP attribute, then use it as the next-hop, otherwise, " +
 				"fall back to the default case.",
 			ValidateFunc: validation.StringInSlice([]string{"default", "force-self", "propagate"}, false),
+			Computed:     true,
 		},
 		"output": {
 			Type:        schema.TypeList,
@@ -406,6 +431,15 @@ func ResourceRoutingBgpConnection() *schema.Resource {
 			MaxItems:    1,
 			Elem: &schema.Resource{
 				Schema: map[string]*schema.Schema{
+					// Since ROS 7.20 the top level 'add-path-out' attribute was replaced
+					// by the per-direction 'input.add-path' / 'output.add-path' attributes.
+					"add_path": {
+						Type:     schema.TypeString,
+						Optional: true,
+						Description: "A list of address families for which BGP Additional Paths (RFC 7911) are " +
+							"advertised to the peer. Available since RouterOS v7.20.",
+						ValidateDiagFunc: ValidationMultiValInSlice([]string{"ip", "ipv6"}, false, false),
+					},
 					// May be "0" ?!?
 					// affinity (afi | alone | instance | main | remote-as | vrf; Default: )
 					"affinity": {
@@ -429,10 +463,12 @@ func ResourceRoutingBgpConnection() *schema.Resource {
 						DiffSuppressFunc: AlwaysPresentNotUserProvided,
 					},
 					"default_originate": {
-						Type:         schema.TypeString,
-						Optional:     true,
-						Description:  "Specifies default route (0.0.0.0/0) distribution method.",
-						ValidateFunc: validation.StringInSlice([]string{"always", "if-installed", "never"}, false),
+						Type:        schema.TypeString,
+						Optional:    true,
+						Description: "Specifies default route (0.0.0.0/0) distribution method.",
+						ValidateFunc: validation.StringInSlice([]string{"always", "if-installed", "never",
+							// RouterOS omits this field entirely when unset; the generator emits "".
+							""}, false),
 					},
 					"default_prepend": {
 						Type:         schema.TypeInt,
@@ -536,7 +572,7 @@ func ResourceRoutingBgpConnection() *schema.Resource {
 						Description: "Acceptable minimum Time To Live, the hop limit for this TCP connection. For " +
 							"example, if 'ttl=255' then only single-hop neighbors will be able to establish the " +
 							"connection. This property only affects EBGP peers.",
-						ValidateFunc: validation.IntBetween(1, 255),
+						ValidateFunc: validation.IntBetween(0, 255),
 					},
 				},
 			},

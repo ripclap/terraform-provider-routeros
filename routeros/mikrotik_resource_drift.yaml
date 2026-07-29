@@ -35,5 +35,5 @@
       mt: list
 7.21:
   /ip/ssh:
-    - tf: always-allow-password-login
+    - tf: always_allow_password_login
       mt: password-authentication

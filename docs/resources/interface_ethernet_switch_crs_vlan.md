@@ -18,6 +18,8 @@ resource "routeros_interface_ethernet_switch_crs_vlan" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `comment` (String)
 - `disabled` (Boolean)
 - `flood` (Boolean) Enables or disables forced VLAN flooding per VLAN. If the feature is enabled, the result of the destination MAC lookup in the UFDB or MFDB is ignored,and the packet is forced to flood in the VLAN.

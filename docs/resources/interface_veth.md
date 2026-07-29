@@ -20,8 +20,11 @@ resource "routeros_interface_veth" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `address` (Set of String) Ip address.
 - `comment` (String)
+- `container_mac_address` (String) MAC address presented to the container side of the veth pair.
 - `dhcp` (Boolean)
 - `disabled` (Boolean)
 - `gateway` (String) Gateway IP address.
@@ -30,6 +33,7 @@ resource "routeros_interface_veth" "test" {
 
 ### Read-Only
 
+- `dhcp_address` (String) Address obtained by the veth DHCP client, when dhcp is enabled.
 - `id` (String) The ID of this resource.
 - `running` (Boolean)
 

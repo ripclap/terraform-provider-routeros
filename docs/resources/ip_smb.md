@@ -16,6 +16,8 @@ resource "routeros_ip_smb" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `comment` (String) Set comment for the server.
 - `domain` (String) Name of Windows Workgroup.
 - `enabled` (String) The default value is 'auto'. This means that the SMB server will automatically be enabled when the first non-disabled SMB share is configured under '/ip smb share'.

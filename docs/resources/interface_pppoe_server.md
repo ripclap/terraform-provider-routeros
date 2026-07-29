@@ -21,6 +21,8 @@ resource "routeros_interface_pppoe_server" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `authentication` (Set of String) Authentication algorithm.
 - `comment` (String)
 - `default_profile` (String)

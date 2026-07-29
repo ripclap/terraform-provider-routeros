@@ -22,7 +22,11 @@ resource "routeros_ip_dhcp_server" "server" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `add_arp` (Boolean) Whether to add dynamic ARP entry.
+- `add_dns_entries` (Boolean) Automatically create DNS records for leases issued by this server.
+- `add_dns_entries_suffix` (String) DNS suffix appended to automatically created lease records.
 - `address_lists` (Set of String) Address list to which address will be added if lease is bound.
 - `address_pool` (String) IP pool, from which to take IP addresses for the clients. If set to static-only, then only the clients that have a static lease (added in lease submenu) will be allowed.
 - `allow_dual_stack_queue` (Boolean) Creates a single simple queue entry for both IPv4 and IPv6 addresses, uses the MAC address and DUID for identification. Requires IPv6 DHCP Server to have this option enabled as well to work properly.

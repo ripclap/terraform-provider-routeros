@@ -20,6 +20,8 @@ resource "routeros_routing_ospf_area_range" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `advertise` (Boolean) Whether to create a summary LSA and advertise it to the adjacent areas.
 - `comment` (String)
 - `cost` (Number) The cost of the summary LSA this range will createdefault - use the largest cost of all routes used (i.e. routes that fall within this range).

@@ -1,9 +1,17 @@
 package routeros
 
 import (
+	"crypto/tls"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"os"
 	"testing"
+	"time"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
+	"github.com/hashicorp/terraform-plugin-testing/terraform"
 )
 
 const testSystemCertificatesImportAddress = "routeros_system_certificate.external"
@@ -31,19 +39,84 @@ func TestAccSystemCertificatesTest_import(t *testing.T) {
 						Config: testAccSystemCertificatesImportConfig(),
 						Check: resource.ComposeTestCheckFunc(
 							testResourcePrimaryInstanceId(testSystemCertificatesImportAddress),
-							// external_crt
 							testCheckResourceExists("routeros_system_certificate.external", "/certificate", &externalCrt),
 							testCheckMikrotikItemAttr("routeros_system_certificate.external", &externalCrt, "name", "external.crt"),
 							resource.TestCheckResourceAttr("routeros_system_certificate.external", "name", "external.crt"),
 							resource.TestCheckResourceAttr("routeros_system_certificate.external", "common_name", "External Certificate"),
 							resource.TestCheckResourceAttr("routeros_system_certificate.external", "private_key", "true"),
+							// The import consumes the files it reads, see below.
+							testCheckImportSourceFilesConsumed("external.crt", "external.key"),
 						),
+						// /certificate/import moves the certificate and key out of /file into the certificate store, so the
+						// two routeros_file resources no longer exist and Terraform expectedly plans them for re-creation.
+						ExpectNonEmptyPlan: true,
 					},
 				},
 			})
 
 		})
 	}
+}
+
+// testCheckImportSourceFilesConsumed asserts that RouterOS removed the given files from /file,
+// which is what it does with the source files of a successful /certificate/import.
+func testCheckImportSourceFilesConsumed(names ...string) resource.TestCheckFunc {
+	return func(s *terraform.State) error {
+		present, ok := testCertificateFileNames()
+		if !ok {
+			return fmt.Errorf("cannot read /file from the device under test")
+		}
+
+		for _, name := range names {
+			if present[name] {
+				return fmt.Errorf("%v is still present in /file, the certificate import did not "+
+					"consume it", name)
+			}
+		}
+
+		return nil
+	}
+}
+
+// testCertificateFileNames returns the set of names in /file. Only the name field is requested:
+// the contents of a binary file would not survive being decoded as a JSON string.
+func testCertificateFileNames() (map[string]bool, bool) {
+	host := reHost.FindStringSubmatch(origHostURL)
+	if host == nil {
+		return nil, false
+	}
+	port := ""
+	if m := rePort.FindStringSubmatch(origHostURL); m != nil {
+		port = ":" + m[1]
+	}
+	req, err := http.NewRequest("GET", "https://"+host[1]+port+"/rest/file?.proplist=name", nil)
+	if err != nil {
+		return nil, false
+	}
+	req.SetBasicAuth(os.Getenv("ROS_USERNAME"), os.Getenv("ROS_PASSWORD"))
+	cl := &http.Client{
+		Timeout:   15 * time.Second,
+		Transport: &http.Transport{TLSClientConfig: &tls.Config{InsecureSkipVerify: true}},
+	}
+	res, err := cl.Do(req)
+	if err != nil {
+		return nil, false
+	}
+	defer res.Body.Close()
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, false
+	}
+	var items []map[string]string
+	if json.Unmarshal(body, &items) != nil {
+		return nil, false
+	}
+
+	names := make(map[string]bool, len(items))
+	for _, item := range items {
+		names[item["name"]] = true
+	}
+	return names, true
 }
 
 func testAccSystemCertificatesImportConfig() string {
@@ -75,12 +148,12 @@ nzDdbYN6/yUiMqapW2xZaT7ZFnbEai4n9/utgtEDnfKHlZvZj2kRhvYoWrvTkt/W
 Sk+abxJ+NMQoh+S5d73niu1CO8uqQjOd8BoSOurURsOh
 -----END ENCRYPTED PRIVATE KEY-----
 EOT
-}  
+}
 
 resource "routeros_file" "cert" {
 	name     = "external.crt"
 	contents = data.routeros_x509.cert.pem
-}  
+}
 
 resource "routeros_system_certificate" "external" {
 	name        = "external.crt"

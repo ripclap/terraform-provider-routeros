@@ -25,7 +25,6 @@ func TestAccIpDhcpClientOptionTest_basic(t *testing.T) {
 							testResourcePrimaryInstanceId(testIpDhcpClientOptionAddress),
 							resource.TestCheckResourceAttr(testIpDhcpClientOptionAddress, "name", "my-dhcp-option"),
 							resource.TestCheckResourceAttr(testIpDhcpClientOptionAddress, "code", "60"),
-
 						),
 					},
 				},

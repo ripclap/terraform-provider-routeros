@@ -13,6 +13,8 @@
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `bsd_syslog` (Boolean, Deprecated) Whether to use bsd-syslog as defined in RFC 3164.
 - `cef_event_delimiter` (String) Option helps remote syslog to distinguish between individual events within sent batch
 - `disk_file_count` (Number) Specifies number of files used to store log messages, applicable only if `action=disk`.

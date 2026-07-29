@@ -16,6 +16,8 @@ resource "routeros_disk_settings" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `auto_media_interface` (String) Interface that will be used in dynamic instance for ip/media when new disk/partition item is added in '/disk'.
 - `auto_media_sharing` (Boolean) Enables media dynamically when new disk/partition item is added in '/disk'.
 - `auto_smb_sharing` (Boolean) Enables dynamic SMB shares when new disk/partition item is added in '/disk'.

@@ -15,6 +15,8 @@ resource "routeros_ip_traffic_flow_target" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `disabled` (Boolean)
 - `dst_address` (String) IP address of the host which receives Traffic-Flow statistic packets from the router.
 - `port` (Number) Port (UDP) of the host which receives Traffic-Flow statistic packets from the router.

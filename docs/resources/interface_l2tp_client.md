@@ -20,6 +20,8 @@ resource "routeros_interface_l2tp_client" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `add_default_route` (Boolean) Whether to add L2TP remote address as a default route.
 - `allow` (Set of String) Allowed authentication methods.
 - `allow_fast_path` (Boolean) Whether to allow FastPath processing. Must be disabled if IPsec tunneling is used.

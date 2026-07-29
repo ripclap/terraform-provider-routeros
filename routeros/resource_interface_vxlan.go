@@ -93,6 +93,11 @@ func ResourceInterfaceVxlan() *schema.Resource {
 		"hw": {
 			Type:     schema.TypeBool,
 			Optional: true,
+			Description: "Enables hardware offloading of the VXLAN interface on switches whose switch chip " +
+				"supports VXLAN tunnel termination. The attribute is only present on such hardware and the " +
+				"device enables it by default, therefore a value that the user did not explicitly set must " +
+				"not produce a diff.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		KeyHwOffloaded: PropHwOffloadedRo,
 		"interface": {

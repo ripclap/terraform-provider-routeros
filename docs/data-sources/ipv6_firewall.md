@@ -9,6 +9,7 @@ This datasource contains all supported firewall resources:
 
 ### Optional
 
+- `___skip___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
 - `mangle` (Block List) (see [below for nested schema](#nestedblock--mangle))
 - `nat` (Block List) (see [below for nested schema](#nestedblock--nat))
 - `rules` (Block List) (see [below for nested schema](#nestedblock--rules))

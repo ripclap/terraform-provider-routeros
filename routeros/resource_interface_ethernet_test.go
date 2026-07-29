@@ -26,8 +26,10 @@ func TestAccInterfaceEthernetTest_basic(t *testing.T) {
 				PreCheck: func() {
 					testAccPreCheck(t)
 					testSetTransportEnv(t, name)
+					testCheckEthernetLink(t, "ether2")
 				},
 				ProviderFactories: testAccProviderFactories,
+				CheckDestroy:      testRestoreEthernetName("ether2"),
 				Steps: []resource.TestStep{
 					{
 						Config: testAccInterfaceEthernetConfig(),

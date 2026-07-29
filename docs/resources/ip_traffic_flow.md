@@ -15,6 +15,8 @@ resource "routeros_ip_traffic_flow" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `active_flow_timeout` (String) Maximum life-time of a flow.
 - `cache_entries` (String) Number of flows which can be in router's memory simultaneously.
 - `inactive_flow_timeout` (String) How long to keep the flow active, if it is idle. If a connection does not see any packet within this timeout, then traffic-flow will send a packet out as a new flow. If this timeout is too small it can create a significant amount of flows and overflow the buffer.

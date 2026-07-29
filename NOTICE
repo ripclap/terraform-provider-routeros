@@ -1,0 +1,46 @@
+terraform-provider-routeros (ripclap fork)
+==========================================
+
+This product is a fork of the terraform-provider-routeros project.
+
+Upstream project
+----------------
+    terraform-provider-routeros
+    https://github.com/terraform-routeros/terraform-provider-routeros
+    Copyright (c) the terraform-provider-routeros authors and contributors
+
+Licensed under the Mozilla Public License, Version 2.0 (the "License").
+The full text of the License is in LICENSE.md and also available at:
+
+    https://mozilla.org/MPL/2.0/
+
+Files in this repository that are Covered Software under the License remain
+subject to it. Modifications made in this fork are likewise released under the
+MPL-2.0, as required by Section 3.1 of the License.
+
+Nature of the modifications
+---------------------------
+This fork extends upstream's resource coverage of the RouterOS configuration
+tree and relaxes several schema constraints that prevented importing the
+configuration of a live device. Specifically:
+
+  * Additional resources covering RouterOS menus not represented upstream,
+    raising registered resource count from 255 to 411.
+
+  * Schema fields present in RouterOS 7.23 but absent from upstream's schema,
+    which caused values to be silently dropped on read. Among them:
+    bridge ra-guard / dhcpv6-snooping / MLAG attributes, bridge-port
+    trusted-ra / trusted-dhcpv6 / actual-path-cost, veth dhcp-address and
+    container-mac-address, DHCP-server add-dns-entries, and adlist comment.
+
+  * Validation relaxations where upstream's constraints were stricter than
+    RouterOS itself: optional route gateway, optional netwatch name, BGP TTL
+    lower bound of 0 rather than 1, and bridge-port BPDU-guard accepting the
+    boolean form the REST API actually returns.
+
+No upstream copyright notice, license text, or attribution has been removed.
+
+Trademark note
+--------------
+MikroTik and RouterOS are trademarks of Mikrotikls SIA. This project is not
+affiliated with, endorsed by, or sponsored by Mikrotikls SIA.

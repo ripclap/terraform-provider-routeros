@@ -24,8 +24,9 @@ func ResourceIpv6NdPrefix() *schema.Resource {
 	resSchema := map[string]*schema.Schema{
 		MetaResourcePath: PropResourcePath("/ipv6/nd/prefix"),
 		MetaId:           PropId(Id),
+		MetaTransformSet: PropTransformSet("six_to_four_interface:6to4_interface"),
 
-		"6to4_interface": {
+		"six_to_four_interface": {
 			Type:     schema.TypeString,
 			Optional: true,
 			Description: "If this option is specified, this prefix will be combined with the IPv4 address of the interface " +

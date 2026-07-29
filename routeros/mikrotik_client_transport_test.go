@@ -68,11 +68,19 @@ func TestClientTransport_SendRequest(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	apis, err := newApiClient(ctx, host+":8729", user, pass, true)
+	apiSslPort := ":8729"
+	if v := os.Getenv("ROS_API_PORT"); v != "" {
+		apiSslPort = ":" + v
+	}
+	apis, err := newApiClient(ctx, host+apiSslPort, user, pass, true)
 	if err != nil {
 		t.Fatal(err)
 	}
-	rest := newRestClient(ctx, "https://"+host+":443", user, pass)
+	restPort := ":443"
+	if m := rePort.FindStringSubmatch(origHostURL); m != nil {
+		restPort = ":" + m[1]
+	}
+	rest := newRestClient(ctx, "https://"+host+restPort, user, pass)
 
 	type fields struct {
 		Transport TransportType

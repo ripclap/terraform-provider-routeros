@@ -1,6 +1,11 @@
 package routeros
 
 import (
+	"context"
+	"fmt"
+	"strings"
+
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
@@ -95,6 +100,14 @@ func ResourceOpenVPNServer() *schema.Resource {
 				"that period of time (i.e. 2 *  keepalive-timeout), not responding client is proclaimed " +
 				"disconnected",
 			DiffSuppressFunc: TimeEqual,
+		},
+		KeyName: {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+			Description: "Name of the server instance to manage. Newer RouterOS versions keep a list of OVPN " +
+				"servers instead of a single settings object; when the attribute is omitted the first (default) " +
+				"instance is used. The attribute is ignored on devices that still expose a single object.",
 		},
 		// Computed only???
 		"mac_address": {
@@ -193,9 +206,9 @@ func ResourceOpenVPNServer() *schema.Resource {
 
 	return &schema.Resource{
 		Description:   `##### *<span style="color:red">This resource requires a minimum version of RouterOS 7.8!</span>*`,
-		CreateContext: DefaultSystemCreate(resSchema),
-		ReadContext:   DefaultSystemRead(resSchema),
-		UpdateContext: DefaultSystemUpdate(resSchema),
+		CreateContext: ovpnServerCreateUpdate(resSchema),
+		ReadContext:   ovpnServerRead(resSchema),
+		UpdateContext: ovpnServerUpdate(resSchema),
 		DeleteContext: DefaultSystemDelete(resSchema),
 
 		Importer: &schema.ResourceImporter{
@@ -212,4 +225,117 @@ func ResourceOpenVPNServer() *schema.Resource {
 			},
 		},
 	}
+}
+
+// Newer RouterOS turned the single OVPN server settings object into a list of named instances: entries
+// carry `.id` and use the inverted `disabled` flag instead of `enabled`. The layout is detected via `.id`.
+
+// ovpnServerInstance returns the server entry to work with and its identifier. An empty identifier
+// means the device still exposes the menu as a single settings object.
+func ovpnServerInstance(path, name string, c Client) (MikrotikItem, string, error) {
+	items, err := ReadItems(nil, path, c)
+	if err != nil {
+		return nil, "", err
+	}
+
+	if items == nil || len(*items) == 0 {
+		return nil, "", nil
+	}
+
+	for _, item := range *items {
+		id, ok := item[".id"]
+		if !ok {
+			// Single settings object.
+			return item, "", nil
+		}
+		if name == "" || item[KeyName] == name {
+			return item, id, nil
+		}
+	}
+
+	return nil, "", fmt.Errorf("OVPN server %q not found in the %v menu", name, path)
+}
+
+// ovpnServerInvertFlag translates between the `enabled` and the `disabled` spelling of one state.
+func ovpnServerInvertFlag(value string) string {
+	if BoolFromMikrotikJSON(value) {
+		return "false"
+	}
+	return "true"
+}
+
+func ovpnServerRead(s map[string]*schema.Schema) schema.ReadContextFunc {
+	return func(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+		metadata := GetMetadata(s)
+
+		item, id, err := ovpnServerInstance(metadata.Path, d.Get(KeyName).(string), m.(Client))
+		if err != nil {
+			return diag.FromErr(err)
+		}
+
+		if item == nil {
+			d.SetId("")
+			return nil
+		}
+
+		if id != "" {
+			if value, ok := item["disabled"]; ok {
+				item["enabled"] = ovpnServerInvertFlag(value)
+				delete(item, "disabled")
+			}
+		}
+
+		// The Id stays synthetic: the resource manages settings, it does not own a removable object.
+		// Id: /interface/ovpn-server/server -> interface.ovpn-server.server
+		d.SetId(strings.ReplaceAll(strings.TrimLeft(metadata.Path, "/"), "/", "."))
+
+		return MikrotikResourceDataToTerraform(item, s, d)
+	}
+}
+
+func ovpnServerUpdate(s map[string]*schema.Schema) schema.UpdateContextFunc {
+	return func(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+		return ovpnServerWrite(ctx, s, d, m)
+	}
+}
+
+func ovpnServerCreateUpdate(s map[string]*schema.Schema) schema.CreateContextFunc {
+	return func(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+		return ovpnServerWrite(ctx, s, d, m)
+	}
+}
+
+func ovpnServerWrite(ctx context.Context, s map[string]*schema.Schema, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+	item, metadata := TerraformResourceDataToMikrotik(s, d)
+
+	_, id, err := ovpnServerInstance(metadata.Path, d.Get(KeyName).(string), m.(Client))
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	if id == "" {
+		// Single settings object: it is written through `set` and knows no `name`.
+		delete(item, KeyName)
+
+		var resUrl string
+		if m.(Client).GetTransport() == TransportREST {
+			// https://router/rest/interface/ovpn-server/server/set
+			resUrl = "/set"
+		}
+
+		if err := m.(Client).SendRequest(crudPost, &URL{Path: metadata.Path + resUrl}, item, nil); err != nil {
+			return diag.FromErr(err)
+		}
+	} else {
+		if value, ok := item["enabled"]; ok {
+			delete(item, "enabled")
+			item["disabled"] = ovpnServerInvertFlag(value)
+		}
+
+		if _, err := UpdateItem(&ItemId{Id, id}, metadata.Path, item, m.(Client)); err != nil {
+			return diag.FromErr(err)
+		}
+	}
+
+	return ovpnServerRead(s)(ctx, d, m)
 }

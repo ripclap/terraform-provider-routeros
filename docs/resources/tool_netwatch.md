@@ -24,10 +24,12 @@ resource "routeros_tool_netwatch" "test" {
   * ipv6 
   * ipv6@vrf
   * ipv6-linklocal%interface
-- `name` (String) Task name.
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
+- `___skip___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
 - `accept_icmp_time_exceeded` (Boolean) If the ICMP `time exceeded` message should be considered a valid response.
 - `comment` (String)
 - `disabled` (Boolean)
@@ -38,6 +40,7 @@ resource "routeros_tool_netwatch" "test" {
 - `http_code_max` (Number) Response in the range [http-code-min , http-code-max] is a probe pass/OK; outside - a probe fail. See [mozilla-http-status](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) or [rfc7231](https://datatracker.ietf.org/doc/html/rfc7231#section-6).
 - `http_code_min` (Number) OK/fail criteria for HTTP response code.
 - `interval` (String) The time interval between probe tests.
+- `name` (String) Task name.
 - `packet_count` (Number) Total count of ICMP packets to send out within a single test.
 - `packet_interval` (String) The time between ICMP-request packet send.
 - `packet_size` (Number) The total size of the IP ICMP packet.

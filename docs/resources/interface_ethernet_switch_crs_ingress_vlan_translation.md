@@ -18,6 +18,8 @@ resource "routeros_interface_ethernet_switch_crs_ingress_vlan_translation" "test
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `comment` (String)
 - `customer_dei` (String) Matching DEI of the customer tag.
 - `customer_pcp` (String) Matching PCP of the customer tag.

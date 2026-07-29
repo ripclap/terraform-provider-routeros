@@ -92,9 +92,10 @@ func ResourceRoutingBgpVpn() *schema.Resource {
 		},
 		KeyInactive: PropInactiveRo,
 		"instance": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "Name of the instance this VPN is assigned to.",
+			Type:     schema.TypeString,
+			Required: true,
+			Description: "Name of the BGP instance (`/routing/bgp/instance`) this VPN is assigned to. " +
+				"RouterOS rejects an entry created without it: `missing =instance=`.",
 		},
 		"label_allocation_policy": {
 			Type:             schema.TypeString,

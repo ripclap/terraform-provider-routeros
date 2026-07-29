@@ -60,3 +60,27 @@ func stateMigrationScalarToList(keys ...string) schema.StateUpgradeFunc {
 		return rawState, nil
 	}
 }
+
+// stateMigrationStringToBool converts a yes/no/true/false string attribute to a
+// real bool. An empty value is dropped so the attribute reads back as unset.
+func stateMigrationStringToBool(keys ...string) schema.StateUpgradeFunc {
+	return func(ctx context.Context, rawState map[string]interface{}, m interface{}) (map[string]interface{}, error) {
+		for _, key := range keys {
+			s, ok := rawState[key].(string)
+			if !ok {
+				continue
+			}
+
+			switch strings.ToLower(strings.TrimSpace(s)) {
+			case "":
+				delete(rawState, key)
+			case "yes", "true", "1":
+				rawState[key] = true
+			default:
+				rawState[key] = false
+			}
+		}
+
+		return rawState, nil
+	}
+}

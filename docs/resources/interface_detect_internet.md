@@ -16,6 +16,8 @@ resource "routeros_interface_detect_internet" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `detect_interface_list` (String) All interfaces in the list will be monitored by Detect Internet.
 - `internet_interface_list` (String) Interfaces with state Internet will be dynamically added to this list.
 - `lan_interface_list` (String) Interfaces with state Lan will be dynamically added to this list.

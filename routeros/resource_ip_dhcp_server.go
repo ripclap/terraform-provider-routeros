@@ -23,6 +23,18 @@ func ResourceDhcpServer() *schema.Resource {
 				"the clients that have a static lease (added in lease submenu) will be allowed.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
+		"add_dns_entries": {
+			Type:        schema.TypeBool,
+			Optional:    true,
+			Computed:    true,
+			Description: "Automatically create DNS records for leases issued by this server.",
+		},
+		"add_dns_entries_suffix": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Computed:    true,
+			Description: "DNS suffix appended to automatically created lease records.",
+		},
 		"address_lists": {
 			Type:        schema.TypeSet,
 			Optional:    true,
@@ -89,9 +101,11 @@ func ResourceDhcpServer() *schema.Resource {
 			Description: "Use custom set of DHCP options defined in option sets menu.",
 		},
 		"dynamic_lease_identifiers": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "Dynamic lease identifier",
+			Type:     schema.TypeString,
+			Optional: true,
+			// RouterOS always reports a default ("client-mac,client-id") here, which would otherwise cause a permanent diff.
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+			Description:      "Dynamic lease identifier",
 		},
 		"support_broadband_tr101": {
 			Type:        schema.TypeBool,

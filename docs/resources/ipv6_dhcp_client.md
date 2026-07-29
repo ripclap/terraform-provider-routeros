@@ -31,6 +31,8 @@ resource "routeros_ipv6_dhcp_client" "client" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `accept_prefix_without_address` (Boolean)
 - `add_default_route` (Boolean) Whether to add default IPv6 route after a client connects.
 - `allow_reconfigure` (Boolean) Allow reconfigure messages.

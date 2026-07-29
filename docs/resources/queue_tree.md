@@ -21,6 +21,9 @@ resource "routeros_queue_tree" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
+- `___skip___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
 - `bucket_size` (String)
 - `burst_limit` (String) Maximal data rate which can be reached while the burst is active.
 - `burst_threshold` (String) When average data rate is below this value - burst is allowed, as soon as average data rate reach this value - burst is denied (basically this is burst on/off switch). For optimal burst behavior this value should above `limit-at` value and below `max-limit` value.

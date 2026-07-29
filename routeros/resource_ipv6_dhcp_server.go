@@ -32,11 +32,11 @@ func ResourceIpv6DhcpServer() *schema.Resource {
 		MetaId:           PropId(Id),
 
 		"address_pool": {
-			Type:             schema.TypeString,
-			Optional:         true,
-			Description:      "IPv6 pool, from which to take IPv6 address for the clients. The prefix length of the pool " +
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "IPv6 pool, from which to take IPv6 address for the clients. The prefix length of the pool " +
 				"must be 128.",
-			AtLeastOneOf:     []string{"address_pool", "prefix_pool"},
+			AtLeastOneOf: []string{"address_pool", "prefix_pool"},
 		},
 		"address_lists": {
 			Type:        schema.TypeSet,
@@ -118,10 +118,10 @@ func ResourceIpv6DhcpServer() *schema.Resource {
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"prefix_pool": {
-			Type:             schema.TypeString,
-			Optional:         true,
-			Description:      "IPv6 pool, from which to take IPv6 prefix for the clients.",
-			AtLeastOneOf:     []string{"address_pool", "prefix_pool"},
+			Type:         schema.TypeString,
+			Optional:     true,
+			Description:  "IPv6 pool, from which to take IPv6 prefix for the clients.",
+			AtLeastOneOf: []string{"address_pool", "prefix_pool"},
 		},
 		"rapid_commit": {
 			Type:             schema.TypeBool,

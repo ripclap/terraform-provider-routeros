@@ -112,6 +112,9 @@ EOT
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
+- `___skip___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
 - `copy_from` (String)
 - `country` (String) Country Name (2 letter code).
 - `days_valid` (Number) Certificate lifetime.

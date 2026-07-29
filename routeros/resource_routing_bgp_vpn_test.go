@@ -19,7 +19,10 @@ func TestAccRoutingBgpVpnTest_basic(t *testing.T) {
 					testSetTransportEnv(t, name)
 				},
 				ProviderFactories: testAccProviderFactories,
-				CheckDestroy:      testCheckResourceDestroy("/routing/bgp/vpn", "routeros_routing_bgp_vpn"),
+				CheckDestroy: resource.ComposeAggregateTestCheckFunc(
+					testCheckResourceDestroy("/routing/bgp/vpn", "routeros_routing_bgp_vpn"),
+					testCheckResourceDestroy("/routing/bgp/instance", "routeros_routing_bgp_instance"),
+				),
 				Steps: []resource.TestStep{
 					{
 						Config: testAccRoutingBgpVpnConfig(),
@@ -29,7 +32,8 @@ func TestAccRoutingBgpVpnTest_basic(t *testing.T) {
 							resource.TestCheckResourceAttr(testRoutingBgpVpn, "label_allocation_policy", "per-vrf"),
 							resource.TestCheckResourceAttr(testRoutingBgpVpn, "name", "bgp-mpls-vpn-test"),
 							resource.TestCheckResourceAttr(testRoutingBgpVpn, "route_distinguisher", "1.2.3.4:1"),
-							resource.TestCheckResourceAttr(testRoutingBgpVpn, "vrf", "main")),
+							resource.TestCheckResourceAttr(testRoutingBgpVpn, "vrf", "main"),
+							resource.TestCheckResourceAttr(testRoutingBgpVpn, "instance", "bgp-mpls-vpn-test-inst")),
 					},
 				},
 			})
@@ -41,6 +45,14 @@ func TestAccRoutingBgpVpnTest_basic(t *testing.T) {
 func testAccRoutingBgpVpnConfig() string {
 	return fmt.Sprintf(`%v
 
+// RouterOS refuses a VPN entry that is not bound to a BGP instance ("missing =instance="),
+// so the test brings its own instance instead of borrowing one from the device.
+resource "routeros_routing_bgp_instance" "test" {
+  name      = "bgp-mpls-vpn-test-inst"
+  as        = "65550"
+  router_id = "192.0.2.111"
+}
+
 resource "routeros_routing_bgp_vpn" "test" {
   disabled = false
   export {
@@ -50,6 +62,7 @@ resource "routeros_routing_bgp_vpn" "test" {
   import {
     route_targets = ["1:2"]
   }
+  instance                = routeros_routing_bgp_instance.test.name
   label_allocation_policy = "per-vrf"
   name                    = "bgp-mpls-vpn-test"
   route_distinguisher     = "1.2.3.4:1"

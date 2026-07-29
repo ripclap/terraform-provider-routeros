@@ -7,6 +7,7 @@ resource "routeros_routing_bgp_vpn" "test" {
   import {
     route_targets = ["1:2"]
   }
+  instance                = "bgp-instance-1"
   label_allocation_policy = "per-vrf"
   name                    = "bgp-mpls-vpn-test"
   route_distinguisher     = "1.2.3.4:1"

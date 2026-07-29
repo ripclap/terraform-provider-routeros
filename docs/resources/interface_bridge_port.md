@@ -20,6 +20,9 @@ resource "routeros_interface_bridge_port" "bridge_port" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
+- `___skip___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
 - `auto_isolate` (Boolean) When enabled, prevents a port moving from discarding into forwarding state if no BPDUs are received from the neighboring bridge. The port will change into a forwarding state only when a BPDU is received. This property only has an effect when protocol-mode is set to rstp or mstp and edge is set to no.
 - `bpdu_guard` (Boolean) This property has no effect when protocol-mode is set to none.
 - `broadcast_flood` (Boolean) When enabled, bridge floods broadcast traffic to all bridge egress ports. When disabled, drops broadcast traffic on egress ports.
@@ -44,11 +47,14 @@ resource "routeros_interface_bridge_port" "bridge_port" {
 - `restricted_tcn` (Boolean) Disable topology change notification (TCN) sending on a port, used by STP to forbid network topology changes to propagate. This property only has effect when protocol-mode is set to mstp.
 - `tag_stacking` (Boolean) Forces all packets to be treated as untagged packets. Packets on ingress port will be tagged with another VLAN tag regardless if a VLAN tag already exists, packets will be tagged with a VLAN ID that matches the pvid value and will use EtherType that is specified in ether-type. This property only has effect when vlan-filtering is set to yes.
 - `trusted` (Boolean) When enabled, it allows to forward DHCP packets towards DHCP server through this port. Mainly used to limit unauthorized servers to provide malicious information for users. This property only has effect when dhcp-snooping is set to yes.
+- `trusted_dhcpv6` (Boolean) Port is trusted to forward DHCPv6 server messages when bridge dhcpv6-snooping is enabled.
+- `trusted_ra` (Boolean) Port is trusted to forward IPv6 Router Advertisements when bridge ra-guard is enabled.
 - `unknown_multicast_flood` (Boolean) When enabled, bridge floods unknown multicast traffic to all bridge egress ports.
 - `unknown_unicast_flood` (Boolean) When enabled, bridge floods unknown unicast traffic to all bridge egress ports.
 
 ### Read-Only
 
+- `actual_path_cost` (Number) Path cost currently in effect, as computed by STP.
 - `designated_bridge` (String) Root bridge ID (bridge priority and the bridge MAC address).
 - `designated_bridge_id` (String) Shows the designated bridge identifier, as determined from the port's priority vector.
 - `designated_cost` (String) Designated cost.

@@ -18,6 +18,8 @@ resource "routeros_interface_vxlan" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `allow_fast_path` (Boolean) Whether to allow Fast Path processing. Fragmented and flooded packets over VXLAN are redirected via a slow path. Fast Path is disabled for VXLAN interface that uses IPv6 VTEP version or VRF. The setting is available since RouterOS version 7.8.
 - `arp` (String) Address Resolution Protocol mode:
   * disabled - the interface will not use ARP

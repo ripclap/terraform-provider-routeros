@@ -35,11 +35,16 @@ func TestAccIpDhcpServerTest_basic(t *testing.T) {
 
 func testAccIpDhcpServerConfig() string {
 	return providerConfig + `
+resource "routeros_ip_pool" "test_dhcp_pool" {
+	name   = "test_dhcp_pool"
+	ranges = ["192.0.2.10-192.0.2.100"]
+}
+
 resource "routeros_ip_dhcp_server" "test_dhcp" {
 	name	     = "test_dhcp_server"
 	interface    = "bridge"
 	disabled     = true
-	address_pool = "dhcp"
+	address_pool = routeros_ip_pool.test_dhcp_pool.name
   }
 
 `

@@ -44,9 +44,15 @@ func TestAccInterfaceWireguardPeerTest_basic(t *testing.T) {
 func testAccInterfaceWireguardPeerConfig() string {
 	return providerConfig + `
 
+resource "routeros_interface_wireguard" "wg1" {
+	name        = "wg1"
+	listen_port = 13231
+	disabled    = true
+}
+
 resource "routeros_interface_wireguard_peer" "wg_peer" {
 	allowed_address  = ["1.2.3.0/30"]
-	interface        = "wg1"
+	interface        = routeros_interface_wireguard.wg1.name
 	public_key       = "QxC+CTcrDdU5+ny0+2ChUH3NegTrwoVCv53TllI5T0I="
 	client_keepalive = "85s"
   }

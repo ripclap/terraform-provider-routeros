@@ -36,10 +36,12 @@ func ResourceIpCloud() *schema.Resource {
 				"yes, for BTH to function.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
+		// RouterOS reports this as "true"/"false" on older versions and "yes"/"no" on 7.2x; TypeBool
+		// normalizes both, TypeString would drift on one.
 		"ddns_enabled": {
-			Type:     schema.TypeString,
+			Type:     schema.TypeBool,
 			Optional: true,
-			Description: "If set to yes, then the device will send an encrypted message to the MikroTik's Cloud " +
+			Description: "If enabled, the device will send an encrypted message to the MikroTik's Cloud " +
 				"server. The server will then decrypt the message and verify that the sender is an " +
 				"authentic MikroTik device. If all is OK, then the MikroTik's Cloud server will create a " +
 				"DDNS record for this device and send a response to the device. Every minute the IP/Cloud " +
@@ -129,6 +131,14 @@ func ResourceIpCloud() *schema.Resource {
 			StateContext: schema.ImportStatePassthroughContext,
 		},
 
-		Schema: resSchema,
+		Schema:        resSchema,
+		SchemaVersion: 1,
+		StateUpgraders: []schema.StateUpgrader{
+			{
+				Type:    ResourceIpCloudV0().CoreConfigSchema().ImpliedType(),
+				Upgrade: stateMigrationStringToBool("ddns_enabled"),
+				Version: 0,
+			},
+		},
 	}
 }

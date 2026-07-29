@@ -4,7 +4,7 @@ import (
 	"flag"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
-	"github.com/terraform-routeros/terraform-provider-routeros/routeros"
+	"github.com/ripclap/terraform-provider-routeros/routeros"
 )
 
 // Generate the Terraform provider documentation using `tfplugindocs`:

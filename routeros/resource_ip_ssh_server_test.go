@@ -10,6 +10,11 @@ import (
 const testIpSSHServerSettings = "routeros_ip_ssh_server.test"
 
 func TestAccIpSSHServerSettingsTest_basic(t *testing.T) {
+	// allow_none_crypto was removed after RouterOS 7.20, so this config cannot apply there.
+	if !testCheckMaxVersion(t, "7.20") {
+		t.Skip("allow_none_crypto was removed after RouterOS 7.20")
+	}
+
 	for _, name := range testNames {
 		t.Run(name, func(t *testing.T) {
 			resource.Test(t, resource.TestCase{

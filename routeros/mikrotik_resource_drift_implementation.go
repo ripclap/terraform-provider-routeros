@@ -68,12 +68,13 @@ func (do *driftObjects) index(version uint64) int {
 // Obtaining a map to match TF attributes and MT parameters for further transformation.
 // Direct output (for TF to MT serialization) and reverse output (MT to TF) are provided.
 func (do *driftObjects) GetDriftMap(ros, resName string, reverse bool) (res map[string]string) {
+	res = map[string]string{}
+
+	// No usable version means no version-gated renames apply.
 	version, err := parseRouterOSVersion(ros)
 	if err != nil {
-		log.Fatal(err)
+		return
 	}
-
-	res = map[string]string{}
 	for i := range *do {
 		if version >= (*do)[i].Version {
 			for _, attr := range (*do)[i].Resources[resName] {

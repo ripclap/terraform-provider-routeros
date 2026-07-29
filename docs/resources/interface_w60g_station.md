@@ -22,6 +22,9 @@ resource "routeros_interface_w60g_station" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
+- `___skip___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
 - `arp` (String) Address Resolution Protocol mode:
   * disabled - the interface will not use ARP
   * enabled - the interface will use ARP
