@@ -1,3 +1,22 @@
+## [2.0.3](https://github.com/ripclap/terraform-provider-routeros/compare/v2.0.2...v2.0.3) (2026-07-31)
+
+### Bug Fixes
+
+* **release:** republish 2.0.2. Its archives were built and uploaded twice, and the
+  registry had recorded the checksums of the first set, so installing 2.0.2 fails with
+  `registry response indicates a package of size ...`. Use this version instead; the
+  provider itself is unchanged.
+
+### Miscellaneous
+
+* **ci:** a tag now builds, signs and publishes the release, and every push is checked
+  for formatting, vet, the tests that do not need a device, a build of all release
+  platforms, and documentation that still matches the schemas.
+* **drift:** the generator runs its output through `go/format`, so the file it writes is
+  gofmt'd, and it reports a YAML decode error instead of silently writing an empty map.
+* **interface-wireless:** the acceptance test skips rather than returning from the top of
+  the function, where it reported a pass without running anything.
+
 ## [2.0.2](https://github.com/ripclap/terraform-provider-routeros/compare/v2.0.1...v2.0.2) (2026-07-31)
 
 ### Features
