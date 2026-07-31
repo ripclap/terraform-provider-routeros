@@ -11,6 +11,22 @@ description: |-
 
 To get started with the provider, you first need to enable the REST API on your router. [You can follow the Mikrotik documentation on this](https://help.mikrotik.com/docs/display/ROS/REST+API), but the gist is to create an SSL cert (in `/system/certificates`) and enable the `web-ssl` service (in `/ip/services`) which uses that certificate.
 
+## About this fork
+
+This is a community fork of [`terraform-routeros/terraform-provider-routeros`](https://github.com/terraform-routeros/terraform-provider-routeros), licensed under MPL-2.0. It is **not affiliated with or endorsed by** the upstream project or its maintainers.
+
+It exists to represent the **complete** running configuration of a RouterOS 7.23 device as OpenTofu/Terraform state, so drift is detectable across the whole device rather than a subset. Measured against a live RouterOS 7.23 device it registers **411 resources** (upstream v1.99.1 registers ~255) and models many menus upstream does not. It is published to the [OpenTofu Registry](https://search.opentofu.org/provider/ripclap/routeros); use it under OpenTofu with `source = "ripclap/routeros"`. It is not published to the HashiCorp Terraform Registry.
+
+Because it is rebased on upstream, most resources behave identically. The notable behavioural differences are:
+
+- `routeros_ip_cloud.ddns_enabled` is a **boolean** (upstream: string).
+- `routeros_routing_bgp_vpn.instance` is **required** — RouterOS rejects an entry created without it.
+- `routeros_routing_bgp_connection` and `routeros_routing_bgp_template` add `afi` and `add_path`.
+- `routeros_mpls_traffic_eng_interface` models the uint32 `te_metric`, `k_factor` and `blockade_k_factor` fields as strings.
+- Several new resources cover menus upstream does not yet model.
+
+See the repository `CHANGELOG.md` for the full list.
+
 
 ## Example Usage
 
@@ -18,7 +34,7 @@ To get started with the provider, you first need to enable the REST API on your 
 terraform {
   required_providers {
     routeros = {
-      source = "terraform-routeros/routeros"
+      source = "ripclap/routeros"
     }
   }
 }
