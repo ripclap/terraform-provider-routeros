@@ -50,6 +50,15 @@ jobs:
           version: latest
           args: release --snapshot --clean --skip=publish,sign
 
+      # Unsigned, and not what a release publishes, but enough to install by hand
+      # from a filesystem mirror and try a change against a device before tagging.
+      - name: Keep the built archives
+        uses: actions/upload-artifact@v4
+        with:
+          name: snapshot-${{ github.sha }}
+          path: dist/*.zip
+          retention-days: 14
+
   docs:
     runs-on: ubuntu-latest
     steps:
