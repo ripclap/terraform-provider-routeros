@@ -38,8 +38,14 @@ jobs:
         run: go vet ./routeros/
 
       - name: Unit tests
-        # TF_ACC is unset, so the acceptance tests skip themselves.
-        run: go test ./routeros/ -count=1
+        # TF_ACC is unset, so an acceptance test skips once it reaches
+        # resource.Test. Two things run before that and need a device:
+        # the version gates read ROS_VERSION and fail the test outright when it
+        # is empty, so a value is supplied here; testAccPreCheck wants a
+        # reachable router, so the transport test is left to the manual run.
+        env:
+          ROS_VERSION: 7.23.1
+        run: go test ./routeros/ -count=1 -skip 'TestClientTransport_SendRequest'
 
       # Builds every platform the release does, so a break specific to one of them
       # is caught here rather than half way through publishing. 386 is the one that
