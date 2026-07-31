@@ -11,13 +11,16 @@ device as OpenTofu state, so that configuration drift is detectable. Upstream co
 the resources most people need; it does not cover the whole configuration tree, and
 several schemas reject or silently discard values that RouterOS itself accepts.
 
-Measured against a live RouterOS 7.23.2 device:
+Two devices are referred to below: coverage is measured on a router running RouterOS
+**7.23.2**, and the acceptance suite runs on a switch running **7.23.1**.
+
+Measured against the live 7.23.2 device:
 
 | | upstream v1.99.1 | this fork |
 |---|---|---|
 | Registered resources | 255 | **411** |
 | RouterOS menus represented | 207 / 547 | **363 / 547** |
-| Schema round-trip warnings on a full import | 130 | **93** |
+| Schema round-trip warnings on a full import | 130 | **93** at 2.0.0, see below |
 
 ## What changed
 
@@ -30,8 +33,9 @@ Three categories, all detailed in [NOTICE](NOTICE):
 
 ## Testing
 
-Verified against physical MikroTik hardware running RouterOS **7.23.1**,
-over both the REST and the binary API transport.
+Verified against physical MikroTik hardware running RouterOS **7.23.1** — a different
+device from the 7.23.2 one the coverage numbers above come from — over both the REST
+and the binary API transport.
 
 | | count |
 |---|---|
@@ -87,8 +91,11 @@ is acceptable on x86).
 - **~5 menus remain unmodelled**: `/routing/isis/interface`,
   `/routing/pimsm/igmp-interface-template`, `/interface/wifi/radio/settings`,
   `/interface/wifi/steering/neighbor-group`, `/ipv6/dhcp-relay/routes`.
-- **93 schema warnings remain**, dominated by `managed` (33),
-  `client_allowed_address` (31), `vrf` (13) and `l3_hw_offloading` (12).
+- **Schema warnings**: the 93 counted at 2.0.0 were dominated by `managed` (33),
+  `client_allowed_address` (31), `vrf` (13) and `l3_hw_offloading` (12). All but `vrf`
+  were added in 2.0.2, together with `preferred`, `valid` and `headers`; a full
+  392-resource import of the 7.23.1 device now reports none. `vrf` is the largest
+  class still unmodelled.
 - **9 resources are deliberately untested**, because exercising them risks the device:
   `disk`, `disk_btrfs_filesystem`, `disk_btrfs_subvolume`, `disk_btrfs_transfer`,
   `partitions`, `system_package_update`, both `system_package_local_update_*`, and

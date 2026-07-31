@@ -1,3 +1,41 @@
+## [2.0.2] (2026-07-31)
+
+### Features
+
+* **schema:** add the RouterOS 7.23 fields the device returns but the schemas did not
+  declare, so reading a resource warned `field not found in the schema` and dropped the
+  value: `managed` (bridge, bridge port, bridge VLAN, logging, logging action),
+  `l3_hw_offloading` (VLAN interface), `preferred` and `valid` (IPv6 address), `headers`
+  (IPv6 mangle rule) and `client_allowed_address` (WireGuard peer).
+
+### Bug Fixes
+
+* **container:** do not derive `remote_image` from `tag` for a container installed from a
+  tarball. RouterOS assigns a tag to every container, including those installed from a
+  file, so the read set `remote_image` alongside `file` and `-generate-config-out` then
+  emitted a configuration the schema rejected with ``only one of `file`, `remote_image`
+  can be set``. The value is now reconstructed only when the device reports a registry
+  image.
+
+### Documentation
+
+* regenerate. Adds the new fields and brings the pages of the resources that were
+  resolved in favour of upstream during the rebase back in sync with their schemas.
+
+## [2.0.1] (2026-07-31)
+
+### Documentation
+
+* the provider overview identifies the fork, states that it is published to the OpenTofu
+  Registry, and uses `source = "ripclap/routeros"` in the example. It previously carried
+  upstream's source address, which sent installs to the wrong provider.
+* **mpls-traffic-eng-interface:** `blockade_k_factor`, `k_factor` and `te_metric` are
+  documented as String, matching the schema.
+
+### Build
+
+* add `terraform-registry-manifest.json`, declaring protocol version 5.0.
+
 ## [2.0.0] (2026-07-29)
 
 First release of this fork. Based on upstream, rebased onto `main` after v1.99.1.
@@ -42,7 +80,8 @@ See [FORK.md](FORK.md).
   when no gateway is set.
 * **container:** replace `ExactlyOneOf{file, remote_image}` with a `CustomizeDiff` that
   compares non-empty values. The device reports `file=""` alongside a real `remote_image`,
-  and Terraform counts an empty string as a specified value.* **drift:** correct the 7.21 `/ip/ssh` entry. It named the Terraform attribute with
+  and Terraform counts an empty string as a specified value.
+* **drift:** correct the 7.21 `/ip/ssh` entry. It named the Terraform attribute with
   hyphens while the drift map is keyed by the snake_case attribute name, so the rename to
   `password-authentication` never applied and RouterOS 7.21+ rejected the old parameter.
 * **drift:** `GetDriftMap` no longer calls `log.Fatal` when the RouterOS version is
