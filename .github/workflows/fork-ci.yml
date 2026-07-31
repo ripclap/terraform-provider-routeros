@@ -53,7 +53,8 @@ jobs:
       - name: Build the release matrix
         uses: goreleaser/goreleaser-action@v7
         with:
-          version: latest
+          # Matches `version: 2` in .goreleaser.yml, and the release workflow.
+          version: '~> v2'
           args: release --snapshot --clean --skip=publish,sign
 
       # Unsigned, and not what a release publishes, but enough to install by hand
