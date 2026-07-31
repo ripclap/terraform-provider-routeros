@@ -35,7 +35,7 @@ func ResourceInterfaceL2tpServer() *schema.Resource {
 		MetaResourcePath: PropResourcePath("/interface/l2tp-server/server"),
 		MetaId:           PropId(Id),
 
-    KeyEnabled: PropEnabled("Enables/disables service."),
+		KeyEnabled: PropEnabled("Enables/disables service."),
 		"authentication": {
 			Type:             schema.TypeSet,
 			Optional:         true,
@@ -83,34 +83,34 @@ func ResourceInterfaceL2tpServer() *schema.Resource {
 			ValidateFunc:     validation.IntBetween(512, 18432),
 		},
 		"use_ipsec": {
-			Type:        schema.TypeBool,
-			Optional:    true,
+			Type:     schema.TypeBool,
+			Optional: true,
 			Description: "When this option is enabled, dynamic IPSec peer configuration is added to suite" +
-			  "most of the L2TP road-warrior setups. When require is selected server will accept only" +
+				"most of the L2TP road-warrior setups. When require is selected server will accept only" +
 				"those L2TP connection attempts that were encapsulated in the IPSec tunnel.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"ipsec_secret": {
-			Type: schema.TypeString,
-			Optional: true,
-			Description: "Preshared key used when use-ipsec is enabled.",
-		  DiffSuppressFunc: AlwaysPresentNotUserProvided,	
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Preshared key used when use-ipsec is enabled.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
-		"accept_proto_version" : {
+		"accept_proto_version": {
 			Type:             schema.TypeString,
 			Optional:         true,
 			Description:      "Specify protocol version.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 			ValidateFunc:     validation.StringInSlice([]string{"all", "l2tpv2", "l2tpv3"}, false),
 		},
-    "accept_pseudowire_type": {
+		"accept_pseudowire_type": {
 			Type:             schema.TypeString,
 			Optional:         true,
 			Description:      "Set the pseudowire signaling protocol for specific pseudowire type.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 			ValidateFunc:     validation.StringInSlice([]string{"all", "ether", "ppp"}, false),
 		},
-    "allow_fast_path": {
+		"allow_fast_path": {
 			Type:             schema.TypeBool,
 			Optional:         true,
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
@@ -148,18 +148,18 @@ func ResourceInterfaceL2tpServer() *schema.Resource {
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 			ValidateFunc:     validation.StringInSlice([]string{"0", "4-bytes", "8-bytes"}, false),
 		},
-    "l2tpv3_digest_hash": {
-		  Type:             schema.TypeString,
+		"l2tpv3_digest_hash": {
+			Type:             schema.TypeString,
 			Optional:         true,
 			Description:      "Specifies which hash function to be used.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
-			ValidateFunc:     validation.StringInSlice([]string{"md5", "none", "sha1"}, false),	
+			ValidateFunc:     validation.StringInSlice([]string{"md5", "none", "sha1"}, false),
 		},
-    "l2tpv3_ether_interface_list": {
+		"l2tpv3_ether_interface_list": {
 			Type:             schema.TypeString,
 			Optional:         true,
 			Description:      "Set your interface list for example the default ones- all, dynamic, none, static.",
-		  DiffSuppressFunc: AlwaysPresentNotUserProvided,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 	}
 

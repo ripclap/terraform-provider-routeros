@@ -14,8 +14,8 @@ import (
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"github.com/sirupsen/logrus"
 	"github.com/ripclap/terraform-provider-routeros/routeros"
+	"github.com/sirupsen/logrus"
 )
 
 var (

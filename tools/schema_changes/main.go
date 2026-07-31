@@ -13,8 +13,8 @@ import (
 	"strings"
 
 	"github.com/fatih/color"
-	godiffpatch "github.com/sourcegraph/go-diff-patch"
 	"github.com/ripclap/terraform-provider-routeros/routeros"
+	godiffpatch "github.com/sourcegraph/go-diff-patch"
 )
 
 // https://tikoci.github.io/restraml/$v/inspect.json" -o- | gzip > ros-$v.json.gz
