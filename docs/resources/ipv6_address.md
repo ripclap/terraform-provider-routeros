@@ -40,7 +40,9 @@ resource "routeros_ipv6_address" "ipv6_address" {
 - `id` (String) The ID of this resource.
 - `invalid` (Boolean)
 - `link_local` (Boolean) Whether address is link local.
+- `preferred` (String) Time left until the address is deprecated.
 - `slave` (Boolean) Whether address belongs to an interface which is a slave port to some other master interface
+- `valid` (String) Time left until the address is no longer valid.
 
 ## Import
 Import is supported using the following syntax:

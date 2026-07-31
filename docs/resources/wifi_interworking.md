@@ -18,10 +18,9 @@ resource "routeros_wifi_interworking" "interworking1" {
 
 ### Optional
 
-- `three_gpp_info` (List of String) Cellular network advertisement information - country and network codes.
-- `three_gpp_raw` (String) Cellular network advertisement information - country and network codes.
 - `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
 - `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
+- `___ts___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
 - `asra` (Boolean) An option to enable Additional Steps Required for Access.
 - `authentication_types` (List of String) A list of authentication types that is only effective when `asra` is set to yes.
 - `comment` (String)
@@ -41,6 +40,8 @@ resource "routeros_wifi_interworking" "interworking1" {
 - `realms` (List of String) A list of colon-separated realm names and EAP methods.
 - `realms_raw` (List of String) A list of 'NAI Realm Tuple' excluding 'NAI Realm Data Field Length' field.
 - `roaming_ois` (List of String) A list of Organization Identifiers (OI).
+- `three_gpp_info` (List of String) Cellular network advertisement information - country and network codes.
+- `three_gpp_raw` (String) Cellular network advertisement information - country and network codes.
 - `uesa` (Boolean) An option to enable Unauthenticated Emergency Service Accessibility.
 - `venue` (String) Information about the venue in which the Access Point is located.
 - `venue_names` (List of String) A list of colon-separated venue names and language codes.

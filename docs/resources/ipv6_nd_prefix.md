@@ -20,14 +20,15 @@ resource "routeros_ipv6_nd_prefix" "test" {
 
 ### Optional
 
-- `six_to_four_interface` (String) If this option is specified, this prefix will be combined with the IPv4 address of the interface name to produce a valid 6to4 prefix. The first 16 bits of this prefix will be replaced by 2002 and the next 32 bits of this prefix will be replaced by the IPv4 address assigned to the interface name at configuration time. The remaining 80 bits of the prefix (including the SLA ID) will be advertised as specified in the configuration file.
 - `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
 - `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
+- `___ts___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
 - `autonomous` (Boolean) When set, indicates that this prefix can be used for autonomous address configuration. Otherwise, prefix information is silently ignored.
 - `comment` (String)
 - `disabled` (Boolean)
 - `on_link` (Boolean) When set, indicates that this prefix can be used for on-link determination. When not set the advertisement makes no statement about the on-link or off-link properties of the prefix. For instance, the prefix might be used for address configuration with some of the addresses belonging to the prefix being on-link and others being off-link.
 - `preferred_lifetime` (String) Timeframe (relative to the time the packet is sent) after which generated address becomes `deprecated`. Deprecated is used only for already existing connections and is usable until valid lifetime expires.
+- `six_to_four_interface` (String) If this option is specified, this prefix will be combined with the IPv4 address of the interface name to produce a valid 6to4 prefix. The first 16 bits of this prefix will be replaced by 2002 and the next 32 bits of this prefix will be replaced by the IPv4 address assigned to the interface name at configuration time. The remaining 80 bits of the prefix (including the SLA ID) will be advertised as specified in the configuration file.
 - `valid_lifetime` (String) The length of time (relative to the time the packet is sent) an address remains in the valid state. The valid lifetime must be greater than or equal to the preferred lifetime.
 
 ### Read-Only

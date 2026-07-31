@@ -30,8 +30,10 @@ resource "routeros_routing_bgp_connection" "test" {
 
 - `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
 - `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
-- `add_path_out` (String)
-- `address_families` (String) List of address families about which this peer will exchange routing information. The remote peer must support (they usually do) BGP capabilities optional parameter to negotiate any other families than IP.
+- `___unset___` (String) <em>A set of fields that require setting/unsetting. This is an internal service field, setting a value is not required.</em>
+- `add_path_out` (String, Deprecated) Enables BGP Additional Paths (RFC 7911) advertisement for all address families. Removed in RouterOS v7.20, use the 'output.add_path' attribute instead.
+- `address_families` (String, Deprecated) List of address families about which this peer will exchange routing information. The remote peer must support (they usually do) BGP capabilities optional parameter to negotiate any other families than IP. Renamed to 'afi' in RouterOS v7.20.
+- `afi` (String) List of address families about which this peer will exchange routing information. The remote peer must support (they usually do) the BGP capabilities optional parameter to negotiate any other families than IP. Replaces 'address_families' since RouterOS v7.20.
 - `cisco_vpls_nlri_len_fmt` (String) VPLS NLRI length format type. Used for compatibility with Cisco VPLS.
 - `cluster_id` (String, Deprecated) In case this instance is a route reflector: the cluster ID of the router reflector cluster to this instance belongs. This attribute helps to recognize routing updates that come from another route reflector in this cluster and avoid routing information looping. Note that normally there is only one route reflector in a cluster; in this case, 'cluster-id' does not need to be configured and BGP router ID is used instead.
 - `comment` (String)
@@ -70,6 +72,7 @@ Optional:
 - `accept_large_communities` (String) A quick way to filter incoming updates with specific large communities. It allows filtering incoming messages directly before they are even parsed and stored in memory, that way significantly reducing memory usage. Regular input filter chain can only reject prefixes which means that it will still eat memory and will be visible in /routing route table as 'not active, filtered'. Changes to be applied required session refresh.
 - `accept_nlri` (String) Name of the ipv4/6 address-list. A quick way to filter incoming updates with specific NLRIs. It allows filtering incoming messages directly before they are even parsed and stored in memory, that way significantly reducing memory usage. Regular input filter chain can only reject prefixes which means that it will still eat memory and will be visible in /routing route table as 'not active, filtered'. Changes to be applied required session restart.
 - `accept_unknown` (String, Deprecated) A quick way to filter incoming updates with specific 'unknown' attributes. It allows filtering incoming messages directly before they are even parsed and stored in memory, that way significantly reducing memory usage. Regular input filter chain can only reject prefixes which means that it will still eat memory and will be visible in /routing route table as 'not active, filtered'. Changes to be applied required session refresh.
+- `add_path` (String) A list of address families for which BGP Additional Paths (RFC 7911) are accepted from the peer. Available since RouterOS v7.20.
 - `affinity` (String) Configure input multi-core processing. Read more in Routing Protocol Multi-core Support article. alone - input and output of each session are processed in its own process, most likely the best option when there are a lot of cores and a lot of peers afi, instance, vrf, remote-as - try to run input/output of new session in process with similar parameters main - run input/output in the main process (could potentially increase performance on single-core even possibly on multi-core devices with a small amount of cores) input - run output in the same process as input (can be set only for output affinity)
 - `allow_as` (Number) Indicates how many times to allow your own AS number in AS-PATH, before discarding a prefix.
 - `filter` (String) Name of the routing filter chain to be used on input prefixes. This happens after NLRIs are processed. If the chain is not specified, then BGP by default accepts everything.
@@ -106,6 +109,7 @@ Read-Only:
 
 Optional:
 
+- `add_path` (String) A list of address families for which BGP Additional Paths (RFC 7911) are advertised to the peer. Available since RouterOS v7.20.
 - `affinity` (String) Configure output multicore processing. Read more in Routing Protocol Multi-core Support article. alone - input and output of each session is processed in its own process, the most likely best option when there are a lot of cores and a lot of peers afi, instance, vrf, remote-as - try to run input/output of new session in process with similar parameters main - run input/output in the main process (could potentially increase performance on single-core even possibly on multicore devices with small amount of cores) input - run output in the same process as input (can be set only for output affinity).
 - `as_override` (Boolean) If set, then all instances of the remote peer's AS number in the BGP AS-PATH attribute are replaced with the local AS number before sending a route update to that peer. Happens before routing filters and prepending.
 - `default_originate` (String) Specifies default route (0.0.0.0/0) distribution method.

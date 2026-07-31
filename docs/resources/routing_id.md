@@ -19,8 +19,11 @@ resource "routeros_routing_id" "test" {
 
 ### Optional
 
+- `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
+- `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
+- `___ts___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
 - `comment` (String)
-- `disabled` (Boolean) ID reference is not used.
+- `disabled` (Boolean)
 - `router_id` (String) Parameter to explicitly set the Router ID. If not specified, it can be elected from one of the configured IP addresses on the router.
 - `select_dynamic_id` (String) States what IP addresses to use for ID election.
 - `select_from_vrf` (String) VRF from which to select IP addresses for the ID election.

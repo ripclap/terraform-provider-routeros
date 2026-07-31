@@ -81,6 +81,7 @@ resource "routeros_interface_bridge" "bridge" {
 - `id` (String) The ID of this resource.
 - `l2mtu` (Number) Layer2 Maximum transmission unit. [See](https://wiki.mikrotik.com/wiki/Maximum_Transmission_Unit_on_RouterBoards).
 - `mac_address` (String) Current mac address.
+- `managed` (Boolean) Configuration item is managed by another RouterOS subsystem and cannot be directly modified.
 - `running` (Boolean)
 
 ## Import

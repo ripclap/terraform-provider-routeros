@@ -32,6 +32,7 @@ resource "routeros_system_logging" "log_snmp_disk" {
 - `default` (Boolean) It's the default item.
 - `id` (String) The ID of this resource.
 - `invalid` (Boolean)
+- `managed` (Boolean) Configuration item is managed by another RouterOS subsystem and cannot be directly modified.
 
 ## Import
 Import is supported using the following syntax:

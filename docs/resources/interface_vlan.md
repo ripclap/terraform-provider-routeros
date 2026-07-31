@@ -46,6 +46,7 @@ resource "routeros_interface_vlan" "interface_vlan" {
 
 - `id` (String) The ID of this resource.
 - `l2mtu` (Number) Layer2 Maximum transmission unit. [See](https://wiki.mikrotik.com/wiki/Maximum_Transmission_Unit_on_RouterBoards).
+- `l3_hw_offloading` (Boolean) Layer 3 hardware offloading status of the VLAN interface.
 - `loop_protect_status` (String)
 - `mac_address` (String) Current mac address.
 - `running` (Boolean)

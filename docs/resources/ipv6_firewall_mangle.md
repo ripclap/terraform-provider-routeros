@@ -46,6 +46,7 @@ resource "routeros_ipv6_firewall_mangle" "rule" {
 - `dst_address_type` (String) Matches destination address type.
 - `dst_limit` (String) Matches packets until a given rate is exceeded.
 - `dst_port` (String) List of destination port numbers or port number ranges.
+- `headers` (String) Matches the presence of an IPv6 extension header, for example `hop:contains`.
 - `icmp_options` (String) Matches ICMP type: code fields.
 - `in_bridge_port` (String) Actual interface the packet has entered the router if the incoming interface is a bridge. Works only if use-ip-firewall is enabled in bridge settings.
 - `in_bridge_port_list` (String) Set of interfaces defined in interface list. Works the same as in-bridge-port.
