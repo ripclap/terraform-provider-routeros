@@ -200,8 +200,11 @@ func ResourceContainer() *schema.Resource {
 			return diags
 		}
 
+		// RouterOS clears `remote-image` once the pull completes, so the image name is
+		// reconstructed from `tag`. Containers imported from a tarball also carry a tag,
+		// but their source is `file` and no `remote_image` must be derived for them.
 		tag, ok := d.Get("tag").(string)
-		if ok && tag != "" {
+		if ok && tag != "" && d.Get("file").(string) == "" {
 			// Get Registry URL.
 			res, err := ReadItems(nil, "/container/config", m.(Client))
 			if err != nil {
