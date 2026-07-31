@@ -15,15 +15,15 @@
 - `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
 - `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `bandwidth` (String) Amount of the bandwidth announced as available for the RSVP-TE reservations on this interface. The console grammar is `Num[bps]`, and the router reports the value back as a plain number of bits per second.
-- `blockade_k_factor` (Number) Multiplier used to calculate the lifetime of the RSVP blockade state (RFC 2205).
+- `blockade_k_factor` (String) Multiplier used to calculate the lifetime of the RSVP blockade state (RFC 2205).
 - `comment` (String)
 - `disabled` (Boolean)
 - `down_flood_thresholds` (List of String) Reserved bandwidth thresholds, in percent, that trigger an IGP traffic engineering update when the amount of the reserved bandwidth decreases. The order is significant.
 - `igp_flood_period` (String) Maximum interval between the periodic IGP traffic engineering updates advertised for this interface.
-- `k_factor` (Number) RSVP refresh multiplier K used to calculate the state lifetime (RFC 2205).
+- `k_factor` (String) RSVP refresh multiplier K used to calculate the state lifetime (RFC 2205).
 - `refresh_time` (String) Interval between the RSVP refresh messages sent for the sessions on this interface.
 - `resource_class` (String) Resource class (administrative group, link colour) bit mask of this interface, matched by the `affinity_include_any`, `affinity_include_all` and `affinity_exclude` properties of the tunnels and paths. Written as a decimal number or as a `0x`-prefixed hexadecimal number.
-- `te_metric` (Number) Traffic engineering metric of this interface, used by CSPF instead of the IGP metric.
+- `te_metric` (String) Traffic engineering metric of this interface, used by CSPF instead of the IGP metric.
 - `up_flood_thresholds` (List of String) Reserved bandwidth thresholds, in percent, that trigger an IGP traffic engineering update when the amount of the reserved bandwidth increases. The order is significant.
 - `use_udp` (Boolean) Whether to send the RSVP messages encapsulated in UDP instead of raw IP.
 
