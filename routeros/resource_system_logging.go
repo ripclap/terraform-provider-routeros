@@ -42,6 +42,7 @@ func ResourceSystemLogging() *schema.Resource {
 		KeyDefault:  PropDefaultRo,
 		KeyDisabled: PropDisabledRw,
 		KeyInvalid:  PropInvalidRo,
+		KeyManaged:  PropManagedRo,
 		"prefix": {
 			Type:        schema.TypeString,
 			Optional:    true,

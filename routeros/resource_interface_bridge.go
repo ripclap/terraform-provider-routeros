@@ -138,6 +138,7 @@ func ResourceInterfaceBridge() *schema.Resource {
 			RequiredWith:     []string{"igmp_snooping"},
 		},
 		KeyMacAddress: PropMacAddressRo,
+		KeyManaged:    PropManagedRo,
 		"max_hops": {
 			Type:     schema.TypeInt,
 			Optional: true,

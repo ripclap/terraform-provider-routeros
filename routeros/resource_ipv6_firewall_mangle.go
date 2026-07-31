@@ -158,6 +158,11 @@ func ResourceIPv6FirewallMangle() *schema.Resource {
 			Description: "List of destination port numbers or port number ranges.",
 		},
 		KeyDynamic: PropDynamicRo,
+		"headers": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Matches the presence of an IPv6 extension header, for example `hop:contains`.",
+		},
 		"icmp_options": {
 			Type:        schema.TypeString,
 			Optional:    true,

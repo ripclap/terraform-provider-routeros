@@ -51,6 +51,7 @@ func ResourceInterfaceBridgeVlan() *schema.Resource {
 		},
 		KeyDisabled: PropDisabledRw,
 		KeyDynamic:  PropDynamicRo,
+		KeyManaged:  PropManagedRo,
 		"mvrp_forbidden": {
 			Type:     schema.TypeList,
 			Optional: true,

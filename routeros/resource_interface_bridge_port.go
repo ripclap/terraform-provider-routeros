@@ -255,6 +255,7 @@ func ResourceInterfaceBridgePort() *schema.Resource {
 			Computed:    true,
 			Description: "Shows whether the port is capable of learning MAC addresses.",
 		},
+		KeyManaged: PropManagedRo,
 		"multicast_router": {
 			Type:     schema.TypeString,
 			Optional: true,

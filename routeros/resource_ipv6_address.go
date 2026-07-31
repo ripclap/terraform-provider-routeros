@@ -148,10 +148,20 @@ func ResourceIPv6Address() *schema.Resource {
 			Description: "If set indicates that address is anycast address and Duplicate Address Detection should " +
 				"not be performed.",
 		},
+		"preferred": {
+			Type:        schema.TypeString,
+			Computed:    true,
+			Description: "Time left until the address is deprecated.",
+		},
 		"slave": {
 			Type:        schema.TypeBool,
 			Computed:    true,
 			Description: "Whether address belongs to an interface which is a slave port to some other master interface",
+		},
+		"valid": {
+			Type:        schema.TypeString,
+			Computed:    true,
+			Description: "Time left until the address is no longer valid.",
 		},
 		KeyVrf: PropVrfRw,
 	}

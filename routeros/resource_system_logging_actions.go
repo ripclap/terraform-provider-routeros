@@ -78,6 +78,7 @@ func ResourceSystemLoggingAction() *schema.Resource {
 			Optional:    true,
 			Description: "Email address where logs are sent, applicable only if `action=email`.",
 		},
+		KeyManaged: PropManagedRo,
 		"memory_lines": {
 			Type:             schema.TypeInt,
 			Optional:         true,
