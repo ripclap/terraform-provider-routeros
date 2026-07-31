@@ -51,3 +51,7 @@ signs:
       - "${artifact}"
 release:
   prerelease: auto
+  extra_files:
+    # The Terraform Registry requires the manifest as a release asset.
+    - glob: terraform-registry-manifest.json
+      name_template: "{{ .ProjectName }}_{{ .Version }}_manifest.json"
