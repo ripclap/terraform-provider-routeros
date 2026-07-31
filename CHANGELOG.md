@@ -1,4 +1,4 @@
-## [2.0.2] (2026-07-31)
+## [2.0.2](https://github.com/ripclap/terraform-provider-routeros/compare/v2.0.1...v2.0.2) (2026-07-31)
 
 ### Features
 
@@ -22,7 +22,7 @@
 * regenerate. Adds the new fields and brings the pages of the resources that were
   resolved in favour of upstream during the rebase back in sync with their schemas.
 
-## [2.0.1] (2026-07-31)
+## [2.0.1](https://github.com/ripclap/terraform-provider-routeros/compare/v2.0.0...v2.0.1) (2026-07-31)
 
 ### Documentation
 
@@ -36,7 +36,7 @@
 
 * add `terraform-registry-manifest.json`, declaring protocol version 5.0.
 
-## [2.0.0] (2026-07-29)
+## [2.0.0](https://github.com/ripclap/terraform-provider-routeros/compare/v1.99.1...v2.0.0) (2026-07-29)
 
 First release of this fork. Based on upstream, rebased onto `main` after v1.99.1.
 See [FORK.md](FORK.md).
