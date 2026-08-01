@@ -9,7 +9,7 @@ description: |-
 
 # RouterOS Provider
 
-To get started with the provider, you first need to enable the REST API on your router. [You can follow the Mikrotik documentation on this](https://help.mikrotik.com/docs/display/ROS/REST+API), but the gist is to create an SSL cert (in `/system/certificates`) and enable the `web-ssl` service (in `/ip/services`) which uses that certificate.
+Enable the REST API on the router first: create a certificate under `/certificate` and enable the `www-ssl` service under `/ip/service` using it. [MikroTik's documentation](https://help.mikrotik.com/docs/display/ROS/REST+API) covers this.
 
 ## About this fork
 
@@ -25,7 +25,9 @@ Because it is rebased on upstream, most resources behave identically. The notabl
 - `routeros_mpls_traffic_eng_interface` models the uint32 `te_metric`, `k_factor` and `blockade_k_factor` fields as strings.
 - Several new resources cover menus upstream does not yet model.
 
-See the repository `CHANGELOG.md` for the full list.
+See the repository `CHANGELOG.md` for the full list, and `COVERAGE.md` for the resources it adds.
+
+The provider speaks REST (`https://`, `http://`) and the binary API (`apis://` port 8729, `api://` port 8728). The binary API is faster, and is the one that completes a read against a very large routing table; if a resource times out on import, try `apis://` before assuming it is unsupported.
 
 
 ## Example Usage

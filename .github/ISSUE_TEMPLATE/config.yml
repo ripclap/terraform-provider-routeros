@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Provider documentation
+    url: https://search.opentofu.org/provider/ripclap/routeros/latest
+    about: Resource and data source reference for the published version.
+  - name: What this fork changes
+    url: https://github.com/ripclap/terraform-provider-routeros/blob/full-device-coverage/FORK.md
+    about: Behavioural differences from upstream, and the resources it adds.
+  - name: Upstream project
+    url: https://github.com/terraform-routeros/terraform-provider-routeros/issues
+    about: Report there if the behaviour also occurs with the upstream provider.

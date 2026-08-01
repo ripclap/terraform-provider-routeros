@@ -14,8 +14,6 @@ on:
       - 'CHANGELOG.md'
       - 'RELEASING.md'
       - 'CONTRIBUTING.md'
-      - 'SECURITY.md'
-      - 'CODE_OF_CONDUCT.md'
       - 'NOTICE'
       - 'LICENSE.md'
       - '.github/ISSUE_TEMPLATE/**'

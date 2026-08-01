@@ -1,9 +1,21 @@
 # Releasing
 
-A published version is immutable. The registry records the checksums a version had when
-it was first indexed and serves those permanently, so republishing a version with
-different bytes breaks every install of it. Never re-tag and never rebuild a published
-version — release the next patch version instead.
+## A published version is immutable
+
+The registry records the checksums a version had when it was first indexed and serves
+them permanently. Upload different bytes under a version that has already been published
+and every install of it fails with
+
+```
+registry response indicates a package of size N, but received a package of size M
+```
+
+There is no way to correct this short of asking the registry maintainers to remove the
+version. Version 2.0.2 of this provider was lost that way.
+
+So: never re-tag, and never rebuild a published version. Release the next patch version
+and mark the broken one withdrawn in `README.md`. Drafts exist precisely so a build can
+be discarded and repeated before any of this becomes permanent.
 
 ## Steps
 
@@ -32,6 +44,27 @@ version — release the next patch version instead.
 - the tag is `vMAJOR.MINOR.PATCH` and is an ancestor of `full-device-coverage`
 - the version is not already in the registry or published on GitHub
 - `CHANGELOG.md` has an entry and the registry manifest parses
+- the signing key matches the `GPG_FINGERPRINT` variable
+
+## What a release ships
+
+| artefact | purpose |
+|---|---|
+| 13 platform archives | the provider itself |
+| `*_SHA256SUMS` + `.sig` | what the registry verifies, signed with the namespace key |
+| `*_manifest.json` | the registry protocol manifest |
+| `*.sbom.json` | CycloneDX inventory, one per archive |
+| provenance attestation | proves which workflow and commit built the archives |
+
+The draft is checked before it can be published: every checksum is re-verified against
+the files actually uploaded, each platform archive is confirmed present, and the archive
+and SBOM counts must agree.
+
+Consumers verify provenance with:
+
+```bash
+gh attestation verify <archive> --repo ripclap/terraform-provider-routeros
+```
 
 ## Repository configuration
 
@@ -55,7 +88,8 @@ The public key must be registered with the OpenTofu Registry for this namespace.
 Release only from CI. Locally, build snapshots:
 
 ```bash
-goreleaser release --snapshot --clean --skip=publish,sign
+make snapshot
 ```
 
-CI also retains snapshot archives from each push under the run's Artifacts.
+That skips publishing, signing and SBOM generation, so neither the signing key nor syft
+is needed. CI also retains snapshot archives from each push under the run's Artifacts.

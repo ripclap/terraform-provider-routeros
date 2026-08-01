@@ -1,15 +1,6 @@
-# Runs after a draft is published, and answers the only question that matters
-# once a version is public: does what the registry hands people match what is
-# actually on the release?
-#
-# When those disagree, `tofu init` fails with
-#
-#   registry response indicates a package of size N, but received a package of size M
-#
-# and it cannot be repaired, because the registry keeps the checksums it recorded
-# the first time it saw the version. This is how 2.0.2 of this provider was lost.
-# The release workflow is built so it should not be able to happen again; this is
-# the check that says so out loud rather than waiting for somebody's `tofu init`.
+# Runs once a draft is published and confirms the checksums the registry serves
+# match the files on the release. A mismatch cannot be repaired; see
+# RELEASING.md.
 name: Verify published release
 
 on:
@@ -104,11 +95,10 @@ jobs:
           if [ "$fail" -ne 0 ]; then
             {
               echo
-              echo "**This version is broken and cannot be fixed.** The registry is serving"
-              echo "checksums for files that are no longer the ones on the release, so"
-              echo "\`tofu init\` will fail for everyone. Do not re-upload anything to it:"
-              echo "release the next patch version instead, and note in the README that"
-              echo "this one must not be used."
+              echo "**This version cannot be repaired.** The registry serves checksums"
+              echo "for files that are no longer the ones on the release, so \`tofu init\`"
+              echo "fails for everyone. Do not re-upload: release the next patch version"
+              echo "and mark this one withdrawn in the README. See RELEASING.md."
             } >> "$GITHUB_STEP_SUMMARY"
             exit 1
           fi

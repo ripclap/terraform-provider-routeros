@@ -1,3 +1,29 @@
+## [Unreleased](https://github.com/ripclap/terraform-provider-routeros/compare/v2.0.3...HEAD)
+
+### Bug Fixes
+
+* **provider:** advertise `registry.opentofu.org/ripclap/routeros` rather than upstream's
+  address, so a debug-mode reattach resolves to this provider.
+* **provider:** report errors from `d.Set` in the x509 and Easy Connect data sources and
+  in the container, ethernet switch, move and sniffer resources. A failed set left state
+  silently disagreeing with the device.
+* **build:** define the `version` and `commit` symbols the release `-ldflags` write to.
+  They were being discarded, so `-version` reported nothing.
+
+### Security
+
+* **deps:** upgrade `grpc`, `x/crypto`, `x/net` and `x/text` to the versions that fix the
+  nine advisories `govulncheck` reported as reachable from this code.
+
+### Miscellaneous
+
+* **ci:** add `golangci-lint`, `govulncheck`, dependency review and CodeQL. Releases now
+  ship a CycloneDX SBOM per archive and a build provenance attestation.
+* **docs:** correct the REST API setup instructions, which named `/system/certificates`,
+  `/ip/services` and `web-ssl`. The menus are `/certificate` and `/ip/service`, and the
+  service is `www-ssl`.
+* **docs:** add `CONTRIBUTING.md`.
+
 ## [2.0.3](https://github.com/ripclap/terraform-provider-routeros/compare/v2.0.2...v2.0.3) (2026-07-31)
 
 ### Bug Fixes
