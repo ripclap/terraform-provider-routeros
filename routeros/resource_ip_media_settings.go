@@ -21,7 +21,7 @@ func ResourceIpMediaSettings() *schema.Resource {
 			Type:     schema.TypeString,
 			Optional: true,
 			Description: "Location used by the media server for the generated thumbnails; empty by default. " +
-				"VERIFY: this is the only property `/ip/media/settings/set` accepts on RouterOS 7.23.2, but " +
+				"This is the only property `/ip/media/settings/set` accepts on RouterOS 7.23, but " +
 				"MikroTik does not document it, so the exact accepted values were not established.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},

@@ -6,7 +6,7 @@ import (
 )
 
 /*
-	The menu was empty on the reference device (RouterOS 7.23.2):
+	The menu was empty on the RouterOS 7.23:
 	`GET /rest/interface/mesh/port` -> `[]`, so no value sample is available.
 
 	Writable fields reported by the device:
@@ -16,7 +16,7 @@ import (
 	Read-only fields reported by the same device:
 	  active-port-type  dr-address  dynamic  inactive
 
-	VERIFY: HWMP+ mesh has no page on help.mikrotik.com; the property descriptions below come from
+	HWMP+ mesh has no page on help.mikrotik.com; the property descriptions below come from
 	the legacy MikroTik HWMP+ mesh manual. The field names, the value types and the enumerations
 	were taken from the device.
 */

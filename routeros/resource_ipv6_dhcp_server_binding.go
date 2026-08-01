@@ -6,7 +6,7 @@ import (
 )
 
 /*
-	Menu is empty on the reference device (RouterOS 7.23.2), so no GET sample is available.
+	Menu is empty on the RouterOS 7.23, so no GET sample is available.
 */
 
 // ResourceIPv6DhcpServerBinding https://help.mikrotik.com/docs/spaces/ROS/pages/24805500/DHCP
@@ -124,22 +124,22 @@ func ResourceIPv6DhcpServerBinding() *schema.Resource {
 			Type:     schema.TypeString,
 			Computed: true,
 			Description: "Key used to authenticate the DHCPv6 Reconfigure messages sent to this client. " +
-				"VERIFY: field presence confirmed on ROS 7.23.2, the exact value format was not observable " +
-				"(no bindings on the reference device).",
+				"Field presence confirmed on ROS 7.23, the exact value format was not observable " +
+				"(no bindings on RouterOS 7.23).",
 		},
 		"reconfigure_last_sent": {
 			Type:     schema.TypeString,
 			Computed: true,
 			Description: "When the last DHCPv6 Reconfigure message was sent to this client. " +
-				"VERIFY: field presence confirmed on ROS 7.23.2, the exact value format was not observable " +
-				"(no bindings on the reference device).",
+				"Field presence confirmed on ROS 7.23, the exact value format was not observable " +
+				"(no bindings on RouterOS 7.23).",
 		},
 		"reconfigure_status": {
 			Type:     schema.TypeString,
 			Computed: true,
 			Description: "Result of the last DHCPv6 Reconfigure exchange with this client. " +
-				"VERIFY: field presence confirmed on ROS 7.23.2, the set of possible values was not observable " +
-				"(no bindings on the reference device).",
+				"Field presence confirmed on ROS 7.23, the set of possible values was not observable " +
+				"(no bindings on RouterOS 7.23).",
 		},
 		"server": {
 			Type:             schema.TypeString,

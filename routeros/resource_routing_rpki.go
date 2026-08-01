@@ -57,7 +57,7 @@ func ResourceRoutingRpki() *schema.Resource {
 			Type:     schema.TypeInt,
 			Optional: true,
 			Description: "The preference of this session inside the group, used when several sessions back the same " +
-				"group. VERIFY: the direction of the ordering could not be established - the console exposes no help " +
+				"group. The direction of the ordering could not be established - the console exposes no help " +
 				"text for this property and the MikroTik RPKI page does not document it.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},

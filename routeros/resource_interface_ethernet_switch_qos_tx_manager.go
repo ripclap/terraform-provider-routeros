@@ -7,7 +7,7 @@ import (
 /*
 	{
 	  ".id": "*1",
-	  "comment": "Use this for permanently disconnected ports",
+	  "comment": "",
 	  "default": "true",
 	  "disabled": "false",
 	  "hw-id": "1",
@@ -17,7 +17,7 @@ import (
 	  "queue-buffers": "auto"
 	}
 
-	Writable fields reported by the reference device (RouterOS 7.23.2):
+	Writable fields reported by the RouterOS 7.23:
 	/console/inspect request=child path="interface,ethernet,switch,qos,tx-manager,add"
 	  comment  copy-from  disabled  name  queue-buffers
 

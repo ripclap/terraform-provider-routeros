@@ -87,8 +87,8 @@ func ResourceSystemHealthSettings() *schema.Resource {
 		"fan_on_threshold": {
 			Type:     schema.TypeString,
 			Optional: true,
-			Description: "VERIFY: the threshold at which the fan is switched on. The property is accepted by " +
-				"`/system/health/settings/set` but is not reported by the reference device, so neither its unit " +
+			Description: "The threshold at which the fan is switched on. The property is accepted by " +
+				"`/system/health/settings/set` but is not reported by a RouterOS 7.23 device, so neither its unit " +
 				"(percent or degrees Celsius) nor its valid range could be established on this hardware.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},

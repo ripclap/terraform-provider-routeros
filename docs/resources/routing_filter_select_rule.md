@@ -38,7 +38,7 @@ Numeric property tokens reported by the device: `bgp-input-local-as`, `bgp-input
 The value is a property token, optionally followed by `>` and an ordering selector (`largest-none-best`, `largest-none-worst`, `smallest-none-best`, `smallest-none-worst`).
 
 Prefix property tokens reported by the device: `bgp-input-local-addr`, `bgp-input-remote-addr`, `bgp-output-local-addr`, `bgp-output-remote-addr`, `dst`, `gw`, `ospf-fwd`, `pref-src`.
-- `do_take` (String) VERIFY: limits how many of the remaining candidate routes are taken. The console exposes no value domain for this property and it is not covered by the MikroTik documentation - supply the raw RouterOS value.
+- `do_take` (String) Limits how many of the remaining candidate routes are taken. The console exposes no value domain for this property and it is not covered by the MikroTik documentation - supply the raw RouterOS value.
 - `do_where` (String) Name of a `/routing/filter/rule` chain that is called to decide which of the candidate routes stay in the selection.
 - `place_before` (String) Before which position the rule will be inserted.  
 	> Please check the effect of this option, as it does not work as you think!  

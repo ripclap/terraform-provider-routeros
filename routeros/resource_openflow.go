@@ -6,7 +6,7 @@ import (
 )
 
 /*
-  `GET /rest/openflow` returns `[]` on the reference device (RouterOS 7.23.2) -
+  `GET /rest/openflow` returns `[]` on the RouterOS 7.23 -
   no switch instance is configured, so no live record could be captured. The shape below lists
   the wire field names reported by the device; the values are illustrative.
 
@@ -51,7 +51,7 @@ func ResourceOpenflow() *schema.Resource {
 			Type:     schema.TypeString,
 			Optional: true,
 			Description: "Datapath ID advertised to the controller. MikroTik documents it as two parts separated " +
-				"with a slash - an implementer-defined number `0..65535` and a MAC address. VERIFY: the console " +
+				"with a slash - an implementer-defined number `0..65535` and a MAC address. The console " +
 				"reports this argument as a plain number, so the exact accepted syntax on RouterOS 7.23 could not be " +
 				"confirmed without writing to the device; it is declared as a string so that both forms are accepted.",
 		},
@@ -59,7 +59,7 @@ func ResourceOpenflow() *schema.Resource {
 		"isolate_controllers": {
 			Type:     schema.TypeBool,
 			Optional: true,
-			Description: "VERIFY: accepts `yes`/`no` on the device, but the property is not described in the " +
+			Description: "Accepts `yes`/`no` on the device, but the property is not described in the " +
 				"MikroTik documentation, so its exact effect is unconfirmed.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},

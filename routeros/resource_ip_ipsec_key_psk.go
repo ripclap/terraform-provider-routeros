@@ -5,7 +5,7 @@ import (
 )
 
 /*
-	The menu was empty on the reference device (RouterOS 7.23.2), so no value sample is available.
+	The menu was empty on the RouterOS 7.23, so no value sample is available.
 	The menu has no `set` command, so every attribute is ForceNew. The RouterOS `id` property is
 	reserved by the Terraform SDK, so it is exposed as `psk_id` and remapped by the transform set.
 */

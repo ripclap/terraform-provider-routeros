@@ -21,11 +21,11 @@ import (
 	  "traffic-class": "1"
 	}
 
-	Writable fields reported by the reference device (RouterOS 7.23.2):
+	Writable fields reported by the RouterOS 7.23:
 	/console/inspect request=child path="interface,ethernet,switch,qos,profile,add"
 	  automap  comment  copy-from  disabled  dscp  name  pcp  traffic-class
 
-	The `color` property documented by MikroTik is not exposed by RouterOS 7.23.2 on this switch
+	The `color` property documented by MikroTik is not exposed by RouterOS 7.23 on this switch
 	chip, so it is not part of the schema.
 */
 

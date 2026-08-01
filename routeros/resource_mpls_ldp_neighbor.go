@@ -5,7 +5,7 @@ import (
 )
 
 /*
-  The menu is empty on the reference device (ROS 7.23.2, MPLS not configured),
+  The menu is empty on RouterOS 7.23 (ROS 7.23, MPLS not configured),
   the field set below is taken from `/console/inspect request=syntax path="mpls,ldp,neighbor,add"`
   and from `print proplist=` completion on that device.
 
@@ -86,7 +86,7 @@ func ResourceMplsLdpNeighbor() *schema.Resource {
 			Type:     schema.TypeString,
 			Computed: true,
 			Description: "Path vector limit negotiated with this neighbor. " +
-				"VERIFY: reported as a number by the console, exposed as a string because the property is " +
+				"Reported as a number by the console, exposed as a string because the property is " +
 				"absent unless the loop detection is negotiated.",
 		},
 		"peer": {
@@ -122,7 +122,7 @@ func ResourceMplsLdpNeighbor() *schema.Resource {
 			Type:     schema.TypeString,
 			Computed: true,
 			Description: "Address families used on the session with this neighbor. " +
-				"VERIFY: the exact value shape is not documented, exposed as a string.",
+				"The exact value shape is not documented, exposed as a string.",
 		},
 		"vpls": {
 			Type:        schema.TypeBool,

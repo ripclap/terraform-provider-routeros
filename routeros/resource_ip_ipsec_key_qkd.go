@@ -58,7 +58,7 @@ func ResourceIpIpsecKeyQkd() *schema.Resource {
 			Type:     schema.TypeInt,
 			Optional: true,
 			Description: "Requested size of each key. " +
-				"VERIFY: MikroTik documents the unit as bytes, while the device default is `128`; the unit was not " +
+				"MikroTik documents the unit as bytes, while the device default is `128`; the unit was not " +
 				"verified on hardware.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},

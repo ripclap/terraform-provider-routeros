@@ -5,7 +5,7 @@ import (
 )
 
 /*
-  The menu is empty on the reference device (RouterOS 7.23.2), so no live JSON sample can be shown.
+  The menu is empty on the RouterOS 7.23, so no live JSON sample can be shown.
   This menu has no `disabled` or `dynamic` property.
 */
 

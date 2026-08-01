@@ -60,7 +60,7 @@ func ResourceRoutingRipInterfaceTemplate() *schema.Resource {
 			Optional: true,
 			Description: "The operation mode of the matching interfaces." +
 				"\n  * passive - do not send the RIP updates, only receive and process them" +
-				"\n  * strict - VERIFY: not covered by the MikroTik documentation, the value is reported by the " +
+				"\n  * strict - Not covered by the MikroTik documentation, the value is reported by the " +
 				"RouterOS console completion",
 			ValidateFunc: validation.StringInSlice([]string{"passive", "strict"}, false),
 		},

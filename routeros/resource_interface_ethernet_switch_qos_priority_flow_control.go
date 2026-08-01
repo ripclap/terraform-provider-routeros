@@ -17,7 +17,7 @@ import (
 	  "tx": "false"
 	}
 
-	Writable fields reported by the reference device (RouterOS 7.23.2):
+	Writable fields reported by the RouterOS 7.23:
 	/console/inspect request=child path="interface,ethernet,switch,qos,priority-flow-control,add"
 	  comment  copy-from  disabled  name  pause-threshold  resume-threshold  rx  traffic-class  tx
 */

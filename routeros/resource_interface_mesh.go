@@ -5,7 +5,7 @@ import (
 )
 
 /*
-	The menu was empty on the reference device (RouterOS 7.23.2):
+	The menu was empty on the RouterOS 7.23:
 	`GET /rest/interface/mesh` -> `[]`, so no value sample is available.
 
 	Writable fields reported by the device:
@@ -20,7 +20,7 @@ import (
 	The HWMP+ timers are reported by RouterOS as time values, so they are modelled as strings with
 	a time aware diff.
 
-	VERIFY: HWMP+ mesh has no page on help.mikrotik.com; the property descriptions below come from
+	HWMP+ mesh has no page on help.mikrotik.com; the property descriptions below come from
 	the legacy MikroTik HWMP+ mesh manual. The field names, the value types and the enumerations
 	were taken from the device.
 */

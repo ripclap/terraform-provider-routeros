@@ -9,7 +9,7 @@ import (
 	  "enabled": "false"
 	}
 
-	Reference device: RouterOS 7.23.2, `GET /rest/file/rsync-daemon`.
+	Sampled from RouterOS 7.23, `GET /rest/file/rsync-daemon`.
 */
 
 // ResourceFileRsyncDaemon The built in rsync daemon that serves the router file system.

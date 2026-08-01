@@ -5,7 +5,7 @@ import (
 )
 
 /*
-  Live `GET /rest/iot/modbus` from the reference device running RouterOS 7.23.2:
+  Live `GET /rest/iot/modbus` from a RouterOS 7.23 device running RouterOS 7.23:
 
   {
     "disable-security-rules": "true",

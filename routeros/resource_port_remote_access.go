@@ -6,7 +6,7 @@ import (
 )
 
 /*
-	The menu was empty on the reference device (RouterOS 7.23.2), so no JSON sample is available.
+	The menu was empty on the RouterOS 7.23, so no JSON sample is available.
 */
 
 // ResourcePortRemoteAccess Makes a serial port reachable over TCP/UDP (RFC 2217 and raw modes).

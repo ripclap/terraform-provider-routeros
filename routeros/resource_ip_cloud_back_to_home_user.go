@@ -6,7 +6,7 @@ import (
 )
 
 /*
-	The menu was empty on the reference device (RouterOS 7.23.2), so no value sample is available.
+	The menu was empty on the RouterOS 7.23, so no value sample is available.
 	`expires` is ForceNew: MikroTik documents that it cannot be changed once the user exists, so a
 	change recreates the user (regenerating its WireGuard keys).
 */

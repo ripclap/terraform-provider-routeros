@@ -14,7 +14,7 @@ const testRoutingFilterSelectRuleJump = "routeros_routing_filter_select_rule.tes
 
 // The do-select-*/do-group-* properties only parse as '<property-token>><ordering-selector>'; RouterOS
 // answers "expected >" when the ordering selector is omitted. The rules are chained with depends_on
-// because concurrent REST writes to /routing/filter/select-rule wedge the RouterOS 7.23.2 www-ssl server.
+// because concurrent REST writes to /routing/filter/select-rule wedge the RouterOS 7.23 www-ssl server.
 func TestAccRoutingFilterSelectRuleTest_basic(t *testing.T) {
 	for _, name := range testNames {
 		t.Run(name, func(t *testing.T) {

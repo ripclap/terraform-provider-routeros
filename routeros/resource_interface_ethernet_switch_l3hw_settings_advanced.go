@@ -53,8 +53,8 @@ func ResourceInterfaceEthernetSwitchL3HwSettingsAdvanced() *schema.Resource {
 			Type:     schema.TypeInt,
 			Optional: true,
 			Description: "Number of retries used when the neighbour table is dumped." +
-				"\nVERIFY: this property is exposed by RouterOS 7.23.2 but is not covered by the MikroTik " +
-				"documentation; only the name and the device default (3) could be established.",
+				"\nThis property is exposed by RouterOS 7.23 but is not covered by the MikroTik " +
+				"documentation; only the name and the default value (3) are known.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"neigh_keepalive_interval": {

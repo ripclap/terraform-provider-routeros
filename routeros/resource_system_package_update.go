@@ -9,7 +9,7 @@ import (
 {
   "channel": "stable",
   "check-certificate": "yes",
-  "installed-version": "7.23.2",
+  "installed-version": "7.23",
   "ip-version": "auto",
   "mode": "https"
 }

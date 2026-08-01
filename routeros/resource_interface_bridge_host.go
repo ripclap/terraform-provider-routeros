@@ -19,7 +19,7 @@ import (
 	  "on-interface": "ether1"
 	}
 
-	Writable fields reported by the reference device (RouterOS 7.23.2):
+	Writable fields reported by the RouterOS 7.23:
 	/console/inspect request=child path="interface,bridge,host,add"
 	  bridge  comment  copy-from  disabled  interface  mac-address  vid
 

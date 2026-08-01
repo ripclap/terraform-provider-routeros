@@ -5,7 +5,7 @@ import (
 )
 
 /*
-  `GET /rest/iot/mqtt/subscriptions` returns `[]` on the reference device (RouterOS 7.23.2) - no subscription is configured, so no live record could be captured. The
+  `GET /rest/iot/mqtt/subscriptions` returns `[]` on the RouterOS 7.23 - no subscription is configured, so no live record could be captured. The
   shape below lists the wire field names reported by the device; the values are illustrative.
 
   {

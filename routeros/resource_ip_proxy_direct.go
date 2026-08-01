@@ -9,7 +9,7 @@ import (
 )
 
 /*
-	Menu is empty on the reference device (RouterOS 7.23.2), so no GET sample is available.
+	Menu is empty on the RouterOS 7.23, so no GET sample is available.
 */
 
 // ResourceIpProxyDirect Web proxy direct access list: decides which requests bypass the parent proxy.

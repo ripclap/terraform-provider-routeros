@@ -34,7 +34,7 @@ import (
 // This menu is undocumented; property value domains are unknown, so the value-carrying properties are
 // plain strings passed to the device verbatim.
 func ResourceRoutingFantasy() *schema.Resource {
-	const verify = "VERIFY: the value domain of this property could not be established, the RouterOS console " +
+	const verify = "The value domain of this property could not be established, the RouterOS console " +
 		"offers no completions for it and the menu is undocumented. Supply the raw RouterOS value."
 
 	resSchema := map[string]*schema.Schema{

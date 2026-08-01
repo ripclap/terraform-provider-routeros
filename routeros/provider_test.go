@@ -283,7 +283,7 @@ func testCheckResourceExists(name string, resourcePath string, resource *Mikroti
 	}
 }
 
-// testCheckMenu skips the test when the menu is absent on the device under test.
+// testCheckMenu skips the test when the menu is absent on the target device.
 // Package-dependent menus (iot, openflow, ups) and hardware-dependent ones
 // (serial /port) do not exist everywhere; their absence is not a defect.
 func testCheckMenu(t *testing.T, path string) {

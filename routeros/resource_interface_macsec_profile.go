@@ -15,7 +15,7 @@ import (
 	  "server-priority": "10"
 	}
 
-	Writable fields reported by the reference device (RouterOS 7.23.2):
+	Writable fields reported by the RouterOS 7.23:
 	/console/inspect request=child path="interface,macsec,profile,add"
 	  ciphers  copy-from  name  server-priority
 */

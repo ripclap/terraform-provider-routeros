@@ -8,7 +8,7 @@ import (
 )
 
 /*
-  The menu is empty on the reference device (ROS 7.23.2, MPLS not configured),
+  The menu is empty on RouterOS 7.23 (ROS 7.23, MPLS not configured),
   the field set below is taken from `/console/inspect request=syntax path="mpls,traffic-eng,path,add"`
   and from `print proplist=` completion on that device.
 

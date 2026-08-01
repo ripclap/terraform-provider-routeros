@@ -5,7 +5,7 @@ import (
 )
 
 /*
-	The menu was empty on the reference device (RouterOS 7.23.2):
+	The menu was empty on the RouterOS 7.23:
 	`GET /rest/interface/wifi/network/radio` -> `[]`, so no value sample is available.
 
 	Writable fields reported by the device:
@@ -76,7 +76,7 @@ func ResourceWifiNetworkRadio() *schema.Resource {
 
 	return &schema.Resource{
 		Description: `*<span style="color:red">The '/interface/wifi/network/radio' menu was verified on RouterOS ` +
-			`7.23.2; VERIFY: the exact minimum RouterOS version could not be established.</span>*`,
+			`7.23; the exact minimum RouterOS version is not documented.</span>*`,
 		CreateContext: DefaultCreate(resSchema),
 		ReadContext:   DefaultRead(resSchema),
 		UpdateContext: DefaultUpdate(resSchema),

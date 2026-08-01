@@ -39,14 +39,14 @@
 
 ### Read-Only
 
-- `forwarding` (String) Forwarding state of the tunnel. VERIFY: the exact value shape is not documented, exposed as a string.
+- `forwarding` (String) Forwarding state of the tunnel. The exact value shape is not documented, exposed as a string.
 - `forwarding_on` (String) Path the tunnel currently forwards the traffic over.
 - `id` (String) The ID of this resource.
 - `invalid` (Boolean)
-- `primary` (String) State of the primary path of the tunnel. VERIFY: the exact value shape is not documented, exposed as a string.
-- `primary_pending` (String) Pending state of the primary path. VERIFY: the exact value shape is not documented, exposed as a string.
-- `secondary` (String) State of the secondary path of the tunnel. VERIFY: the exact value shape is not documented, exposed as a string.
-- `secondary_pending` (String) Pending state of the secondary path. VERIFY: the exact value shape is not documented, exposed as a string.
+- `primary` (String) State of the primary path of the tunnel. The exact value shape is not documented, exposed as a string.
+- `primary_pending` (String) Pending state of the primary path. The exact value shape is not documented, exposed as a string.
+- `secondary` (String) State of the secondary path of the tunnel. The exact value shape is not documented, exposed as a string.
+- `secondary_pending` (String) Pending state of the secondary path. The exact value shape is not documented, exposed as a string.
 - `session` (String) RSVP session of the tunnel.
 
 

@@ -5,7 +5,7 @@ import (
 )
 
 /*
-  `GET /rest/iot/mqtt/brokers` returns `[]` on the reference device (RouterOS 7.23.2) - no broker is configured, so no live record could be captured. The shape
+  `GET /rest/iot/mqtt/brokers` returns `[]` on the RouterOS 7.23 - no broker is configured, so no live record could be captured. The shape
   below lists the wire field names reported by the device; the values are illustrative.
 
   {

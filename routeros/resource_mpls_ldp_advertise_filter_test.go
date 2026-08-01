@@ -55,7 +55,7 @@ resource "routeros_mpls_ldp_advertise_filter" "test_mpls_ldp_advertise_filter_x"
   advertise = %v
   neighbor  = "198.51.100.3"
   prefix    = %q
-  # RouterOS 7.23.2 only accepts "any" here: unlike /mpls/ldp/accept-filter, this menu
+  # RouterOS 7.23 only accepts "any" here: unlike /mpls/ldp/accept-filter, this menu
   # rejects a concrete VRF name with "input does not match any value of vrf".
   vrf     = "any"
   comment = "test_mpls_ldp_advertise_filter_x"

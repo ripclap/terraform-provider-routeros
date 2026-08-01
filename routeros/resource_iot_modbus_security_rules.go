@@ -5,8 +5,8 @@ import (
 )
 
 /*
-  `GET /rest/iot/modbus/security-rules` returns `[]` on the reference device
-  (RouterOS 7.23.2) - no rules are configured, so no live record could be
+  `GET /rest/iot/modbus/security-rules` returns `[]` on RouterOS 7.23
+  (RouterOS 7.23) - no rules are configured, so no live record could be
   captured. The shape below uses the field names reported by the device and the values from
   the MikroTik example `/iot modbus security-rules add ip-range=0.0.0.0/0 allowed-function-codes=3,6`:
 

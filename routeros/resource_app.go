@@ -10,21 +10,21 @@ import (
 	  ".id": "*3D",
 	  "app-store-url": "",
 	  "category": "search",
-	  "container-command-lines": "solr:none:docker.io/solr:latest",
+	  "container-command-lines": "example:none:docker.io/library/example:latest",
 	  "custom": "false",
 	  "default-network": "internal",
 	  "devices": "",
 	  "disabled": "true",
 	  "environment": "",
 	  "extra-mounts": "",
-	  "firewall-redirects": "8983:8983:tcp:web",
+	  "firewall-redirects": "8080:8080:tcp:web",
 	  "from-app-store": "false",
 	  "interface": "none",
-	  "name": "solr",
+	  "name": "example",
 	  "network": "default",
 	  "network-outgoing-access": "true",
 	  "network-pvid": "1",
-	  "project-page": "https://solr.apache.org",
+	  "project-page": "https://example.org",
 	  "required-hw-devices": "",
 	  "required-mounts": "data",
 	  "running": "false",
@@ -34,7 +34,7 @@ import (
 	  "use-https": "true"
 	}
 
-	Reference device: RouterOS 7.23.2, `GET /rest/app` (one of 104 entries; the
+	Sampled from RouterOS 7.23, `GET /rest/app` (one entry of many; the
 	bulky `yaml`, `configs`, `cmds` and `description` properties were left out of the sample).
 
 	Settable arguments, `/console/inspect request=syntax path="app,add"` and `path="app,set"`:

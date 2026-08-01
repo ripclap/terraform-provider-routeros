@@ -87,7 +87,7 @@ func ResourceRoutingFilterSelectRule() *schema.Resource {
 		"do_take": {
 			Type:     schema.TypeString,
 			Optional: true,
-			Description: "VERIFY: limits how many of the remaining candidate routes are taken. The console exposes " +
+			Description: "Limits how many of the remaining candidate routes are taken. The console exposes " +
 				"no value domain for this property and it is not covered by the MikroTik documentation - supply the " +
 				"raw RouterOS value.",
 		},

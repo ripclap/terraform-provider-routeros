@@ -5,7 +5,7 @@ import (
 )
 
 /*
-	The menu was empty on the reference device (RouterOS 7.23.2), so no value sample is available.
+	The menu was empty on the RouterOS 7.23, so no value sample is available.
 */
 
 // ResourceIpKidControl Kid Control profile (per user time and rate policy).

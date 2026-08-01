@@ -6,7 +6,7 @@ import (
 )
 
 /*
-  The menu is empty on the reference device (RouterOS 7.23.2), so no live
+  The menu is empty on the RouterOS 7.23, so no live
   JSON sample can be shown. The field set below was taken from the device itself:
 
     /console/inspect request=syntax path="user-manager,payment,add"

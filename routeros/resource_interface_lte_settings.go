@@ -15,7 +15,7 @@ import (
 
 	The hardware dependent properties `external-antenna`, `external-antenna-selected` and
 	`sim-slot` that MikroTik documents for some LTE products are not exposed by the reference
-	device (RouterOS 7.23.2) and are therefore not part of the schema.
+	device (RouterOS 7.23) and are therefore not part of the schema.
 */
 
 // ResourceInterfaceLteSettings Global LTE modem settings.
@@ -43,8 +43,8 @@ func ResourceInterfaceLteSettings() *schema.Resource {
 			Type:     schema.TypeString,
 			Optional: true,
 			Description: "Time without a working data link after which RouterOS restarts the modem link." +
-				"\nVERIFY: this property is exposed by RouterOS 7.23.2 but is not covered by the MikroTik " +
-				"documentation; only the name and the device default (120) could be established.",
+				"\nThis property is exposed by RouterOS 7.23 but is not covered by the MikroTik " +
+				"documentation; only the name and the default value (120) are known.",
 			DiffSuppressFunc: TimeEqual,
 		},
 		"mode": {

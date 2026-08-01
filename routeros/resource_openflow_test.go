@@ -8,7 +8,7 @@ import (
 
 const testOpenflowAddress = "routeros_openflow.test_openflow_x"
 
-// The `controllers` value grammar on RouterOS 7.23.2 is `protocol/address/port`, the console
+// The `controllers` value grammar on RouterOS 7.23 is `protocol/address/port`, the console
 // rejects the `protocol/address:port` form. `datapath_id` and `certificate` are always reported
 // back by the device, so both are pinned in the configuration; `datapath_id` only accepts the
 // `number/MAC` form.

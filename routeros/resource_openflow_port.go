@@ -5,7 +5,7 @@ import (
 )
 
 /*
-  `GET /rest/openflow/port` returns `[]` on the reference device (RouterOS 7.23.2) - no port is attached to an OpenFlow switch, so no live record could be
+  `GET /rest/openflow/port` returns `[]` on the RouterOS 7.23 - no port is attached to an OpenFlow switch, so no live record could be
   captured. The shape below lists the wire field names reported by the device; the values are
   illustrative.
 

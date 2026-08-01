@@ -20,7 +20,7 @@
 - `key_chain` (String) Name of the `/routing/rip/keys` chain used to authenticate the RIP messages on the matching interfaces.
 - `mode` (String) The operation mode of the matching interfaces.
   * passive - do not send the RIP updates, only receive and process them
-  * strict - VERIFY: not covered by the MikroTik documentation, the value is reported by the RouterOS console completion
+  * strict - Not covered by the MikroTik documentation, the value is reported by the RouterOS console completion
 - `password` (String, Sensitive) The plain text authentication password used on the matching interfaces. Use `key_chain` for the cryptographic authentication instead.
 - `poison_reverse` (Boolean) Advertise the routes learned on an interface back through the same interface with an infinite metric instead of omitting them.
 - `source_addresses` (Set of String) The local addresses used as the source of the RIP messages sent on the matching interfaces.

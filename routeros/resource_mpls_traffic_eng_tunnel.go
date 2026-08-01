@@ -8,7 +8,7 @@ import (
 )
 
 /*
-  The menu is empty on the reference device (ROS 7.23.2, MPLS not configured),
+  The menu is empty on RouterOS 7.23 (ROS 7.23, MPLS not configured),
   the field set below is taken from `/console/inspect request=syntax path="mpls,traffic-eng,tunnel,add"`
   and from `print proplist=` completion on that device.
 
@@ -131,7 +131,7 @@ func ResourceMplsTrafficEngTunnel() *schema.Resource {
 			Type:     schema.TypeString,
 			Computed: true,
 			Description: "Forwarding state of the tunnel. " +
-				"VERIFY: the exact value shape is not documented, exposed as a string.",
+				"The exact value shape is not documented, exposed as a string.",
 		},
 		"forwarding_on": {
 			Type:        schema.TypeString,
@@ -159,7 +159,7 @@ func ResourceMplsTrafficEngTunnel() *schema.Resource {
 			Type:     schema.TypeString,
 			Computed: true,
 			Description: "State of the primary path of the tunnel. " +
-				"VERIFY: the exact value shape is not documented, exposed as a string.",
+				"The exact value shape is not documented, exposed as a string.",
 		},
 		"primary_path": {
 			Type:             schema.TypeString,
@@ -171,7 +171,7 @@ func ResourceMplsTrafficEngTunnel() *schema.Resource {
 			Type:     schema.TypeString,
 			Computed: true,
 			Description: "Pending state of the primary path. " +
-				"VERIFY: the exact value shape is not documented, exposed as a string.",
+				"The exact value shape is not documented, exposed as a string.",
 		},
 		"primary_retry_interval": {
 			Type:             schema.TypeString,
@@ -198,7 +198,7 @@ func ResourceMplsTrafficEngTunnel() *schema.Resource {
 			Type:     schema.TypeString,
 			Computed: true,
 			Description: "State of the secondary path of the tunnel. " +
-				"VERIFY: the exact value shape is not documented, exposed as a string.",
+				"The exact value shape is not documented, exposed as a string.",
 		},
 		"secondary_paths": {
 			Type:     schema.TypeList,
@@ -211,7 +211,7 @@ func ResourceMplsTrafficEngTunnel() *schema.Resource {
 			Type:     schema.TypeString,
 			Computed: true,
 			Description: "Pending state of the secondary path. " +
-				"VERIFY: the exact value shape is not documented, exposed as a string.",
+				"The exact value shape is not documented, exposed as a string.",
 		},
 		"secondary_standby": {
 			Type:     schema.TypeBool,

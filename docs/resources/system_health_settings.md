@@ -20,7 +20,7 @@
   * auto - the fan speed is adjusted by the system according to the measured temperatures;
   * manual - the fan state is controlled by the `fan_switch` property.
 Only available on devices with a controllable fan.
-- `fan_on_threshold` (String) VERIFY: the threshold at which the fan is switched on. The property is accepted by `/system/health/settings/set` but is not reported by the reference device, so neither its unit (percent or degrees Celsius) nor its valid range could be established on this hardware.
+- `fan_on_threshold` (String) The threshold at which the fan is switched on. The property is accepted by `/system/health/settings/set` but is not reported by a RouterOS 7.23 device, so neither its unit (percent or degrees Celsius) nor its valid range could be established on this hardware.
 - `fan_switch` (String) The state of the fan when `fan_mode` is `manual`.
   * auto - the fan is controlled by the system;
   * off - the fan is always off;

@@ -57,14 +57,14 @@ func ResourceRoutingPimsmBsrCandidate() *schema.Resource {
 		"scope4": {
 			Type:     schema.TypeString,
 			Optional: true,
-			Description: "VERIFY: the IPv4 administrative scope this candidate is a bootstrap router for. The " +
+			Description: "The IPv4 administrative scope this candidate is a bootstrap router for. The " +
 				"console exposes no value domain for this property and it is not covered by the MikroTik " +
 				"documentation - supply the raw RouterOS value.",
 		},
 		"scope6": {
 			Type:     schema.TypeString,
 			Optional: true,
-			Description: "VERIFY: the IPv6 administrative scope this candidate is a bootstrap router for. The " +
+			Description: "The IPv6 administrative scope this candidate is a bootstrap router for. The " +
 				"console exposes no value domain for this property and it is not covered by the MikroTik " +
 				"documentation - supply the raw RouterOS value.",
 		},

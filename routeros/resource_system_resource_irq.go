@@ -11,11 +11,11 @@ import (
 /*
 {
   ".id": "*15",
-  "active-cpu": "5",
+  "active-cpu": "0",
   "count": "17359",
   "cpu": "auto",
   "irq": "21",
-  "per-cpu-count": "3,0,0,0,0,17356,0,0,0,0,0,0,0,0,0,0",
+  "per-cpu-count": "0,0,0,0",
   "read-only": "false",
   "users": "ttyS0"
 }

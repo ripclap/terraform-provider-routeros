@@ -5,7 +5,7 @@ import (
 )
 
 /*
-	The menu was empty on the reference device (RouterOS 7.23.2):
+	The menu was empty on the RouterOS 7.23:
 	`GET /rest/tool/traffic-generator/port` -> `[]`, so no value sample is available.
 
 	Settable arguments, `/console/inspect request=syntax path="tool,traffic-generator,port,add"`:

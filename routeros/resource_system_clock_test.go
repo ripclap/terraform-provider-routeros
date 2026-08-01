@@ -61,7 +61,7 @@ func makeSteps(t *testing.T, name string) []resource.TestStep {
 
 	clock, ok := testSystemClockFetch(t)
 	if !ok {
-		t.Skip("cannot read /system/clock from the device under test")
+		t.Skip("cannot read /system/clock from the target device")
 		return nil
 	}
 

@@ -5,7 +5,7 @@ import (
 )
 
 /*
-  The menu is empty on the reference device (RouterOS 7.23.2: the default
+  The menu is empty on RouterOS 7.23 (RouterOS 7.23: the default
   instance "zt1" exists but is disabled and /zerotier/controller has no networks), so no live
   JSON sample can be shown. The field set below was taken from the device itself:
 

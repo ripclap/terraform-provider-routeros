@@ -18,8 +18,8 @@
 - `disabled` (Boolean)
 - `hashmask_length` (Number) The length of the hash mask advertised in the bootstrap messages. It controls over how many consecutive groups a single rendezvous point is used.
 - `priority` (Number) The bootstrap router election priority. The candidate with the highest priority wins the election.
-- `scope4` (String) VERIFY: the IPv4 administrative scope this candidate is a bootstrap router for. The console exposes no value domain for this property and it is not covered by the MikroTik documentation - supply the raw RouterOS value.
-- `scope6` (String) VERIFY: the IPv6 administrative scope this candidate is a bootstrap router for. The console exposes no value domain for this property and it is not covered by the MikroTik documentation - supply the raw RouterOS value.
+- `scope4` (String) The IPv4 administrative scope this candidate is a bootstrap router for. The console exposes no value domain for this property and it is not covered by the MikroTik documentation - supply the raw RouterOS value.
+- `scope6` (String) The IPv6 administrative scope this candidate is a bootstrap router for. The console exposes no value domain for this property and it is not covered by the MikroTik documentation - supply the raw RouterOS value.
 
 ### Read-Only
 

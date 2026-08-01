@@ -10,7 +10,7 @@ import (
 const testResourceToolTrafficGenerator = "routeros_tool_traffic_generator.test_tool_traffic_generator"
 
 // /tool/traffic-generator is a settings singleton, so the test uses no CheckDestroy.
-// The second step restores factory values to leave the shared test device untouched.
+// The second step restores factory values so the device is left unchanged.
 func TestAccToolTrafficGeneratorTest_basic(t *testing.T) {
 	for _, name := range testNames {
 		t.Run(name, func(t *testing.T) {

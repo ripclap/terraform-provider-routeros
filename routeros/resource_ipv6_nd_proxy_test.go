@@ -9,7 +9,7 @@ import (
 
 const testIPv6NdProxy = "routeros_ipv6_nd_proxy.test_ipv6_nd_proxy_x"
 
-// Uses ether1, not a veth fixture: on RouterOS 7.23.2 `/ipv6/nd/proxy/remove` fails with
+// Uses ether1, not a veth fixture: on RouterOS 7.23 `/ipv6/nd/proxy/remove` fails with
 // "could not get interface index for device" when the interface is down, blocking destroy.
 func TestAccIPv6NdProxyTest_basic(t *testing.T) {
 	for _, name := range testNames {

@@ -1,5 +1,5 @@
 # routeros_interface_wifi_network_radio (Resource)
-*<span style="color:red">The '/interface/wifi/network/radio' menu was verified on RouterOS 7.23.2; VERIFY: the exact minimum RouterOS version could not be established.</span>*
+*<span style="color:red">The '/interface/wifi/network/radio' menu was verified on RouterOS 7.23; the exact minimum RouterOS version is not documented.</span>*
 
 
 

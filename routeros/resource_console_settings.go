@@ -12,7 +12,7 @@ import (
 	  "tab-width": "4"
 	}
 
-	Reference device: RouterOS 7.23.2, `GET /rest/console/settings`.
+	Sampled from RouterOS 7.23, `GET /rest/console/settings`.
 */
 
 // ResourceConsoleSettings Global console behaviour settings.

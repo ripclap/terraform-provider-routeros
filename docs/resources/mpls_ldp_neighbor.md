@@ -27,11 +27,11 @@
 - `operational` (Boolean) Whether the LDP session with this neighbor is operational.
 - `passive` (Boolean) Whether this router waits for the neighbor to initiate the TCP connection.
 - `passive_wait` (Boolean) Whether the session is waiting for the neighbor to connect.
-- `path_vector_limit` (String) Path vector limit negotiated with this neighbor. VERIFY: reported as a number by the console, exposed as a string because the property is absent unless the loop detection is negotiated.
+- `path_vector_limit` (String) Path vector limit negotiated with this neighbor. Reported as a number by the console, exposed as a string because the property is absent unless the loop detection is negotiated.
 - `peer` (String) LDP identifier of the neighbor, in the `lsr-id:label-space` notation.
 - `sending_targeted_hello` (Boolean) Whether the targeted hello messages are currently being sent to this neighbor.
 - `throttled` (Boolean) Whether the session establishment with this neighbor is currently throttled.
-- `used_afi` (String) Address families used on the session with this neighbor. VERIFY: the exact value shape is not documented, exposed as a string.
+- `used_afi` (String) Address families used on the session with this neighbor. The exact value shape is not documented, exposed as a string.
 - `vpls` (Boolean) Whether the neighbor is used for a VPLS pseudowire.
 
 

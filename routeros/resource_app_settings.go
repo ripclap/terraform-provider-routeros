@@ -19,7 +19,7 @@ import (
 	  "show-in-webfig": "true"
 	}
 
-	Reference device: RouterOS 7.23.2, `GET /rest/app/settings`
+	Sampled from RouterOS 7.23, `GET /rest/app/settings`
 	(the certificate name has been redacted).
 
 	`download-path` and `media-path` can be written but are not reported back; RouterOS returns the

@@ -6,7 +6,7 @@ import (
 )
 
 /*
-	The menu was empty on the reference device (RouterOS 7.23.2):
+	The menu was empty on the RouterOS 7.23:
 	`GET /rest/interface/ppp-client` -> `[]`, so no value sample is available.
 
 	Writable fields reported by the device:
@@ -18,7 +18,7 @@ import (
 
 	Read-only fields reported by the same device: running
 
-	`port` completes to the serial ports of the device (`serial0` on the reference device). The
+	`port` completes to the serial ports of the device (`serial0` on RouterOS 7.23). The
 	channel selectors `data-channel` and `info-channel` are kept as strings because RouterOS does
 	not report their empty value shape on a device without a modem.
 */

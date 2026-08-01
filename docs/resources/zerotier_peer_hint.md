@@ -15,7 +15,7 @@
 
 - `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
 - `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
-- `addresses` (Set of String) Transport addresses the peer should be contacted on. The console confirms this is a comma separated list. VERIFY: the exact accepted notation of a single element (`ip/port`) could not be observed - no peers are known on the reference device and the console performs no value check on this attribute.
+- `addresses` (Set of String) Transport addresses the peer should be contacted on. The console confirms this is a comma separated list. The exact accepted notation of a single element (`ip/port`) could not be observed - no peers are known on RouterOS 7.23 and the console performs no value check on this attribute.
 - `comment` (String)
 - `disabled` (Boolean)
 

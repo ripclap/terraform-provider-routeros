@@ -31,8 +31,8 @@ import (
 	}
 
 	The entries of this menu are created by the switch driver, one per switch port; they can only be
-	changed, never added or removed. Writable fields reported by the reference device
-	(RouterOS 7.23.2):
+	changed, never added or removed. Writable fields reported by a RouterOS 7.23 device
+	(RouterOS 7.23):
 
 	/console/inspect request=child path="interface,ethernet,switch,qos,port,set"
 	  egress-rate-queue0 .. egress-rate-queue7  map  pfc  profile  trust-l2  trust-l3  tx-manager

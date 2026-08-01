@@ -13,7 +13,7 @@
 - `esim_channel` (String) The channel used to communicate with the eSIM applet of the modem. `at` forces the AT command channel, `auto` lets RouterOS pick the channel.
 - `firmware_path` (String) Path in the router file system where the modem firmware images are stored.
 - `link_recovery_timer` (String) Time without a working data link after which RouterOS restarts the modem link.
-VERIFY: this property is exposed by RouterOS 7.23.2 but is not covered by the MikroTik documentation; only the name and the device default (120) could be established.
+This property is exposed by RouterOS 7.23 but is not covered by the MikroTik documentation; only the name and the default value (120) are known.
 - `mode` (String) Operation mode of the modem interface.
   * auto - RouterOS selects the mode automatically.
   * mbim - switch the modem to MBIM mode if it is supported.

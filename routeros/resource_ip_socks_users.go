@@ -5,7 +5,7 @@ import (
 )
 
 /*
-	Menu is empty on the reference device (RouterOS 7.23.2), so no GET sample is available.
+	Menu is empty on the RouterOS 7.23, so no GET sample is available.
 */
 
 // ResourceIpSocksUsers SOCKS proxy users, used when `/ip/socks` runs with auth-method=password.

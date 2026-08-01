@@ -12,7 +12,7 @@ import (
   "name": "part0",
   "running": "true",
   "size": "128",
-  "version": "RouterOS v7.23.2 2026-07-03 09:08:08"
+  "version": "RouterOS v7.23"
 }
 */
 

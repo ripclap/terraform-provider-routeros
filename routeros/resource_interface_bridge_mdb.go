@@ -18,7 +18,7 @@ import (
 	  "vid": "10"
 	}
 
-	Writable fields reported by the reference device (RouterOS 7.23.2):
+	Writable fields reported by the RouterOS 7.23:
 	/console/inspect request=child path="interface,bridge,mdb,add"
 	  bridge  comment  copy-from  disabled  group  interface  vid
 

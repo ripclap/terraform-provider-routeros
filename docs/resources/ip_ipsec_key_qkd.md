@@ -15,7 +15,7 @@
 - `cache_size` (Number) Number of keys IPsec will prefetch from the QKD server.
 - `certificate` (String) Client certificate used to authenticate against the QKD (KME) server.
 - `enabled` (Boolean) Enables the QKD key source.
-- `key_size` (Number) Requested size of each key. VERIFY: MikroTik documents the unit as bytes, while the device default is `128`; the unit was not verified on hardware.
+- `key_size` (Number) Requested size of each key. MikroTik documents the unit as bytes, while the device default is `128`; the unit was not verified on hardware.
 - `kme_id` (String) Identifier of the KME, used for certificate validation. If it is not specified, the KME identity is not validated.
 - `peer_sae_id` (String) Identifier of the peer SAE (Secure Application Entity).
 

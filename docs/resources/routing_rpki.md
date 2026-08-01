@@ -19,7 +19,7 @@
 - `disabled` (Boolean)
 - `expire_interval` (String) The time the cached data stays usable after the connection to the validator is lost. When it elapses, the records of this session are dropped.
 - `port` (Number) The TCP port of the RTR service on the validator.
-- `preference` (Number) The preference of this session inside the group, used when several sessions back the same group. VERIFY: the direction of the ordering could not be established - the console exposes no help text for this property and the MikroTik RPKI page does not document it.
+- `preference` (Number) The preference of this session inside the group, used when several sessions back the same group. The direction of the ordering could not be established - the console exposes no help text for this property and the MikroTik RPKI page does not document it.
 - `refresh_interval` (String) The interval between the serial queries sent to the validator to refresh the data.
 - `retry_interval` (String) The time to wait before retrying a failed connection to the validator.
 - `vrf` (String) The VRF table this resource operates on.

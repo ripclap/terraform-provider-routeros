@@ -10,7 +10,7 @@ const testSystemLoggingAction = "routeros_system_logging_action.action"
 
 // testSystemLoggingRemoteFormatVersion is the release where RouterOS replaced the boolean bsd-syslog parameter
 // with the remote-log-format enum; sending bsd-syslog to a newer device fails with "unknown parameter
-// bsd-syslog", so the test picks the attribute matching the device under test.
+// bsd-syslog", so the test picks the attribute matching the target device.
 const testSystemLoggingRemoteFormatVersion = "7.18"
 
 func TestAccSystemLoggingActionTest_basic(t *testing.T) {

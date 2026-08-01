@@ -25,7 +25,7 @@
 - `ra_path` (String) The local HTTP path that the registration authority listens on, for example `/scep/ra`.
 - `ra_transaction_lifetime` (String) How long an enrollment transaction that is waiting to be granted is kept before it is discarded.
 - `server_url` (String) The URL of the upstream SCEP server that the requests are forwarded to.
-- `template` (String) VERIFY: the name of the template used for the certificates issued through this registration authority. The console completion of this argument was empty on the reference device, so the menu the value is taken from could not be established.
+- `template` (String) The name of the template used for the certificates issued through this registration authority. The console completion of this argument was empty on RouterOS 7.23, so the menu the value is taken from could not be established.
 
 ### Read-Only
 

@@ -64,7 +64,7 @@ func testCheckImportSourceFilesConsumed(names ...string) resource.TestCheckFunc 
 	return func(s *terraform.State) error {
 		present, ok := testCertificateFileNames()
 		if !ok {
-			return fmt.Errorf("cannot read /file from the device under test")
+			return fmt.Errorf("cannot read /file from the target device")
 		}
 
 		for _, name := range names {

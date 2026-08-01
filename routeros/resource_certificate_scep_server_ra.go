@@ -103,8 +103,8 @@ func ResourceCertificateScepServerRa() *schema.Resource {
 		"template": {
 			Type:     schema.TypeString,
 			Optional: true,
-			Description: "VERIFY: the name of the template used for the certificates issued through this " +
-				"registration authority. The console completion of this argument was empty on the reference device, " +
+			Description: "The name of the template used for the certificates issued through this " +
+				"registration authority. The console completion of this argument was empty on RouterOS 7.23, " +
 				"so the menu the value is taken from could not be established.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
