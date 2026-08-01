@@ -1,20 +1,9 @@
-# Turns a tag into a *draft* release. Nothing here makes a version installable:
-# publishing the draft is a deliberate, manual act, and it is the only way a
-# version ever reaches the registry.
+# Turns a tag into a draft release, signed and attested. Publishing the draft is
+# a separate manual act and is the only way a version reaches the registry.
+# Registry versions are immutable once published; see RELEASING.md.
 #
-# The reason for that shape: a registry records the checksums of the files a
-# version had when it first saw it, and serves those checksums forever. Upload
-# different bytes under a version that has already been published and every
-# install of it fails, permanently, with no way to correct it short of asking
-# the registry maintainers. 2.0.2 of this provider is exactly that. So:
-#
-#   * a version that already exists anywhere is refused before anything is built
-#   * a draft can be thrown away and rebuilt as often as you like
-#   * once published, a version is finished - the next fix is the next version
-#
-# Requires two repository secrets, GPG_PRIVATE_KEY and GPG_PASSPHRASE, holding
-# the key whose public half is registered for this namespace. Optionally set the
-# repository variable GPG_FINGERPRINT to have the key checked before it is used.
+# Requires the repository secrets GPG_PRIVATE_KEY and GPG_PASSPHRASE, and the
+# repository variable GPG_FINGERPRINT.
 name: Release
 
 on:
@@ -140,6 +129,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      # Provenance attestation is signed with a short-lived OIDC identity.
+      id-token: write
+      attestations: write
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
@@ -183,6 +175,10 @@ jobs:
           fi
           echo "signing with $ACTUAL"
 
+      # Produces the CycloneDX documents named in .goreleaser.yml.
+      - name: Install syft
+        uses: anchore/sbom-action/download-syft@e22c389904149dbc22b58101806040fa8d37a610 # v0.24.0
+
       - name: GoReleaser
         uses: goreleaser/goreleaser-action@f06c13b6b1a9625abc9e6e439d9c05a8f2190e94 # v7.2.3
         with:
@@ -197,6 +193,15 @@ jobs:
 
       - name: The signature verifies
         run: gpg --verify dist/*_SHA256SUMS.sig dist/*_SHA256SUMS
+
+      # The GPG signature proves who signed the checksums. This proves which
+      # workflow, repository and commit produced the archives, which a signature
+      # cannot. Verified with:
+      #   gh attestation verify <archive> --repo <owner>/<repo>
+      - name: Attest the archives
+        uses: actions/attest-build-provenance@0f67c3f4856b2e3261c31976d6725780e5e4c373 # v4
+        with:
+          subject-path: dist/*.zip
 
   verify:
     name: Verify the draft
@@ -224,8 +229,17 @@ jobs:
           done
           ls ./*_manifest.json >/dev/null 2>&1 || { echo "::error::no registry manifest"; missing=1; }
           ls ./*_SHA256SUMS.sig >/dev/null 2>&1 || { echo "::error::no signature"; missing=1; }
+
+          # One SBOM per archive, or the inventory is incomplete for some platform.
+          archives=$(ls ./*.zip | wc -l)
+          sboms=$(ls ./*.sbom.json 2>/dev/null | wc -l)
+          if [ "$archives" -ne "$sboms" ]; then
+            echo "::error::${archives} archives but ${sboms} SBOMs"
+            missing=1
+          fi
+
           [ "$missing" -eq 0 ]
-          echo "$(ls ./*.zip | wc -l) archives, checksums and signature present"
+          echo "${archives} archives, ${sboms} SBOMs, checksums and signature present"
 
       - name: What to do next
         run: |

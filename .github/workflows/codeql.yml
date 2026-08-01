@@ -1,0 +1,55 @@
+# Static application security testing. Results appear under the repository's
+# Security tab and on pull requests.
+name: CodeQL
+
+on:
+  push:
+    branches:
+      - 'full-device-coverage'
+  pull_request:
+    branches:
+      - 'full-device-coverage'
+  schedule:
+    # Weekly, so a newly published query reaches this code without waiting for
+    # the next push.
+    - cron: '17 4 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    name: Analyze Go
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+
+      - name: Set up Go
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+        with:
+          go-version-file: go.mod
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@f205ea1c3313d32999d8d6a48b4f6530d4437b38 # v4
+        with:
+          languages: go
+          # security-extended adds lower-severity queries the default suite
+          # leaves out; the noise is manageable at this size.
+          queries: security-extended
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@f205ea1c3313d32999d8d6a48b4f6530d4437b38 # v4
+
+      - name: Analyze
+        uses: github/codeql-action/analyze@f205ea1c3313d32999d8d6a48b4f6530d4437b38 # v4
+        with:
+          category: /language:go
