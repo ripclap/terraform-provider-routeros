@@ -2,9 +2,14 @@
 
 # Terraform Provider RouterOS
 
-![module testing workflow](https://github.com/GNewbury1/terraform-provider-routeros/actions/workflows/release.yml/badge.svg?branch=main)
+[![CI](https://github.com/ripclap/terraform-provider-routeros/actions/workflows/ci.yml/badge.svg?branch=full-device-coverage)](https://github.com/ripclap/terraform-provider-routeros/actions/workflows/ci.yml)
+[![OpenTofu Registry](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fregistry.opentofu.org%2Fv1%2Fproviders%2Fripclap%2Frouteros%2Fversions&query=%24.versions%5B0%5D.version&label=opentofu&color=blue)](https://search.opentofu.org/provider/ripclap/routeros/latest)
+[![Latest release](https://img.shields.io/github/v/release/ripclap/terraform-provider-routeros?label=release)](https://github.com/ripclap/terraform-provider-routeros/releases)
 
-**Note**: In release 1.43, the resource schemas have been changed:
+
+**Note**: Version 2.0.2 is withdrawn and will not install. Use 2.0.3 or later.
+
+**Note**: In upstream release 1.43, the resource schemas have been changed:
 * `routeros_routing_bgp_connection`
 * `routeros_ipv6_neighbor_discovery`
 * `routeros_interface_wireguard_peer`
@@ -27,7 +32,7 @@ To get started with the provider, you first need to enable the REST API on your 
 terraform {
   required_providers {
     routeros = {
-      source = "terraform-routeros/routeros"
+      source = "ripclap/routeros"
     }
   }
 }
@@ -40,15 +45,24 @@ provider "routeros" {
 
 ```
 
-For more in-depth documentation about each of the resources and datasources, please read the [documentation on Hashicorp's Provider registry](https://registry.terraform.io/providers/terraform-routeros/routeros/latest/docs)
+This fork is published to the OpenTofu Registry; the source address above resolves
+under OpenTofu. It is not published to the HashiCorp Terraform Registry.
+
+For more in-depth documentation about each of the resources and datasources, please read the [documentation on the OpenTofu Registry](https://search.opentofu.org/provider/ripclap/routeros/latest)
 
 ### Versions tested
 
-- go 1.24.2 and ROS 7.12, 7.15, 7.16 (stable)
+- go 1.25 and ROS 7.23.1, 7.23.2 (stable)
 
 ## Changelog
 
 For a detailed changelog, please see the [changelog.md](CHANGELOG.md).
+
+## Releasing
+
+Tagging builds a draft release; publishing it is a separate, manual step. See
+[RELEASING.md](RELEASING.md) — particularly the reason a published version is
+never rebuilt.
 
 ## Contributing
 This version of the module greatly simplifies the process of adding new resources.
@@ -67,8 +81,8 @@ mv main ~/.terraform.d/plugins/terraform.local/local/routeros/1.0.0/$(uname -s |
 ```hcl
 required_providers {
   routeros = {
-    source  = "terraform-routeros/routeros"
-    version = "1.85.1"
+    source  = "ripclap/routeros"
+    version = "2.0.3"
   }
 }
 ```
@@ -87,7 +101,7 @@ required_providers {
 ```hcl
 provider_installation {
   dev_overrides {
-     "terraform-routeros/routeros" = "/path/to/your/git/clone"
+     "ripclap/routeros" = "/path/to/your/git/clone"
   }
 
   direct {
