@@ -57,7 +57,7 @@ func ResourceRoutingBgpTemplate() *schema.Resource {
 		MetaResourcePath: PropResourcePath("/routing/bgp/template"),
 		MetaId:           PropId(Id),
 
-		// Removed in ROS 7.20 in favour of 'input.add-path' / 'output.add-path'. No schema Default: it would
+		// Removed in ROS 7.20 in favor of 'input.add-path' / 'output.add-path'. No schema Default: it would
 		// send 'add-path-out' on every create, which a >=7.20 device rejects with "unknown parameter add-path-out".
 		"add_path_out": {
 			Type:     schema.TypeString,

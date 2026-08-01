@@ -356,7 +356,9 @@ func ResourceToolSniffer() *schema.Resource {
 			if d := SystemResourceRead(ctx, resSchema, d, m); d.HasError() {
 				return d
 			}
-			d.Set("enabled", d.Get(KeyRunning).(bool))
+			if err := d.Set("enabled", d.Get(KeyRunning).(bool)); err != nil {
+				return diag.FromErr(err)
+			}
 
 			return nil
 		},

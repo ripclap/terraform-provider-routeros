@@ -114,23 +114,28 @@ func datasourceParseCertificate(_ context.Context, d *schema.ResourceData, m int
 		return diag.FromErr(err)
 	}
 
-	d.Set("akid", fmt.Sprintf("%x", c.AuthorityKeyId))
-	d.Set("authority", c.IsCA)
-	d.Set("common_name", c.Subject.CommonName)
-	d.Set("digest_algorithm", c.SignatureAlgorithm.String())
-	d.Set("fingerprint", fmt.Sprintf("%x", sha256.Sum256(c.Raw)))
-	d.Set("invalid_after", c.NotAfter.String())
-	d.Set("invalid_before", c.NotBefore.String())
-	d.Set("issuer", c.Issuer.String())
-	d.Set("key_type", c.PublicKeyAlgorithm.String())
-	d.Set("issuer", c.Issuer.String())
-	d.Set("serial_number", c.SerialNumber.Text(16))
-	d.Set("skid", fmt.Sprintf("%x", c.SubjectKeyId))
-	d.Set("signature_algorithm", c.SignatureAlgorithm.String())
-	d.Set("subject", c.Subject.String())
-	d.Set("subject_alt_name", getSANs(c))
-	d.Set("version", c.Version)
-	d.Set("pem", string(pem.EncodeToMemory(block)))
+	for field, value := range map[string]interface{}{
+		"akid":                fmt.Sprintf("%x", c.AuthorityKeyId),
+		"authority":           c.IsCA,
+		"common_name":         c.Subject.CommonName,
+		"digest_algorithm":    c.SignatureAlgorithm.String(),
+		"fingerprint":         fmt.Sprintf("%x", sha256.Sum256(c.Raw)),
+		"invalid_after":       c.NotAfter.String(),
+		"invalid_before":      c.NotBefore.String(),
+		"issuer":              c.Issuer.String(),
+		"key_type":            c.PublicKeyAlgorithm.String(),
+		"pem":                 string(pem.EncodeToMemory(block)),
+		"serial_number":       c.SerialNumber.Text(16),
+		"signature_algorithm": c.SignatureAlgorithm.String(),
+		"skid":                fmt.Sprintf("%x", c.SubjectKeyId),
+		"subject":             c.Subject.String(),
+		"subject_alt_name":    getSANs(c),
+		"version":             c.Version,
+	} {
+		if err := d.Set(field, value); err != nil {
+			return diag.FromErr(err)
+		}
+	}
 
 	d.SetId(c.SerialNumber.String())
 

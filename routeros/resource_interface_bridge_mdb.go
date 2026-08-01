@@ -26,7 +26,7 @@ import (
 	  dynamic  invalid  on-interface
 
 	`interface` accepts more than one bridge port: the console completes another interface name
-	after a trailing comma, so it is modelled as a list.
+	after a trailing comma, so it is modeled as a list.
 */
 
 // ResourceInterfaceBridgeMdb Static entries of the bridge multicast database (MDB).

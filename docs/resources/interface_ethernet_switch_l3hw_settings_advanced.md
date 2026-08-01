@@ -13,9 +13,9 @@
 - `neigh_discovery_burst_delay` (String) Delay between subsequent ARP/ND request bursts. The minimum value is `10ms`.
 - `neigh_discovery_burst_limit` (Number) Maximum number of ARP/ND requests that are sent simultaneously.
 - `neigh_discovery_interval` (String) Interval for sending ARP/ND requests used to check whether the offloaded hosts are still active. The minimum value is `30s`.
-- `neigh_dump_retries` (Number) Number of retries used when the neighbour table is dumped.
+- `neigh_dump_retries` (Number) Number of retries used when the neighbor table is dumped.
 This property is exposed by RouterOS 7.23 but is not covered by the MikroTik documentation; only the name and the default value (3) are known.
-- `neigh_keepalive_interval` (String) Keepalive interval of the offloaded neighbour (host) entries. The minimum value is `5s`.
+- `neigh_keepalive_interval` (String) Keepalive interval of the offloaded neighbor (host) entries. The minimum value is `5s`.
 - `partial_offload_chunk` (Number) Minimum number of routes that are added incrementally in Partial Offloading mode.
 - `route_index_delay_max` (String) Maximum delay between route processing and offloading.
 - `route_index_delay_min` (String) Minimum delay between route processing and offloading.

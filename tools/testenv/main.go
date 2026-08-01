@@ -54,7 +54,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Host is not available")
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	for _, command := range commands {
 		cmd := strings.Split(command, " ")

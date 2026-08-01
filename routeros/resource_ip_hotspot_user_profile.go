@@ -89,7 +89,7 @@ func ResourceIpHotspotUserProfile() *schema.Resource {
 			Type:     schema.TypeString,
 			Optional: true,
 			Description: "List of URLs that is show for advertisement popups. After the last URL is used, list starts " +
-				"from the begining.",
+				"from the beginning.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		KeyDefault: PropDefaultRo,

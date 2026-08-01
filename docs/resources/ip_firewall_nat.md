@@ -27,7 +27,7 @@ resource "routeros_ip_firewall_nat" "rule" {
 - `address_list` (String) Name of the address list to be used. Applicable if action is add-dst-to-address-list or add-src-to-address-list.
 - `address_list_timeout` (String) Time interval after which the address will be removed from the address list specified by address-list parameter. Used in conjunction with add-dst-to-address-list or add-src-to-address-list actions.
 - `comment` (String)
-- `connection_bytes` (String) Matches packets only if a given amount of bytes has been transfered through the particular connection.
+- `connection_bytes` (String) Matches packets only if a given amount of bytes has been transferred through the particular connection.
 - `connection_limit` (String) Matches connections per address or address block after given value is reached. Should be used together with connection-state=new and/or with tcp-flags=syn because matcher is very resource intensive.
 - `connection_mark` (String) Matches packets marked via mangle facility with particular connection mark. If no-mark is set, rule will match any unmarked connection.
 - `connection_rate` (String) Connection Rate is a firewall matcher that allow to capture traffic based on present speed of the connection (0..4294967295).

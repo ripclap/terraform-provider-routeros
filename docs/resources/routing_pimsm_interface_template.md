@@ -20,7 +20,7 @@
 - `hello_period` (String) The interval between the periodic PIM Hello messages.
 - `interfaces` (Set of String) Interfaces to match. Both interface names and interface list names are accepted.
 - `join_prune_period` (String) The interval between the periodic PIM Join/Prune messages.
-- `join_tracking_support` (Boolean) Announce the support of the join attribute tracking, which lets the upstream router suppress the prune override behaviour.
+- `join_tracking_support` (Boolean) Announce the support of the join attribute tracking, which lets the upstream router suppress the prune override behavior.
 - `override_interval` (String) The value of the Override Interval advertised in the PIM Hello messages. It bounds the randomized delay before a Join is sent to override someone else's Prune.
 - `place_before` (String) Before which position the rule will be inserted.  
 	> Please check the effect of this option, as it does not work as you think!  

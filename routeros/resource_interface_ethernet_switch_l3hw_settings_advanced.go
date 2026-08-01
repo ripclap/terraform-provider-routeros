@@ -52,7 +52,7 @@ func ResourceInterfaceEthernetSwitchL3HwSettingsAdvanced() *schema.Resource {
 		"neigh_dump_retries": {
 			Type:     schema.TypeInt,
 			Optional: true,
-			Description: "Number of retries used when the neighbour table is dumped." +
+			Description: "Number of retries used when the neighbor table is dumped." +
 				"\nThis property is exposed by RouterOS 7.23 but is not covered by the MikroTik " +
 				"documentation; only the name and the default value (3) are known.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
@@ -60,7 +60,7 @@ func ResourceInterfaceEthernetSwitchL3HwSettingsAdvanced() *schema.Resource {
 		"neigh_keepalive_interval": {
 			Type:             schema.TypeString,
 			Optional:         true,
-			Description:      "Keepalive interval of the offloaded neighbour (host) entries. The minimum value is `5s`.",
+			Description:      "Keepalive interval of the offloaded neighbor (host) entries. The minimum value is `5s`.",
 			DiffSuppressFunc: TimeEqual,
 		},
 		"partial_offload_chunk": {

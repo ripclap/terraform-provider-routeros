@@ -44,25 +44,25 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer f1.Close()
+	defer func() { _ = f1.Close() }()
 
 	gz1, err := gzip.NewReader(f1)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer gz1.Close()
+	defer func() { _ = gz1.Close() }()
 
 	f2, err := os.Open("ros-" + vv[1] + ".json.gz")
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer f2.Close()
+	defer func() { _ = f2.Close() }()
 
 	gz2, err := gzip.NewReader(f2)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer gz2.Close()
+	defer func() { _ = gz2.Close() }()
 
 	if *markdown {
 		fmt.Println("```diff")

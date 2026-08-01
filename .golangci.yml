@@ -1,0 +1,59 @@
+version: "2"
+
+run:
+  timeout: 10m
+
+# Report every finding. The defaults cap output at 50 per linter and 3 per
+# distinct message, which silently hides work from a reviewer reading CI logs.
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+linters:
+  default: none
+  enable:
+    - errcheck
+    - govet
+    - ineffassign
+    - misspell
+    - staticcheck
+    - unused
+
+  settings:
+    errcheck:
+      # A failed type assertion in this code surfaces as a nil map or an empty
+      # string, which the schema layer already rejects. Requiring the two-value
+      # form everywhere would add noise without catching a real defect.
+      check-type-assertions: false
+    misspell:
+      locale: US
+      # RouterOS spells these this way. They appear only as schema attribute
+      # names mirroring a device property, so "correcting" one would rename a
+      # user-facing attribute or break value validation. `ip-total-lenght` is
+      # MikroTik's own misspelling of the IPFIX field and must be reproduced
+      # exactly for the field to bind.
+      ignore-rules:
+        - addressess
+        - ageing
+        - lenght
+        - randomise
+        - routeros
+
+  exclusions:
+    generated: lax
+    rules:
+      # The acceptance suite is largely inherited from upstream and is rebased
+      # onto it regularly. Linting it would create conflicts on every rebase
+      # without improving the shipped provider.
+      - path: _test\.go
+        linters:
+          - errcheck
+          - govet
+          - ineffassign
+          - misspell
+          - staticcheck
+          - unused
+
+formatters:
+  enable:
+    - gofmt

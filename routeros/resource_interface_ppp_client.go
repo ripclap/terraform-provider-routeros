@@ -103,7 +103,7 @@ func ResourceInterfacePppClient() *schema.Resource {
 		"modem_init": {
 			Type:        schema.TypeString,
 			Optional:    true,
-			Description: "Modem initialization string sent before dialling.",
+			Description: "Modem initialization string sent before dialing.",
 		},
 		"mrru": {
 			Type:     schema.TypeString,
@@ -125,7 +125,7 @@ func ResourceInterfacePppClient() *schema.Resource {
 			Type:     schema.TypeBool,
 			Optional: true,
 			Description: "Enables null-modem mode. When enabled, no modem initialization strings are sent and no " +
-				"dialling takes place.",
+				"dialing takes place.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"password": {

@@ -246,7 +246,7 @@ func ResourceInterfaceBridgePort() *schema.Resource {
 		"learn": {
 			Type:             schema.TypeString,
 			Optional:         true,
-			Description:      "Changes MAC learning behaviour on a bridge port ",
+			Description:      "Changes MAC learning behavior on a bridge port ",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 			ValidateFunc:     ValidationAutoYesNo,
 		},

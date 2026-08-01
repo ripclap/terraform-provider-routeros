@@ -17,7 +17,7 @@ import (
 
 	Read-only fields reported by the same device: invalid
 
-	`max-mru` and `max-mtu` accept the value `auto` in addition to an integer, so they are modelled
+	`max-mru` and `max-mtu` accept the value `auto` in addition to an integer, so they are modeled
 	as strings.
 */
 

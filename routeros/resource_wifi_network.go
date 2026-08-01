@@ -134,7 +134,7 @@ func ResourceWifiNetwork() *schema.Resource {
 		"station_roaming": {
 			Type:             schema.TypeBool,
 			Optional:         true,
-			Description:      "Enables 802.11k neighbour reports for the client devices of this network.",
+			Description:      "Enables 802.11k neighbor reports for the client devices of this network.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 	}

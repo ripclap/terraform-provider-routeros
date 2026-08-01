@@ -115,7 +115,9 @@ func datasourceQRGenerate(ctx context.Context, d *schema.ResourceData, m interfa
 		BlackChar: qrterminal.BLACK,
 		WhiteChar: qrterminal.WHITE,
 	})
-	d.Set("qr_code", buf.String())
+	if err := d.Set("qr_code", buf.String()); err != nil {
+		return diag.FromErr(err)
+	}
 
 	return nil
 }

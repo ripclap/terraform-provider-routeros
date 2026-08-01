@@ -74,7 +74,7 @@ func ResourceRoutingPimsmInterfaceTemplate() *schema.Resource {
 			Type:     schema.TypeBool,
 			Optional: true,
 			Description: "Announce the support of the join attribute tracking, which lets the upstream router " +
-				"suppress the prune override behaviour.",
+				"suppress the prune override behavior.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"override_interval": {

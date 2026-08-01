@@ -25,7 +25,7 @@
 - `qos_classifier` (String) An option to specify the QoS classifier.
 - `security` (Map of String) Security inline settings.
 - `ssid` (String) SSID (service set identifier) of the network.
-- `station_roaming` (Boolean) Enables 802.11k neighbour reports for the client devices of this network.
+- `station_roaming` (Boolean) Enables 802.11k neighbor reports for the client devices of this network.
 
 ### Read-Only
 

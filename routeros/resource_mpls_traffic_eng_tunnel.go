@@ -216,7 +216,7 @@ func ResourceMplsTrafficEngTunnel() *schema.Resource {
 		"secondary_standby": {
 			Type:     schema.TypeBool,
 			Optional: true,
-			Description: "Whether the secondary paths are signalled and kept up in advance so that the switchover " +
+			Description: "Whether the secondary paths are signaled and kept up in advance so that the switchover " +
 				"does not require a new reservation.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},

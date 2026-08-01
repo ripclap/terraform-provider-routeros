@@ -35,7 +35,7 @@ resource "routeros_interface_bridge_port" "bridge_port" {
 - `hw` (Boolean) Enable or disable Hardware Offloading of the interface.
 - `ingress_filtering` (Boolean) Enables or disables VLAN ingress filtering, which checks if the ingress port is a member of the received VLAN ID in the bridge VLAN table. Should be used with frame-types to specify if the ingress traffic should be tagged or untagged. This property only has effect when vlan-filtering is set to yes.
 - `internal_path_cost` (Number) Path cost to the interface for MSTI0 inside a region. This property only has effect when protocol-mode is set to mstp.
-- `learn` (String) Changes MAC learning behaviour on a bridge port
+- `learn` (String) Changes MAC learning behavior on a bridge port
 - `multicast_router` (String) Changes the state of a bridge port whether IGMP membership reports are going to be forwarded to this port.
 - `mvrp_applicant_state` (String) MVRP applicant options (available since RouterOS 7.15): - non-participant - port does not send any MRP messages; - normal-participant - port participates normally in MRP exchanges.
 - `mvrp_registrar_state` (String) MVRP registrar options (available since RouterOS 7.15): - fixed - port ignores all MRP messages, and remains Registered (IN) in all configured vlans. - normal - port receives MRP messages and handles them according to the standard.

@@ -17,7 +17,7 @@ import (
 
 	Read-only fields reported by the same device: mac-address, running
 
-	The HWMP+ timers are reported by RouterOS as time values, so they are modelled as strings with
+	The HWMP+ timers are reported by RouterOS as time values, so they are modeled as strings with
 	a time aware diff.
 
 	HWMP+ mesh has no page on help.mikrotik.com; the property descriptions below come from

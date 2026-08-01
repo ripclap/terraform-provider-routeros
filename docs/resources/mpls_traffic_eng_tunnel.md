@@ -32,7 +32,7 @@
 - `record_route` (Boolean) Whether the sender node asks to record the actual route the LSP tunnel traverses, which is also used for the loop detection.
 - `reoptimize_interval` (String) Interval after which the tunnel re-optimizes the current path.
 - `secondary_paths` (List of String) Names of the label switching paths from the `/mpls/traffic-eng/path` menu used when the primary path fails. The order is significant.
-- `secondary_standby` (Boolean) Whether the secondary paths are signalled and kept up in advance so that the switchover does not require a new reservation.
+- `secondary_standby` (Boolean) Whether the secondary paths are signaled and kept up in advance so that the switchover does not require a new reservation.
 - `setup_priority` (Number) Priority used to decide whether this session can preempt another session. `0` is the highest priority.
 - `to_address` (String) Address of the remote end of the TE tunnel.
 - `vrf` (String) The VRF table this resource operates on.

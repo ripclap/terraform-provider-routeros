@@ -35,7 +35,7 @@ resource "routeros_ip_hotspot_user_profile" "test" {
 - `advertise` (Boolean) Enable forced advertisement popups. After certain interval specific web-page is being displayed for HotSpot users. Advertisement page might be blocked by browsers popup blockers.
 - `advertise_interval` (Set of String) Set of intervals between advertisement popups. After the list is done, the last value is used for all further advertisements, 10 minutes.
 - `advertise_timeout` (String) How long advertisement is shown, before blocking network access for HotSpot client. Connection to Internet is not allowed, when advertisement is not shown.
-- `advertise_url` (String) List of URLs that is show for advertisement popups. After the last URL is used, list starts from the begining.
+- `advertise_url` (String) List of URLs that is show for advertisement popups. After the last URL is used, list starts from the beginning.
 - `idle_timeout` (String) Maximal period of inactivity for authorized HotSpot clients. Timer is counting, when there is no traffic coming from that client and going through the router, for example computer is switched off. User is logged out, dropped of the host list, the address used by the user is freed, when timeout is reached.
 - `incoming_filter` (String) Name of the firewall chain applied to incoming packets from the users of this profile, jump rule is required from built-in chain (input, forward, output) to chain=hotspot.
 - `incoming_packet_mark` (String) Packet mark put on incoming packets from every user of this profile.

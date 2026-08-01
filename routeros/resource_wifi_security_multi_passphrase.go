@@ -28,7 +28,7 @@ func ResourceWifiSecurityMultiPassphrase() *schema.Resource {
 			Optional: true,
 			Description: "The expiration date and time for passphrase specified in this entry, doesn't affect the whole " +
 				"group. Once the date is reached, existing clients using this passphrase will be disconnected, and new " +
-				"clients will not be able to connect using it. If not set, passphrase can be used indefinetly.",
+				"clients will not be able to connect using it. If not set, passphrase can be used indefinitely.",
 		},
 		"group": {
 			Type:     schema.TypeString,

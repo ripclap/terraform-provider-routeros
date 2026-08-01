@@ -53,7 +53,7 @@ func ResourceIPv6FirewallFilter() *schema.Resource {
 		"connection_bytes": {
 			Type:     schema.TypeString,
 			Optional: true,
-			Description: "Matches packets only if a given amount of bytes has been transfered through the particular " +
+			Description: "Matches packets only if a given amount of bytes has been transferred through the particular " +
 				"connection.",
 		},
 		"connection_limit": {
@@ -295,7 +295,8 @@ func ResourceIPv6FirewallFilter() *schema.Resource {
 			Description: "Specifies ICMP error to be sent back if the packet is rejected. Applicable if action=reject.",
 			ValidateFunc: validation.StringInSlice([]string{
 				"icmp-address-unreachable", "icmp-admin-prohibited", "icmp-err-src-routing-header", "icmp-headers-too-long",
-				"icmp-no-route", "icmp-not-neighbour", "icmp-port-unreachable", "tcp-reset",
+				// The reject value below uses the British spelling on the device and is matched literally.
+				"icmp-no-route", "icmp-not-neighbour", "icmp-port-unreachable", "tcp-reset", //nolint:misspell
 			}, false),
 		},
 		// Was removed? No information.

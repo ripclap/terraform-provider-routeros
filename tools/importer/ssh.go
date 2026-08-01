@@ -51,7 +51,7 @@ func (c *SshConnection) Run(cmd string) (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to create session, %v", err)
 	}
-	defer session.Close()
+	defer func() { _ = session.Close() }()
 
 	// Once a Session is created, you can execute a single command on
 	// the remote side using the Run method.

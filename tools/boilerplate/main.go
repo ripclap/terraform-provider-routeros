@@ -106,7 +106,9 @@ Usage: 	go run tools/bolerplate/main.go [-from-csv] [-table file.csv] [-system] 
 
 	goName := Capitalize(resName)
 
-	os.MkdirAll("routeros", os.ModePerm)
+	if err := os.MkdirAll("routeros", os.ModePerm); err != nil {
+		panic(err)
+	}
 
 	fName := fmt.Sprintf("%v_%v", itemType.HCL(), strings.TrimPrefix(resName, "routeros_"))
 	f, err := os.OpenFile(filepath.Join("routeros", fName+".go"), os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
@@ -134,7 +136,9 @@ Usage: 	go run tools/bolerplate/main.go [-from-csv] [-table file.csv] [-system] 
 	if err != nil {
 		panic(err)
 	}
-	f.Close()
+	if err = f.Close(); err != nil {
+		panic(err)
+	}
 
 	f, err = os.OpenFile(filepath.Join("routeros", fName+"_test.go"), os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
 	if err != nil {
@@ -159,13 +163,18 @@ Usage: 	go run tools/bolerplate/main.go [-from-csv] [-table file.csv] [-system] 
 	if err != nil {
 		panic(err)
 	}
-	f.Close()
+	if err = f.Close(); err != nil {
+		panic(err)
+	}
 
 	// Example
 	if !*isDS {
-		os.MkdirAll(filepath.Join("examples", "resources", resName), os.ModePerm)
+		err = os.MkdirAll(filepath.Join("examples", "resources", resName), os.ModePerm)
 	} else {
-		os.MkdirAll(filepath.Join("examples", "data-sources", resName), os.ModePerm)
+		err = os.MkdirAll(filepath.Join("examples", "data-sources", resName), os.ModePerm)
+	}
+	if err != nil {
+		panic(err)
 	}
 
 	if !*isDS {
@@ -184,7 +193,9 @@ Usage: 	go run tools/bolerplate/main.go [-from-csv] [-table file.csv] [-system] 
 		if err != nil {
 			panic(err)
 		}
-		f.Close()
+		if err = f.Close(); err != nil {
+			panic(err)
+		}
 
 		f, err = os.OpenFile(filepath.Join("examples", "resources", resName, "resource.tf"), os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
 		if err != nil {
@@ -200,18 +211,22 @@ Usage: 	go run tools/bolerplate/main.go [-from-csv] [-table file.csv] [-system] 
 		if err != nil {
 			panic(err)
 		}
-		f.Close()
+		if err = f.Close(); err != nil {
+			panic(err)
+		}
 	} else {
 		f, err = os.OpenFile(filepath.Join("examples", "data-sources", resName, "data-source.tf"), os.O_WRONLY|os.O_TRUNC|os.O_CREATE, 0644)
 		if err != nil {
 			panic(err)
 		}
 
-		_, err = f.WriteString(fmt.Sprintf("data \"%v\" \"data\" {}", resName))
+		_, err = fmt.Fprintf(f, "data \"%v\" \"data\" {}", resName)
 		if err != nil {
 			panic(err)
 		}
-		f.Close()
+		if err = f.Close(); err != nil {
+			panic(err)
+		}
 	}
 
 	// var flags int = os.O_WRONLY | os.O_APPEND
@@ -223,8 +238,12 @@ Usage: 	go run tools/bolerplate/main.go [-from-csv] [-table file.csv] [-system] 
 	if err != nil {
 		panic(err)
 	}
-	fmt.Fprintf(f, "\"%v\":    %v(),\n", resName, itemType.String()+goName)
-	f.Close()
+	if _, err = fmt.Fprintf(f, "\"%v\":    %v(),\n", resName, itemType.String()+goName); err != nil {
+		panic(err)
+	}
+	if err = f.Close(); err != nil {
+		panic(err)
+	}
 	// }
 }
 
@@ -475,7 +494,7 @@ func extractAttributes(filename string) string {
 	if err != nil {
 		Fatalf("[extractAttributes] %v", err)
 	}
-	defer file.Close()
+	defer func() { _ = file.Close() }()
 
 	ww := bytes.NewBuffer(nil)
 
@@ -533,7 +552,7 @@ func extractAttributes(filename string) string {
 			validate = enumReplacer.Replace(match[1])
 		}
 
-		tmpl.Execute(ww, struct {
+		if err := tmpl.Execute(ww, struct {
 			Attribute    string
 			Type         string
 			Description  string
@@ -545,14 +564,12 @@ func extractAttributes(filename string) string {
 			Description:  splitDescription(strings.ReplaceAll(r2, `"`, "`")),
 			Slice:        validate,
 			DiffSuppress: diffSuppress,
-		})
+		}); err != nil {
+			Fatalf("%v", err)
+		}
 
 		if r1 == "type" {
 			return ww.String()
-		}
-
-		if err != nil {
-			Fatalf("%v", err)
 		}
 	}
 

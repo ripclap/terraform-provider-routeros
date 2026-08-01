@@ -1,8 +1,5 @@
-# Everything that can be checked without a RouterOS device. The acceptance suite
-# needs real hardware and is run by hand; see FORK.md.
-#
-# A release re-runs this same job against the tagged commit rather than trusting
-# that it ran on the branch, so these checks are the gate for publishing as well.
+# Every check that does not need a RouterOS device. A release re-runs this
+# workflow against the tagged commit, so these checks also gate publishing.
 name: CI
 
 on:
@@ -10,14 +7,15 @@ on:
     branches:
       - 'full-device-coverage'
     paths-ignore: &prose
-      # Prose cannot change what the provider does, and building thirteen
-      # platforms to prove that a README edit compiles is several wasted minutes.
-      # docs/ is deliberately absent from this list: it is generated from the
-      # schemas, so an edit to it is exactly what the docs check is for.
+      # docs/ is deliberately absent: it is generated from the schemas, so an
+      # edit to it is what the docs check exists to catch.
       - 'README.md'
       - 'FORK.md'
       - 'CHANGELOG.md'
       - 'RELEASING.md'
+      - 'CONTRIBUTING.md'
+      - 'SECURITY.md'
+      - 'CODE_OF_CONDUCT.md'
       - 'NOTICE'
       - 'LICENSE.md'
       - '.github/ISSUE_TEMPLATE/**'
@@ -34,6 +32,47 @@ permissions:
   contents: read
 
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+
+      - name: Set up Go
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+        with:
+          go-version-file: go.mod
+
+      # Configured by .golangci.yml. Covers gofmt and go vet, so neither is run
+      # separately.
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
+        with:
+          version: v2.12.2
+
+      # Reports only vulnerabilities reachable from this code, rather than every
+      # advisory affecting something in go.sum. Run from its own module so the
+      # provider's dependency graph is unaffected.
+      - name: govulncheck
+        run: go run golang.org/x/vuln/cmd/govulncheck@v1.6.0 ./...
+
+  dependency-review:
+    name: Dependency review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+
+      # Fails the pull request if it introduces a dependency with a known
+      # vulnerability or a licence incompatible with MPL-2.0 redistribution.
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
+        with:
+          fail-on-severity: moderate
+          deny-licenses: AGPL-3.0, GPL-2.0, GPL-3.0, LGPL-2.1, LGPL-3.0
+
   verify:
     name: Verify
     runs-on: ubuntu-latest
@@ -46,21 +85,6 @@ jobs:
         with:
           # Follows the go directive rather than a second copy of the version.
           go-version-file: go.mod
-
-      - name: gofmt
-        run: |
-          unformatted="$(gofmt -l . | grep -v '^vendor/' || true)"
-          if [ -n "$unformatted" ]; then
-            echo "::error::not gofmt'd:"
-            echo "$unformatted"
-            gofmt -d $unformatted
-            exit 1
-          fi
-
-      - name: go vet
-        # Scoped to the provider: tools/importer calls syscall.ForkExec, which
-        # does not build on every platform a contributor might be using.
-        run: go vet . ./routeros/
 
       - name: Unit tests
         # TF_ACC is unset, so an acceptance test skips once it reaches
@@ -86,8 +110,6 @@ jobs:
           fi
 
       - name: Coverage list is current
-        # COVERAGE.md is what people are pointed at to see what this fork adds,
-        # so it has to follow the resource map rather than drift behind it.
         run: |
           go run tools/coverage/main.go
           if ! git diff --quiet -- COVERAGE.md; then
@@ -98,17 +120,15 @@ jobs:
           fi
 
       # tfplugindocs shells out to Terraform to export the provider schema. Left
-      # to find its own, it downloads one and checks the signature against a
-      # HashiCorp key that has since expired, and fails with "openpgp: key
-      # expired". Putting a binary on PATH skips that entirely.
+      # to find its own it downloads one, checks the signature against a
+      # HashiCorp key that has since expired, and fails. Putting a binary on
+      # PATH skips that entirely.
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
         with:
           terraform_wrapper: false
 
       - name: Docs match the schemas
-        # tfplugindocs comes from go.mod, so this renders the same bytes every
-        # time; an unpinned copy would fail here the day it changes its output.
         run: |
           go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs \
             generate --provider-name routeros
@@ -131,15 +151,15 @@ jobs:
         with:
           go-version-file: go.mod
 
-      # The same build a release performs, minus signing and uploading. A break
-      # confined to one platform surfaces here rather than part way through
-      # publishing: 386 is the one that catches people out, because a uint32
-      # range in a validator overflows `int` there and nowhere else.
+      # The same build a release performs, minus signing and uploading, so a
+      # break confined to one platform surfaces here rather than part way
+      # through publishing. 386 is the one that catches people out: a uint32
+      # range in a validator overflows int there and nowhere else.
       - name: GoReleaser (snapshot)
         uses: goreleaser/goreleaser-action@f06c13b6b1a9625abc9e6e439d9c05a8f2190e94 # v7.2.3
         with:
           version: '~> v2'
-          args: release --snapshot --clean --skip=publish,sign
+          args: release --snapshot --clean --skip=publish,sign,sbom
 
       - name: Summarise
         run: |

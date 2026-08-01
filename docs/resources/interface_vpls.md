@@ -39,10 +39,10 @@
 
 ### Read-Only
 
-- `bgp_signaled` (Boolean) Whether the pseudowire was signalled by BGP.
+- `bgp_signaled` (Boolean) Whether the pseudowire was signaled by BGP.
 - `bgp_vpls` (String) The BGP VPLS instance the dynamically created pseudowire belongs to.
 - `bgp_vpls_prfx` (String) The BGP VPLS prefix the dynamically created pseudowire was built from.
-- `cisco_bgp_signaled` (Boolean) Whether the pseudowire was signalled by BGP using the Cisco style encoding.
+- `cisco_bgp_signaled` (Boolean) Whether the pseudowire was signaled by BGP using the Cisco style encoding.
 - `dynamic` (Boolean) Configuration item created by software, not by management interface. It is not exported, and cannot be directly modified.
 - `id` (String) The ID of this resource.
 - `running` (Boolean)

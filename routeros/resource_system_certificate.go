@@ -559,7 +559,7 @@ func ResourceSystemCertificate() *schema.Resource {
 		var resUrl = &URL{
 			Path: resSchema[MetaResourcePath].Default.(string),
 		}
-		var method crudMethod = crudRemove
+		method := crudRemove
 		if _, ok := d.State().Attributes["ca"]; ok {
 			// Not Root CA.
 			method = crudRevoke

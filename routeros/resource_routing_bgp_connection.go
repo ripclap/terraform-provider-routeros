@@ -71,7 +71,7 @@ func ResourceRoutingBgpConnection() *schema.Resource {
 		MetaId:             PropId(Id),
 		MetaSetUnsetFields: PropSetUnsetFields("hold_time", "keepalive_time"),
 
-		// This attribute was removed in ROS 7.20 in favour of 'input.add-path' / 'output.add-path'.
+		// This attribute was removed in ROS 7.20 in favor of 'input.add-path' / 'output.add-path'.
 		"add_path_out": {
 			Type:     schema.TypeString,
 			Optional: true,

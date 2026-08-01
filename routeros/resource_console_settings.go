@@ -15,7 +15,7 @@ import (
 	Sampled from RouterOS 7.23, `GET /rest/console/settings`.
 */
 
-// ResourceConsoleSettings Global console behaviour settings.
+// ResourceConsoleSettings Global console behavior settings.
 // https://help.mikrotik.com/docs/spaces/ROS/pages/47579162/Console
 func ResourceConsoleSettings() *schema.Resource {
 	resSchema := map[string]*schema.Schema{

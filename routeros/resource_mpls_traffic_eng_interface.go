@@ -121,7 +121,7 @@ func ResourceMplsTrafficEngInterface() *schema.Resource {
 		"resource_class": {
 			Type:     schema.TypeString,
 			Optional: true,
-			Description: "Resource class (administrative group, link colour) bit mask of this interface, matched " +
+			Description: "Resource class (administrative group, link color) bit mask of this interface, matched " +
 				"by the `affinity_include_any`, `affinity_include_all` and `affinity_exclude` properties of the " +
 				"tunnels and paths. Written as a decimal number or as a `0x`-prefixed hexadecimal number.",
 			ValidateFunc: validation.StringMatch(regexp.MustCompile(`^(0[xX][0-9a-fA-F]{1,8}|\d+)$`),

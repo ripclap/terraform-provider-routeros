@@ -84,7 +84,9 @@ func ResourceMoveItems() *schema.Resource {
 			}
 		}
 
-		d.Set("sequence", list)
+		if err := d.Set("sequence", list); err != nil {
+			return diag.FromErr(err)
+		}
 		return nil
 	}
 
@@ -100,7 +102,7 @@ func ResourceMoveItems() *schema.Resource {
 		// 		"destination": anchor.(string),
 		// 	}
 		// } else {
-		var item MikrotikItem = MikrotikItem{
+		item := MikrotikItem{
 			"numbers":     strings.Join(list[:len(list)-1], ","),
 			"destination": list[len(list)-1],
 		}

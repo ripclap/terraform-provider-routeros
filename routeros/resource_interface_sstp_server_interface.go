@@ -16,7 +16,7 @@ import (
 */
 
 // ResourceInterfaceSstpServerInterface the interface a connected SSTP client is bound to.
-// The server itself is /interface/sstp-server/server, modelled by ResourceInterfaceSstpServer.
+// The server itself is /interface/sstp-server/server, modeled by ResourceInterfaceSstpServer.
 // https://help.mikrotik.com/docs/display/ROS/SSTP
 func ResourceInterfaceSstpServerInterface() *schema.Resource {
 	resSchema := map[string]*schema.Schema{

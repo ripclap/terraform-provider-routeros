@@ -367,9 +367,13 @@ func ResourceContainer() *schema.Resource {
 			// Remove (:////)adguard/adguardhome:latest
 			tag = strings.TrimLeft(tag, ":/")
 
-			d.Set("remote_image", strings.TrimPrefix(tag, registryUrl))
+			if err := d.Set("remote_image", strings.TrimPrefix(tag, registryUrl)); err != nil {
+				return diag.FromErr(err)
+			}
 
-			d.Set("running", d.Get("status").(string) == "running")
+			if err := d.Set("running", d.Get("status").(string) == "running"); err != nil {
+				return diag.FromErr(err)
+			}
 		}
 
 		return nil

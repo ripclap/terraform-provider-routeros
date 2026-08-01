@@ -16,7 +16,7 @@ import (
 	additionally report the read-only `dynamic`, `invalid` and `status` properties.
 */
 
-// ResourceFileSync rsync based synchronisation jobs between the router file system and a remote host.
+// ResourceFileSync rsync based synchronization jobs between the router file system and a remote host.
 // https://help.mikrotik.com/docs/spaces/ROS/pages/2555971/File+Systems
 func ResourceFileSync() *schema.Resource {
 	resSchema := map[string]*schema.Schema{
@@ -31,12 +31,12 @@ func ResourceFileSync() *schema.Resource {
 		"local_path": {
 			Type:        schema.TypeString,
 			Optional:    true,
-			Description: "Path on the router that takes part in the synchronisation.",
+			Description: "Path on the router that takes part in the synchronization.",
 		},
 		"mode": {
 			Type:     schema.TypeString,
 			Optional: true,
-			Description: "Direction of the synchronisation:" +
+			Description: "Direction of the synchronization:" +
 				"\n  * upload - the local path is copied to the remote host," +
 				"\n  * download - the remote path is copied to the router.",
 			ValidateFunc:     validation.StringInSlice([]string{"download", "upload"}, false),
@@ -56,7 +56,7 @@ func ResourceFileSync() *schema.Resource {
 		"remote_path": {
 			Type:        schema.TypeString,
 			Optional:    true,
-			Description: "Path on the remote host that takes part in the synchronisation.",
+			Description: "Path on the remote host that takes part in the synchronization.",
 		},
 		"user": {
 			Type:        schema.TypeString,

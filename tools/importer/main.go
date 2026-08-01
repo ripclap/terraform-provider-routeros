@@ -10,12 +10,12 @@ import (
 	"regexp"
 	"slices"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/ripclap/terraform-provider-routeros/routeros"
 	"github.com/sirupsen/logrus"
+	"golang.org/x/term"
 )
 
 var (
@@ -94,7 +94,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer conn.Close()
+	defer func() { _ = conn.Close() }()
 
 	// /interface ethernet set [ find default-name=ether2 ] disable-running-check=no
 	// /interface wireguard add listen-port=1829 mtu=1420 name=wg1
@@ -310,9 +310,13 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer tfFile.Close()
-	_, err = resHcl.WriteTo(tfFile)
-	if err != nil {
+	if _, err = resHcl.WriteTo(tfFile); err != nil {
+		_ = tfFile.Close()
+		log.Fatal(err)
+	}
+	// Reported rather than deferred: a discarded close error here would leave a
+	// silently truncated .tf file behind.
+	if err = tfFile.Close(); err != nil {
 		log.Fatal(err)
 	}
 
@@ -331,7 +335,7 @@ type HCLResource struct {
 // The function returns the name of the resource in provider notation and the unique identifier of the resource.
 func GetResourceSection(hclNames map[string]int, providerResources map[string][]string, path string) (*HCLResource, error) {
 	// /ip pool => /ip/pool
-	path = strings.Replace(path, " ", "/", -1)
+	path = strings.ReplaceAll(path, " ", "/")
 	// /ip/pool => routeros_ip_pool
 	resNames, ok := providerResources[path]
 	if !ok {
@@ -463,50 +467,23 @@ func GetAttributes(provider *schema.Provider, resourceName, attributes string) (
 func getPassword(prompt string) string {
 	fmt.Print(prompt)
 
-	// Common settings and variables for both stty calls.
-	attrs := syscall.ProcAttr{
-		Dir:   "",
-		Env:   []string{},
-		Files: []uintptr{os.Stdin.Fd(), os.Stdout.Fd(), os.Stderr.Fd()},
-		Sys:   nil}
-	var ws syscall.WaitStatus
+	fd := int(os.Stdin.Fd())
 
-	// Disable echoing.
-	pid, err := syscall.ForkExec(
-		"/bin/stty",
-		[]string{"stty", "-echo"},
-		&attrs)
+	// Stdin is not a terminal when the importer is driven from a pipe or a CI
+	// job; there is no echo to suppress, so read an ordinary line.
+	if !term.IsTerminal(fd) {
+		text, err := bufio.NewReader(os.Stdin).ReadString('\n')
+		if err != nil {
+			panic(err)
+		}
+		return strings.TrimSpace(text)
+	}
+
+	secret, err := term.ReadPassword(fd)
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println()
 
-	// Wait for the stty process to complete.
-	_, err = syscall.Wait4(pid, &ws, 0, nil)
-	if err != nil {
-		panic(err)
-	}
-
-	// Echo is disabled, now grab the data.
-	reader := bufio.NewReader(os.Stdin)
-	text, err := reader.ReadString('\n')
-	if err != nil {
-		panic(err)
-	}
-
-	// Re-enable echo.
-	pid, err = syscall.ForkExec(
-		"/bin/stty",
-		[]string{"stty", "echo"},
-		&attrs)
-	if err != nil {
-		panic(err)
-	}
-
-	// Wait for the stty process to complete.
-	_, err = syscall.Wait4(pid, &ws, 0, nil)
-	if err != nil {
-		panic(err)
-	}
-
-	return strings.TrimSpace(text)
+	return strings.TrimSpace(string(secret))
 }

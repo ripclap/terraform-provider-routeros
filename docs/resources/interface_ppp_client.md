@@ -27,10 +27,10 @@
 - `keepalive_timeout` (String) Tunnel keepalive timeout in seconds.
 - `max_mru` (Number) Maximum Receive Unit. Maximum packet size that the interface will be able to receive without packet fragmentation.
 - `max_mtu` (Number) Maximum Transmission Unit. Maximum packet size that the interface will be able to send without packet fragmentation.
-- `modem_init` (String) Modem initialization string sent before dialling.
+- `modem_init` (String) Modem initialization string sent before dialing.
 - `mrru` (String) Maximum packet size that can be received on the link. If a packet is bigger than tunnel MTU, it will be split into multiple packets, allowing full size IP or Ethernet packets to be sent over the tunnel. Set to `disabled` to turn Multilink PPP off.
 - `network_mode` (String) The cellular network mode the modem is allowed to use.
-- `null_modem` (Boolean) Enables null-modem mode. When enabled, no modem initialization strings are sent and no dialling takes place.
+- `null_modem` (Boolean) Enables null-modem mode. When enabled, no modem initialization strings are sent and no dialing takes place.
 - `password` (String, Sensitive) Password used for authentication.
 - `phone` (String) Phone number used for dial out.
 - `pin` (String, Sensitive) The PIN code of the SIM card.

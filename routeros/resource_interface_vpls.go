@@ -31,7 +31,7 @@ func ResourceInterfaceVpls() *schema.Resource {
 		"bgp_signaled": {
 			Type:        schema.TypeBool,
 			Computed:    true,
-			Description: "Whether the pseudowire was signalled by BGP.",
+			Description: "Whether the pseudowire was signaled by BGP.",
 		},
 		"bgp_vpls": {
 			Type:        schema.TypeString,
@@ -72,7 +72,7 @@ func ResourceInterfaceVpls() *schema.Resource {
 		"cisco_bgp_signaled": {
 			Type:        schema.TypeBool,
 			Computed:    true,
-			Description: "Whether the pseudowire was signalled by BGP using the Cisco style encoding.",
+			Description: "Whether the pseudowire was signaled by BGP using the Cisco style encoding.",
 		},
 		"cisco_static_id": {
 			Type:     schema.TypeInt,

@@ -13,13 +13,13 @@
 - `___skip___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
 - `comment` (String)
 - `disabled` (Boolean)
-- `local_path` (String) Path on the router that takes part in the synchronisation.
-- `mode` (String) Direction of the synchronisation:
+- `local_path` (String) Path on the router that takes part in the synchronization.
+- `mode` (String) Direction of the synchronization:
   * upload - the local path is copied to the remote host,
   * download - the remote path is copied to the router.
 - `password` (String, Sensitive) Password of the rsync user on the remote host.
 - `remote_address` (String) Address of the remote rsync host.
-- `remote_path` (String) Path on the remote host that takes part in the synchronisation.
+- `remote_path` (String) Path on the remote host that takes part in the synchronization.
 - `user` (String) User name used to authenticate on the remote rsync host.
 
 ### Read-Only

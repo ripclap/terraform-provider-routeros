@@ -315,7 +315,7 @@ var (
 			return
 		},
 		Description: "Set dscp value in GRE header to a fixed value '0..63' or 'inherit' from dscp value taken " +
-			"from tunnelled traffic.",
+			"from tunneled traffic.",
 	}
 	PropDynamicRo = &schema.Schema{
 		Type:     schema.TypeBool,
@@ -571,7 +571,12 @@ var (
 
 	// ValidationDurationBetween returns a SchemaValidateFunc which tests if the provided value
 	// is a valid duration expected by RouterOS and is between minVal and maxVal (inclusive)
-	ValidationDurationBetween = func(minVal, maxVal int) schema.SchemaValidateFunc {
+	//
+	// The deprecated type is the one `schema.Schema.ValidateFunc` declares, and every
+	// resource in this provider assigns to that field. Returning a
+	// SchemaValidateDiagFunc here would make this helper unusable at those call sites;
+	// the migration belongs with a move to terraform-plugin-framework, not here.
+	ValidationDurationBetween = func(minVal, maxVal int) schema.SchemaValidateFunc { //nolint:staticcheck // SA1019
 		return func(i interface{}, k string) (warnings []string, errors []error) {
 			value, ok := i.(string)
 			if !ok {
@@ -768,7 +773,7 @@ var (
 			return false
 		}
 
-		for i, _ := range oldSet {
+		for i := range oldSet {
 			o, err := ParseDuration(oldSet[i], baseUnits)
 			if err != nil {
 				panic("[TimeEquall] parse 'old' duration error: " + err.Error())
@@ -866,7 +871,7 @@ var (
 			return false
 		}
 
-		for i, _ := range oldSet {
+		for i := range oldSet {
 			o, err := ParseBitValues(oldSet[i])
 			if err != nil {
 				panic("[BitsEqual] parse 'old' value error: " + err.Error())
@@ -905,7 +910,7 @@ var (
 			return false
 		}
 
-		for i, _ := range oldSet {
+		for i := range oldSet {
 			o, err := ParseByteValues(oldSet[i])
 			if err != nil {
 				panic("[BytesEqual] parse 'old' value error: " + err.Error())

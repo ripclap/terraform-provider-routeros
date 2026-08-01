@@ -625,7 +625,7 @@ func MikrotikResourceDataToTerraformDatasource(items *[]MikrotikItem, resourceDa
 	var diags diag.Diagnostics
 	var dsItems []map[string]interface{}
 	// System resource have an empty 'resourceDataKeyName'.
-	var isSystemDatasource bool = (resourceDataKeyName == "")
+	isSystemDatasource := resourceDataKeyName == ""
 	var transformSet map[string]string
 	var skipFields map[string]struct{}
 

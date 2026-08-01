@@ -31,8 +31,8 @@ import (
   }
 */
 
-// ResourceRoutingBgpVpls A BGP signalled VPLS instance. The pseudowires to the remote sites are discovered and
-// signalled over BGP (RFC 4761) and attached to the configured bridge.
+// ResourceRoutingBgpVpls A BGP signaled VPLS instance. The pseudowires to the remote sites are discovered and
+// signaled over BGP (RFC 4761) and attached to the configured bridge.
 // https://help.mikrotik.com/docs/spaces/ROS/pages/331612228/routing+bgp
 func ResourceRoutingBgpVpls() *schema.Resource {
 	resSchema := map[string]*schema.Schema{
@@ -67,14 +67,14 @@ func ResourceRoutingBgpVpls() *schema.Resource {
 		"cisco_id": {
 			Type:     schema.TypeString,
 			Optional: true,
-			Description: "The VPLS identifier used for the interoperability with the Cisco style BGP signalled " +
+			Description: "The VPLS identifier used for the interoperability with the Cisco style BGP signaled " +
 				"VPLS, written as `RouteDistinguisher:VPLSId`.",
 		},
 		KeyComment: PropCommentRw,
 		"current_peers": {
 			Type:        schema.TypeString,
 			Computed:    true,
-			Description: "The peers this VPLS instance currently has a signalled pseudowire with.",
+			Description: "The peers this VPLS instance currently has a signaled pseudowire with.",
 		},
 		KeyDisabled: PropDisabledRw,
 		"export_route_targets": {
@@ -117,14 +117,14 @@ func ResourceRoutingBgpVpls() *schema.Resource {
 		"pw_l2mtu": {
 			Type:             schema.TypeInt,
 			Optional:         true,
-			Description:      "The layer2 MTU signalled for the pseudowires of this instance.",
+			Description:      "The layer2 MTU signaled for the pseudowires of this instance.",
 			ValidateFunc:     validation.IntBetween(0, 65535),
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"pw_type": {
 			Type:         schema.TypeString,
 			Optional:     true,
-			Description:  "The pseudowire encapsulation type signalled for this instance.",
+			Description:  "The pseudowire encapsulation type signaled for this instance.",
 			ValidateFunc: validation.StringInSlice([]string{"raw-ethernet", "tagged-ethernet", "vpls"}, false),
 		},
 		"rd": {

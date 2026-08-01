@@ -68,7 +68,7 @@ jobs:
 
       - name: Preparing RouterOS for testing
         run: |
-          go run .github/scripts/setup_routeros.go
+          go run ./tools/testenv
         env:
           ROS_USERNAME: admin
           ROS_PASSWORD: ''

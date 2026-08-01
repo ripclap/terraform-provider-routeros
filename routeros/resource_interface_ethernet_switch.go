@@ -197,7 +197,9 @@ func ResourceInterfaceEthernetSwitch() *schema.Resource {
 
 		id := (*res)[0].GetID(metadata.IdType)
 		d.SetId(id)
-		d.Set("switch_id", id)
+		if err := d.Set("switch_id", id); err != nil {
+			return diag.FromErr(err)
+		}
 
 		return MikrotikResourceDataToTerraform((*res)[0], resSchema, d)
 	}

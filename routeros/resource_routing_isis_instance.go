@@ -94,7 +94,7 @@ func ResourceRoutingIsisInstance() *schema.Resource {
 		"l1_lsp_max_age": {
 			Type:     schema.TypeString,
 			Optional: true,
-			Description: "The lifetime advertised in the level 1 link state PDUs. A neighbour purges an LSP that " +
+			Description: "The lifetime advertised in the level 1 link state PDUs. A neighbor purges an LSP that " +
 				"has not been refreshed within this time.",
 			ValidateFunc:     ValidationTime,
 			DiffSuppressFunc: TimeEqual,
@@ -152,7 +152,7 @@ func ResourceRoutingIsisInstance() *schema.Resource {
 		"l2_lsp_max_age": {
 			Type:     schema.TypeString,
 			Optional: true,
-			Description: "The lifetime advertised in the level 2 link state PDUs. A neighbour purges an LSP that " +
+			Description: "The lifetime advertised in the level 2 link state PDUs. A neighbor purges an LSP that " +
 				"has not been refreshed within this time.",
 			ValidateFunc:     ValidationTime,
 			DiffSuppressFunc: TimeEqual,

@@ -51,7 +51,7 @@ func ResourceIPFirewallFilter() *schema.Resource {
 		"connection_bytes": {
 			Type:     schema.TypeString,
 			Optional: true,
-			Description: "Matches packets only if a given amount of bytes has been transfered through the particular " +
+			Description: "Matches packets only if a given amount of bytes has been transferred through the particular " +
 				"connection.",
 		},
 		"connection_limit": {

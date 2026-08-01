@@ -65,7 +65,7 @@ func DefaultDelete(s map[string]*schema.Schema) schema.DeleteContextFunc {
 // The distinctive feature of such resources is that they cannot be deleted, but they can be modified.
 // For example, enabling/disabling the resource.
 //
-// FIXME Replace fucntions in resources: ResourceInterfaceEthernetSwitchPortIsolation, ResourceInterfaceEthernetSwitchPort
+// FIXME Replace functions in resources: ResourceInterfaceEthernetSwitchPortIsolation, ResourceInterfaceEthernetSwitchPort
 // ResourceInterfaceEthernetSwitch, ResourceInterfaceLte, ResourceIpService
 func DefaultCreateUpdate(s map[string]*schema.Schema) func(context.Context, *schema.ResourceData, interface{}) diag.Diagnostics {
 	return func(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
