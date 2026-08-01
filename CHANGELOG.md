@@ -71,9 +71,9 @@ See [FORK.md](FORK.md).
 
 ### Features
 
-* **coverage:** 411 resources, up from 255; 363 of 547 RouterOS menus represented. New
-  resources for menus not previously modelled, plus schema fields that RouterOS returns
-  but were dropped on read, so drift in them was invisible.
+* **coverage:** 411 resources, up from 254 upstream. New resources for menus not
+  previously modelled, plus schema fields that RouterOS returns but were dropped on
+  read, so drift in them was invisible.
 * **routing-bgp-connection:** add `afi` and the nested `add_path` attribute for
   input/output; deprecate `address_families` and `add_path_out`.
 * **routing-bgp-template:** add nested `add_path`.

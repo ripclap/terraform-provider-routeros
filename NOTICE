@@ -25,7 +25,8 @@ tree and relaxes several schema constraints that prevented importing the
 configuration of a live device. Specifically:
 
   * Additional resources covering RouterOS menus not represented upstream,
-    raising registered resource count from 255 to 411.
+    raising the registered resource count from 254 to 415. COVERAGE.md lists
+    them.
 
   * Schema fields present in RouterOS 7.23 but absent from upstream's schema,
     which caused values to be silently dropped on read. Among them:

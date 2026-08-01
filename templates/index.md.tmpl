@@ -15,7 +15,7 @@ To get started with the provider, you first need to enable the REST API on your 
 
 This is a community fork of [`terraform-routeros/terraform-provider-routeros`](https://github.com/terraform-routeros/terraform-provider-routeros), licensed under MPL-2.0. It is **not affiliated with or endorsed by** the upstream project or its maintainers.
 
-It exists to represent the **complete** running configuration of a RouterOS 7.23 device as OpenTofu/Terraform state, so drift is detectable across the whole device rather than a subset. Measured against a live RouterOS 7.23 device it registers **411 resources** (upstream v1.99.1 registers ~255) and models many menus upstream does not. It is published to the [OpenTofu Registry](https://search.opentofu.org/provider/ripclap/routeros); use it under OpenTofu with `source = "ripclap/routeros"`. It is not published to the HashiCorp Terraform Registry.
+It represents a complete RouterOS 7.23 configuration as OpenTofu state, so drift is detectable across the whole device rather than a subset. It registers **415 resources** covering 388 RouterOS menus, against 254 resources upstream. It is published to the [OpenTofu Registry](https://search.opentofu.org/provider/ripclap/routeros); use it under OpenTofu with `source = "ripclap/routeros"`. It is not published to the HashiCorp Terraform Registry.
 
 Because it is rebased on upstream, most resources behave identically. The notable behavioural differences are:
 

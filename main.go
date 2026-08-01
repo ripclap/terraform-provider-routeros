@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"os"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
 	"github.com/ripclap/terraform-provider-routeros/routeros"
@@ -10,16 +12,27 @@ import (
 // Generate the Terraform provider documentation using `tfplugindocs`:
 //go:generate go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs
 
-func main() {
-	var debug bool
+// Set by the release build through -ldflags.
+var (
+	version = "dev"
+	commit  = "none"
+)
 
-	// https://github.com/hashicorp/terraform-docs-common/blob/main/website/docs/plugin/debugging.mdx
+func main() {
+	var debug, showVersion bool
+
 	// https://developer.hashicorp.com/terraform/plugin/debugging
 	flag.BoolVar(&debug, "debug", false, "set to true to run the provider with support for debuggers like delve")
+	flag.BoolVar(&showVersion, "version", false, "print the provider version and exit")
 	flag.Parse()
 
+	if showVersion {
+		fmt.Printf("%s %s\n", version, commit)
+		os.Exit(0)
+	}
+
 	plugin.Serve(&plugin.ServeOpts{
-		ProviderAddr: "terraform-routeros/routeros",
+		ProviderAddr: "registry.opentofu.org/ripclap/routeros",
 		ProviderFunc: routeros.NewProvider,
 		Debug:        debug,
 	})

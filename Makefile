@@ -1,61 +1,39 @@
-VERSION=$(shell git describe --tags --abbrev=0)
+VERSION := $(shell git describe --tags --abbrev=0)
 
 EXT :=
 ifeq ($(OS),Windows_NT)
 	EXT := .exe
 endif
 
-.PHONY: docs debug
+.PHONY: build test lint docs generate tfformat debug snapshot
 
-all: docs tfformat compile checksum clean
+build:
+	go build ./...
 
+# Mirrors the unit-test step in .github/workflows/ci.yml. The acceptance suite
+# needs a device; see FORK.md.
 test:
-	go test -timeout 30s github.com/terraform-routeros/terraform-provider-routeros
+	ROS_VERSION=7.23.1 go test ./routeros/ -count=1 -skip 'TestClientTransport_SendRequest'
+
+lint:
+	golangci-lint run ./...
+
+# Regenerates everything CI checks for staleness.
+generate:
+	cd routeros && go run ../tools/drift/main.go
+	go run tools/coverage/main.go
+	go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs generate --provider-name routeros
 
 docs:
-	go generate ./...
-	# !!! GNU Sed
-	find docs -type f -exec sed -i -E '/^.*__[[:alpha:]_]+__/d' {} \;
+	go run github.com/hashicorp/terraform-plugin-docs/cmd/tfplugindocs generate --provider-name routeros
 
 tfformat:
 	terraform fmt -recursive examples/
 
 debug:
-	go generate routeros/provider.go
-	go build -gcflags="all=-N -l" -o terraform-provider-routeros_${VERSION}$(EXT) main.go
+	go build -gcflags="all=-N -l" -o terraform-provider-routeros_$(VERSION)$(EXT) .
 
-compile:
-	mkdir -p pkg
-	echo "Removing previously built packages"
-	rm -rf pkg/*
-	go generate routeros/provider.go
-	echo "Compiling for every OS and Platform"
-	GOOS=linux GOARCH=arm go build -o terraform-provider-routeros_${VERSION} main.go
-	zip pkg/terraform-provider-routeros_${VERSION}_linux_arm.zip terraform-provider-routeros_${VERSION}
-	
-	GOOS=linux GOARCH=arm64 go build -o terraform-provider-routeros_${VERSION} main.go
-	zip pkg/terraform-provider-routeros_${VERSION}_linux_arm64.zip terraform-provider-routeros_${VERSION}
-
-	GOOS=linux GOARCH=386 go build -o terraform-provider-routeros_${VERSION} main.go
-	zip pkg/terraform-provider-routeros_${VERSION}_linux_386.zip terraform-provider-routeros_${VERSION}
-
-	GOOS=linux GOARCH=amd64 go build -o terraform-provider-routeros_${VERSION} main.go
-	zip pkg/terraform-provider-routeros_${VERSION}_linux_amd64.zip terraform-provider-routeros_${VERSION}
-
-	GOOS=windows GOARCH=amd64 go build -o terraform-provider-routeros_${VERSION}.exe main.go
-	zip pkg/terraform-provider-routeros_${VERSION}_windows_amd64.zip terraform-provider-routeros_${VERSION}.exe
-
-	GOOS=windows GOARCH=386 go build -o terraform-provider-routeros_${VERSION}.exe main.go
-	zip pkg/terraform-provider-routeros_${VERSION}_windows_386.zip terraform-provider-routeros_${VERSION}.exe
-
-	GOOS=darwin GOARCH=amd64 go build -o terraform-provider-routeros_${VERSION} main.go
-	zip pkg/terraform-provider-routeros_${VERSION}_darwin_amd64.zip terraform-provider-routeros_${VERSION}
-
-	GOOS=darwin GOARCH=arm64 go build -o terraform-provider-routeros_${VERSION} main.go
-	zip pkg/terraform-provider-routeros_${VERSION}_darwin_arm64.zip terraform-provider-routeros_${VERSION}
-
-checksum:
-	cd pkg && sha256sum *.zip > terraform-provider-routeros_${VERSION}_SHA256SUMS
-
-clean:
-	rm terraform-provider-routeros_${VERSION}
+# Release builds run in CI only; this produces the same artifacts locally
+# without publishing or signing them.
+snapshot:
+	goreleaser release --snapshot --clean --skip=publish,sign,sbom

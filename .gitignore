@@ -8,6 +8,7 @@ node_modules
 tools/boilerplate/examples/**
 tools/boilerplate/routeros/**
 tools/boilerplate/*.csv
-main.exedist/
+main.exe
+dist/
 
 vendor/
