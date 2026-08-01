@@ -50,6 +50,10 @@ signs:
       - "--detach-sign"
       - "${artifact}"
 release:
+  # Upload to a draft, so the archives can be looked at before anyone can install
+  # them. The registry only sees a version once the draft is published, and until
+  # then a bad build can be thrown away and the same version built again.
+  draft: true
   prerelease: auto
   extra_files:
     # The Terraform Registry requires the manifest as a release asset.

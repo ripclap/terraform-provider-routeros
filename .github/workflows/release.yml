@@ -1,74 +1,245 @@
-# This uses an action (crazy-max/ghaction-import-gpg) that assumes you set your
-# private key in the `GPG_PRIVATE_KEY` secret and passphrase in the `PASSPHRASE`
-# secret. If you would rather own your own GPG handling, please fork this action
-# or use an alternative one for key handling.
+# Turns a tag into a *draft* release. Nothing here makes a version installable:
+# publishing the draft is a deliberate, manual act, and it is the only way a
+# version ever reaches the registry.
 #
-# You will need to pass the `--batch` flag to `gpg` in your signing step
-# in `goreleaser` to indicate this is being used in a non-interactive mode.
+# The reason for that shape: a registry records the checksums of the files a
+# version had when it first saw it, and serves those checksums forever. Upload
+# different bytes under a version that has already been published and every
+# install of it fails, permanently, with no way to correct it short of asking
+# the registry maintainers. 2.0.2 of this provider is exactly that. So:
 #
+#   * a version that already exists anywhere is refused before anything is built
+#   * a draft can be thrown away and rebuilt as often as you like
+#   * once published, a version is finished - the next fix is the next version
+#
+# Requires two repository secrets, GPG_PRIVATE_KEY and GPG_PASSPHRASE, holding
+# the key whose public half is registered for this namespace. Optionally set the
+# repository variable GPG_FINGERPRINT to have the key checked before it is used.
 name: Release
 
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - 'main'
-      - 'devel'
-    tags-ignore:
-      - '**'
+    tags:
+      - 'v*'
+  # Re-run against a tag that already exists - pick the tag, not a branch, in the
+  # "Use workflow from" dropdown.
+  workflow_dispatch:
+
+concurrency:
+  # Never cancel a release part way through; a half uploaded draft is confusing
+  # to reason about and there is no hurry.
+  group: release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
 
 jobs:
-
-  release:
-    if: contains(github.event.head_commit.message, 'chore(release)') != true
-
+  preflight:
+    name: Preflight
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.checks.outputs.version }}
+      draft_exists: ${{ steps.checks.outputs.draft_exists }}
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      RELEASE_BRANCH: full-device-coverage
     steps:
-
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
-          fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
-          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
-          token: ${{ secrets.ROUTEROS_ACTIONS }}
+          fetch-depth: 0
 
-      - name: Import GPG key
-        id: import_gpg
-        uses: crazy-max/ghaction-import-gpg@v7
-        with:
-          # These secrets will need to be configured for the repository:
-          gpg_private_key: ${{ secrets.TERRAFORM_GPG_SIGNING_KEY }}
-          passphrase: ${{ secrets.TERRAFORM_GPG_SIGN_KEY_PW }}
+      - name: Check the tag can be released
+        id: checks
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME}"
 
-      - name: Release
-        id: release
-        uses: cycjimmy/semantic-release-action@v6
+          if [ "${GITHUB_REF_TYPE}" != "tag" ]; then
+            echo "::error::run this from a tag, not '${TAG}'. In \"Run workflow\" the" \
+                 "\"Use workflow from\" dropdown lists tags as well as branches."
+            exit 1
+          fi
+
+          # 1. A version number we can reason about, and that goreleaser and the
+          #    registry will agree on.
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
+            echo "::error::'$TAG' is not vMAJOR.MINOR.PATCH[-PRERELEASE]"
+            exit 1
+          fi
+          VERSION="${TAG#v}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+          # 2. The tag has to be on the release branch. A tag pushed from a stale
+          #    clone is the easy way to publish code nobody reviewed.
+          git fetch --no-tags origin "$RELEASE_BRANCH"
+          if ! git merge-base --is-ancestor "${TAG}^{commit}" "origin/${RELEASE_BRANCH}"; then
+            echo "::error::${TAG} is not an ancestor of origin/${RELEASE_BRANCH};" \
+                 "it points at $(git rev-parse --short "${TAG}^{commit}")"
+            exit 1
+          fi
+
+          # 3. The registry is the one place nothing can be undone. Ask it first.
+          NS="${GITHUB_REPOSITORY_OWNER}"
+          NAME="${GITHUB_REPOSITORY#*/terraform-provider-}"
+          PUBLISHED="$(curl -fsS --retry 3 \
+            "https://registry.opentofu.org/v1/providers/${NS}/${NAME}/versions" \
+            2>/dev/null || echo '{"versions":[]}')"
+          if echo "$PUBLISHED" | jq -e --arg v "$VERSION" \
+               '(.versions // []) | map(.version) | index($v)' >/dev/null; then
+            echo "::error::${VERSION} is already in the OpenTofu registry. Its" \
+                 "checksums are recorded and cannot be changed; rebuilding it" \
+                 "would break every install of that version. Tag the next patch" \
+                 "version instead."
+            exit 1
+          fi
+
+          # 4. Same question of GitHub. A draft is fine - that is the point of
+          #    drafts - but a published release is finished.
+          DRAFT=false
+          if gh release view "$TAG" --json isDraft >/dev/null 2>&1; then
+            if [ "$(gh release view "$TAG" --json isDraft -q .isDraft)" = "true" ]; then
+              DRAFT=true
+              echo "::notice::a draft of ${TAG} exists and will be replaced"
+            else
+              echo "::error::${TAG} is already published on GitHub. Its files are" \
+                   "what the registry will fetch; replacing them breaks installs." \
+                   "Tag the next patch version instead."
+              exit 1
+            fi
+          fi
+          echo "draft_exists=$DRAFT" >> "$GITHUB_OUTPUT"
+
+          # 5. Cheap quality gates that are annoying to notice after the fact.
+          if ! grep -qE "^## \[${VERSION}\]" CHANGELOG.md; then
+            echo "::error::CHANGELOG.md has no '## [${VERSION}]' heading"
+            exit 1
+          fi
+          jq -e '.metadata.protocol_versions | length > 0' \
+            terraform-registry-manifest.json > /dev/null
+
+          echo "### Preflight" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "\`${TAG}\` -> version \`${VERSION}\`, commit \`$(git rev-parse --short "${TAG}^{commit}")\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Not yet in the registry, not yet published on GitHub, on \`${RELEASE_BRANCH}\`, changelogged." >> "$GITHUB_STEP_SUMMARY"
+
+  # The same checks the branch gets, run again against the tagged commit. CI
+  # having been green on the branch says nothing about the commit being tagged.
+  checks:
+    name: Checks
+    needs: preflight
+    uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: read
+
+  build:
+    name: Build, sign, draft
+    needs: [preflight, checks]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
-          extra_plugins: |
-            "@semantic-release/changelog@6.0.2"
-            "@semantic-release/commit-analyzer@9.0.2"
-            "@semantic-release/exec@6.0.3"
-            "@semantic-release/git@10.0.1"
-            "@semantic-release/github@8.0.7"
-            "@semantic-release/release-notes-generator@10.0.3"
-            "conventional-changelog-conventionalcommits@8.0.0"
-        env:
-          GITHUB_TOKEN: ${{ secrets.ROUTEROS_ACTIONS }}
-          GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
+          fetch-depth: 0
 
       - name: Set up Go
-        if: steps.release.outputs.new_release_published == 'true'
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
         with:
-          go-version: 1.25
+          go-version-file: go.mod
 
-      - name: Run GoReleaser
-        if: steps.release.outputs.new_release_published == 'true'
-        uses: goreleaser/goreleaser-action@v7
+      # Leaves the tag alone, so the rebuild is of the same commit.
+      - name: Discard the previous draft
+        if: needs.preflight.outputs.draft_exists == 'true'
+        run: gh release delete "${GITHUB_REF_NAME}" --yes
+
+      - name: Import the signing key
+        id: gpg
+        uses: crazy-max/ghaction-import-gpg@2dc316deee8e90f13e1a351ab510b4d5bc0c82cd # v7.0.0
         with:
-          version: latest
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Check it is the expected key
+        # The registry verifies against the public key registered for the
+        # namespace. Signing with any other key produces a release it will not
+        # accept, which is only discovered once the version is already published.
+        env:
+          EXPECTED: ${{ vars.GPG_FINGERPRINT }}
+          ACTUAL: ${{ steps.gpg.outputs.fingerprint }}
+        run: |
+          set -euo pipefail
+          if [ -z "$EXPECTED" ]; then
+            echo "::warning::set the repository variable GPG_FINGERPRINT to $ACTUAL" \
+                 "to have this checked automatically"
+          elif [ "${EXPECTED^^}" != "${ACTUAL^^}" ]; then
+            echo "::error::signing key is $ACTUAL, expected $EXPECTED"
+            exit 1
+          fi
+          echo "signing with $ACTUAL"
+
+      - name: GoReleaser
+        uses: goreleaser/goreleaser-action@f06c13b6b1a9625abc9e6e439d9c05a8f2190e94 # v7.2.3
+        with:
+          version: '~> v2'
           args: release --clean
         env:
-          GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
-          # GitHub sets this automatically
-          GITHUB_TOKEN: ${{ secrets.ROUTEROS_ACTIONS }}
+          GPG_FINGERPRINT: ${{ steps.gpg.outputs.fingerprint }}
+          # Pinned rather than derived: `git describe` is ambiguous when more
+          # than one tag points at the same commit.
+          GORELEASER_CURRENT_TAG: ${{ github.ref_name }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: The signature verifies
+        run: gpg --verify dist/*_SHA256SUMS.sig dist/*_SHA256SUMS
+
+  verify:
+    name: Verify the draft
+    needs: [preflight, build]
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      # Checks what actually landed on the release rather than what the build
+      # believes it produced, so a truncated or missing upload is caught here.
+      - name: Download the draft's files
+        run: gh release download "${GITHUB_REF_NAME}" --repo "$GITHUB_REPOSITORY" --dir dist
+
+      - name: Checksums match
+        working-directory: dist
+        run: sha256sum -c ./*_SHA256SUMS
+
+      - name: Nothing is missing
+        working-directory: dist
+        run: |
+          set -euo pipefail
+          missing=0
+          for want in linux_amd64 linux_arm64 darwin_amd64 darwin_arm64 windows_amd64 linux_386; do
+            ls ./*_"${want}".zip >/dev/null 2>&1 || { echo "::error::no archive for ${want}"; missing=1; }
+          done
+          ls ./*_manifest.json >/dev/null 2>&1 || { echo "::error::no registry manifest"; missing=1; }
+          ls ./*_SHA256SUMS.sig >/dev/null 2>&1 || { echo "::error::no signature"; missing=1; }
+          [ "$missing" -eq 0 ]
+          echo "$(ls ./*.zip | wc -l) archives, checksums and signature present"
+
+      - name: What to do next
+        run: |
+          {
+            echo "### ${GITHUB_REF_NAME} is built and waiting as a draft"
+            echo
+            echo "$(ls dist/*.zip | wc -l) archives, all checksums verified against the signed manifest."
+            echo
+            echo "It is **not installable yet**. Look it over, then publish it:"
+            echo
+            echo "<${{ github.server_url }}/${{ github.repository }}/releases>"
+            echo
+            echo "Publishing is final. The registry records these exact files, and"
+            echo "a version cannot be rebuilt afterwards - the next fix is the next"
+            echo "version. If something is wrong, delete the draft and re-run this"
+            echo "workflow instead."
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,120 @@
+# Runs after a draft is published, and answers the only question that matters
+# once a version is public: does what the registry hands people match what is
+# actually on the release?
+#
+# When those disagree, `tofu init` fails with
+#
+#   registry response indicates a package of size N, but received a package of size M
+#
+# and it cannot be repaired, because the registry keeps the checksums it recorded
+# the first time it saw the version. This is how 2.0.2 of this provider was lost.
+# The release workflow is built so it should not be able to happen again; this is
+# the check that says so out loud rather than waiting for somebody's `tofu init`.
+name: Verify published release
+
+on:
+  release:
+    types: [published]
+  # For re-checking later, e.g. if the registry had not indexed the version yet.
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Published tag to check, e.g. v2.0.3'
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  registry:
+    name: Registry matches the release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for the registry, then compare
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          TAG="${{ inputs.tag || github.event.release.tag_name }}"
+          VERSION="${TAG#v}"
+          NS="${GITHUB_REPOSITORY_OWNER}"
+          NAME="${GITHUB_REPOSITORY#*/terraform-provider-}"
+          BASE="https://registry.opentofu.org/v1/providers/${NS}/${NAME}"
+
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+            echo "::notice::'$TAG' is not a version tag, nothing to check"
+            exit 0
+          fi
+
+          # Ingestion is a poll on the registry's side and has taken anywhere
+          # from a couple of minutes to a couple of hours.
+          indexed=false
+          for _ in $(seq 1 40); do
+            if curl -fsS --retry 2 "${BASE}/versions" \
+                 | jq -e --arg v "$VERSION" \
+                     '(.versions // []) | map(.version) | index($v)' >/dev/null; then
+              indexed=true
+              break
+            fi
+            sleep 90
+          done
+
+          if [ "$indexed" != true ]; then
+            {
+              echo "### ${TAG}: not indexed yet"
+              echo
+              echo "The registry had not picked up \`${VERSION}\` an hour after publishing,"
+              echo "which is slow but not unheard of. Nothing is wrong with the release"
+              echo "itself. Re-run this workflow later to finish the check."
+            } >> "$GITHUB_STEP_SUMMARY"
+            echo "::warning::${VERSION} is not in the registry yet; re-run this workflow later"
+            exit 0
+          fi
+
+          # The registry serves a checksum per platform. Fetch the file it points
+          # at and see whether it is the file we think it is.
+          fail=0
+          {
+            echo "### ${TAG}: registry vs release"
+            echo
+            echo "| platform | registry checksum | matches |"
+            echo "|---|---|:-:|"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          for target in linux/amd64 linux/arm64 darwin/arm64 windows/amd64; do
+            os="${target%/*}"; arch="${target#*/}"
+            meta="$(curl -fsS --retry 3 "${BASE}/${VERSION}/download/${os}/${arch}")"
+            want="$(echo "$meta" | jq -r .shasum)"
+            url="$(echo "$meta" | jq -r .download_url)"
+
+            curl -fsSL --retry 3 -o pkg.zip "$url"
+            got="$(sha256sum pkg.zip | cut -d' ' -f1)"
+
+            if [ "$want" = "$got" ]; then
+              mark='yes'
+            else
+              mark='**NO**'
+              fail=1
+              echo "::error::${target}: registry expects ${want}, the file is ${got}"
+            fi
+            printf '| %s | `%s` | %s |\n' "$target" "${want:0:16}..." "$mark" >> "$GITHUB_STEP_SUMMARY"
+            rm -f pkg.zip
+          done
+
+          if [ "$fail" -ne 0 ]; then
+            {
+              echo
+              echo "**This version is broken and cannot be fixed.** The registry is serving"
+              echo "checksums for files that are no longer the ones on the release, so"
+              echo "\`tofu init\` will fail for everyone. Do not re-upload anything to it:"
+              echo "release the next patch version instead, and note in the README that"
+              echo "this one must not be used."
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+
+          {
+            echo
+            echo "Every checksum the registry serves matches the published file."
+            echo "\`tofu init\` will install \`${VERSION}\` cleanly."
+          } >> "$GITHUB_STEP_SUMMARY"
