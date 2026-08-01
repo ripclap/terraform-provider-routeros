@@ -11,11 +11,13 @@ detectable across the whole device rather than a subset of it.
 
 | | upstream v1.99.1 | this fork |
 |---|---|---|
-| Registered resources | 255 | **415** |
+| Registered resources | 254 | **415** |
 | Distinct RouterOS menus covered | 207 | **388** |
 
 Resources outnumber menus because some menus are reachable under more than one resource
 name.
+
+[COVERAGE.md](COVERAGE.md) lists every resource this fork adds.
 
 ## What differs
 

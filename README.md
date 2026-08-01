@@ -58,6 +58,10 @@ For more in-depth documentation about each of the resources and datasources, ple
 
 For a detailed changelog, please see the [changelog.md](CHANGELOG.md).
 
+## Coverage
+
+[COVERAGE.md](COVERAGE.md) lists the resources this fork adds over upstream.
+
 ## Releasing
 
 Tagging builds a draft release; publishing it is a separate, manual step. See

@@ -85,6 +85,18 @@ jobs:
             exit 1
           fi
 
+      - name: Coverage list is current
+        # COVERAGE.md is what people are pointed at to see what this fork adds,
+        # so it has to follow the resource map rather than drift behind it.
+        run: |
+          go run tools/coverage/main.go
+          if ! git diff --quiet -- COVERAGE.md; then
+            echo "::error::COVERAGE.md is stale, regenerate it:"
+            echo "::error::  go run tools/coverage/main.go"
+            git diff -- COVERAGE.md
+            exit 1
+          fi
+
       # tfplugindocs shells out to Terraform to export the provider schema. Left
       # to find its own, it downloads one and checks the signature against a
       # HashiCorp key that has since expired, and fails with "openpgp: key
