@@ -9,7 +9,7 @@ import (
 const testResourceSystemResourceIrqRps = "routeros_system_resource_irq_rps.test_system_resource_irq_rps"
 
 // RPS entries cannot be added or removed, so this test uses the singleton pattern without CheckDestroy.
-// ether1 is the only interface with an RPS entry on the test VM; toggling the flag does not flap the link.
+// It requires an interface named ether1 that has an RPS entry; toggling the flag does not flap the link.
 func TestAccSystemResourceIrqRpsTest_basic(t *testing.T) {
 	for _, name := range testNames {
 		t.Run(name, func(t *testing.T) {
