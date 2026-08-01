@@ -47,7 +47,19 @@ func ResourceInterfaceVxlan() *schema.Resource {
 		},
 		KeyArp:        PropArpRw,
 		KeyArpTimeout: PropArpTimeoutRw,
-		KeyComment:    PropCommentRw,
+		"bridge": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "The bridge interface the VXLAN interface is dynamically added to as a bridge port.",
+		},
+		"bridge_pvid": {
+			Type:             schema.TypeInt,
+			Optional:         true,
+			Description:      "Port VLAN ID (PVID) of the dynamically created bridge port.",
+			ValidateFunc:     validation.IntBetween(1, 4094),
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+		},
+		KeyComment: PropCommentRw,
 		"checksum": {
 			Type:     schema.TypeBool,
 			Optional: true,

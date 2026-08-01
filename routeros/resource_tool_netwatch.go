@@ -34,7 +34,7 @@ func ResourceToolNetwatch() *schema.Resource {
 			// TCP
 			"tcp_connect_time",
 			// HTTP, HTTPS
-			"http_status_code", "http_codes",
+			"http_status_code",
 			// DNS
 			"ip", "ip6", "mail_servers", "name_servers",
 		),
@@ -67,6 +67,16 @@ func ResourceToolNetwatch() *schema.Resource {
 				"\n  * ipv6 " +
 				"\n  * ipv6@vrf" +
 				"\n  * ipv6-linklocal%interface",
+		},
+		"ignore_initial_down": {
+			Type:        schema.TypeBool,
+			Optional:    true,
+			Description: "Do not send a notification if the host is `down` on the first probe test.",
+		},
+		"ignore_initial_up": {
+			Type:        schema.TypeBool,
+			Optional:    true,
+			Description: "Do not send a notification if the host is `up` on the first probe test.",
 		},
 		"interval": {
 			Type:             schema.TypeString,
@@ -190,6 +200,22 @@ func ResourceToolNetwatch() *schema.Resource {
 		},
 
 		// TCP-CONNECT/HTTP-GET probe options
+		"certificate": {
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Name of the certificate used for the HTTPS probe.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+		},
+		"check_certificate": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Whether the certificate of the probed server is verified." +
+				"\n  * no;" +
+				"\n  * yes;" +
+				"\n  * yes-without-crl - verify the certificate but do not check the CRL.",
+			ValidateFunc:     validation.StringInSlice([]string{"no", "yes", "yes-without-crl"}, false),
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+		},
 		"port": {
 			Type:             schema.TypeInt,
 			Optional:         true,
@@ -226,6 +252,13 @@ func ResourceToolNetwatch() *schema.Resource {
 			Description: "Response in the range [http-code-min , http-code-max] is a probe pass/OK; outside - a " +
 				"probe fail. See [mozilla-http-status](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) or " +
 				"[rfc7231](https://datatracker.ietf.org/doc/html/rfc7231#section-6).",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+		},
+		"http_codes": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "A comma separated list of the HTTP response codes that are considered a probe pass/OK, " +
+				"any other response code is a probe fail.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 

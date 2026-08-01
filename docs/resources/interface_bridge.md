@@ -34,7 +34,11 @@ resource "routeros_interface_bridge" "bridge" {
 - `arp_timeout` (String) ARP timeout is time how long ARP record is kept in ARP table after no packets are received from IP. Value auto equals to the value of arp-timeout in IP/Settings, default is 30s. Can use postfix `ms`, `s`, `m`, `h`, `d` for milliseconds, seconds, minutes, hours or days. If no postfix is set then seconds (s) is used.
 - `auto_mac` (Boolean) Automatically select one MAC address of bridge ports as a bridge MAC address, bridge MAC will be chosen from the first added bridge port. After a device reboot, the bridge MAC can change depending on the port-number.
 - `comment` (String)
+- `dhcp_agent_circuit_id` (String) Specify the relay agent circuit-id suboption value of the option 82 to be added to the DHCP messages passing through the bridge. Variables written as $(NAME) are substituted by the router, the supported names are HOSTNAME, INTERFACE, VID and BRIDGEMAC.
+- `dhcp_agent_remote_id` (String) Specify the relay agent remote-id suboption value of the option 82 to be added to the DHCP messages passing through the bridge. Variables written as $(NAME) are substituted by the router, the supported names are HOSTNAME, INTERFACE, VID and BRIDGEMAC.
 - `dhcp_snooping` (Boolean)
+- `dhcpv6_agent_circuit_id` (String) Specify the relay agent circuit-id value of the DHCPv6 option 18 to be added to the DHCPv6 messages passing through the bridge. Variables written as $(NAME) are substituted by the router, the supported names are HOSTNAME, INTERFACE, VID and BRIDGEMAC.
+- `dhcpv6_agent_remote_id` (String) Specify the relay agent remote-id value of the DHCPv6 option 37 to be added to the DHCPv6 messages passing through the bridge. Variables written as $(NAME) are substituted by the router, the supported names are HOSTNAME, INTERFACE, VID and BRIDGEMAC.
 - `dhcpv6_snooping` (Boolean) Enables DHCPv6 snooping. Requires trusted-dhcpv6 on server/trunk ports. NOTE: changing this resets the switch chip.
 - `disabled` (Boolean)
 - `ether_type` (String) This property only has effect when vlan-filtering is set to yes.

@@ -23,6 +23,8 @@ resource "routeros_ipv6_pool" "test" {
 - `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
 - `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `___skip___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
+- `comment` (String)
+- `from_pool` (String) Name of the pool from which prefix will be taken to construct IPv6 address taking last part of the address from address property.
 - `prefix` (String) Ipv6 address prefix.
 
 ### Read-Only

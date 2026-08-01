@@ -139,6 +139,20 @@ func ResourceDhcpServerLease() *schema.Resource {
 			ValidateFunc:     validation.IsMACAddress,
 			DiffSuppressFunc: MacAddressEqual,
 		},
+		"parent_queue": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "",
+		},
+		"queue_type": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "",
+			ValidateFunc: validation.StringInSlice([]string{"default", "default-small", "ethernet-default",
+				"hotspot-default", "multi-queue-ethernet-default", "only-hardware-queue", "pcq-download-default",
+				"pcq-upload-default", "synchronous-default", "wireless-default"}, false),
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+		},
 		"radius": {
 			Type:        schema.TypeString,
 			Computed:    true,
@@ -149,6 +163,12 @@ func ResourceDhcpServerLease() *schema.Resource {
 			Optional: true,
 			Description: "Adds a dynamic simple queue to limit IP's bandwidth to a specified rate. " +
 				"Requires the lease to be static.",
+		},
+		"routes": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Routes added to the gateway when the client is connected. The route format is dst-address " +
+				"gateway metric (for example, `192.0.2.0/24 192.0.2.1 1`).",
 		},
 		"server": {
 			Type:        schema.TypeString,

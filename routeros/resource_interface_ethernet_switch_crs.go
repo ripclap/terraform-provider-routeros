@@ -179,6 +179,13 @@ func ResourceInterfaceEthernetSwitchCrs() *schema.Resource {
 				"edge port.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
+		"l3_hw_offloading": {
+			Type:     schema.TypeBool,
+			Optional: true,
+			Description: "Layer 3 Hardware Offloading (L3HW, otherwise known as IP switching or HW routing) allows to " +
+				"offload some router features onto the switch chip. This allows reaching wire speeds when routing " +
+				"packets, which simply would not be possible with the CPU.",
+		},
 		"mac_level_isolation": {
 			Type:     schema.TypeBool,
 			Optional: true,
@@ -199,6 +206,13 @@ func ResourceInterfaceEthernetSwitchCrs() *schema.Resource {
 			Optional: true,
 			Description: "When a packet is applied to both ingress and egress mirroring, only ingress mirroring is performed " +
 				"on the packet, if this setting is disabled. If this setting is enabled both mirroring types are applied.",
+		},
+		"mirror_target": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Selects a single mirroring target port. Mirrored packets from mirror-source and mirror " +
+				"(see the property in rule and host table) will be sent to the selected port.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"mirror_tx_on_mirror_port": {
 			Type:        schema.TypeBool,
@@ -240,6 +254,37 @@ func ResourceInterfaceEthernetSwitchCrs() *schema.Resource {
 			Optional: true,
 			Description: "Enable or disable to override existing entry which has the lowest aging value when UFDB is " +
 				"full.",
+		},
+		"qos_hw_offloading": {
+			Type:        schema.TypeBool,
+			Optional:    true,
+			Description: "Allows enabling QoS for the given switch chip (if the latter supports QoS).",
+		},
+		"rspan": {
+			Type:     schema.TypeBool,
+			Optional: true,
+			Description: "Enables Remote Switch Port Analyzer (RSPAN) feature on mirror-target. Traffic marked for " +
+				"ingress or egress mirroring is carried over a specified remote analyzer VLAN - `rspan-egress-vlan-id` " +
+				"and `rspan-ingress-vlan-id`.",
+		},
+		"rspan_egress_vlan_id": {
+			Type:             schema.TypeInt,
+			Optional:         true,
+			Description:      "RSPAN egress VLAN Id.",
+			ValidateFunc:     validation.IntBetween(1, 4094),
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+		},
+		"rspan_ingress_vlan_id": {
+			Type:             schema.TypeInt,
+			Optional:         true,
+			Description:      "RSPAN ingress VLAN Id.",
+			ValidateFunc:     validation.IntBetween(1, 4094),
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+		},
+		"switch_all_ports": {
+			Type:        schema.TypeBool,
+			Optional:    true,
+			Description: "Whether all ports of the device are handled as a single switching group.",
 		},
 		"unicast_fdb_timeout": {
 			Type:             schema.TypeString,

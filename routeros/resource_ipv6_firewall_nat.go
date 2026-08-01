@@ -91,6 +91,14 @@ func ResourceIPv6FirewallNat() *schema.Resource {
 			Description: "Connection Rate is a firewall matcher that allow to capture traffic based on present speed " +
 				"of the connection (0..4294967295).",
 		},
+		"connection_state": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Interprets the connection tracking analysis data for a particular packet.",
+			ValidateDiagFunc: ValidationMultiValInSlice([]string{
+				"established", "invalid", "new", "related", "untracked",
+			}, false, true),
+		},
 		"connection_type": {
 			Type:     schema.TypeString,
 			Optional: true,
@@ -141,6 +149,16 @@ func ResourceIPv6FirewallNat() *schema.Resource {
 		},
 		KeyDynamic: PropDynamicRo,
 		// fragment, hotspot.
+		"headers": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Extension headers. Look at the Extras tab in the v6 filter rules.",
+		},
+		"hop_limit": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "IPv6 TTL. Look at the Extras tab in the v6 filter rules.",
+		},
 		"icmp_options": {
 			Type:        schema.TypeString,
 			Optional:    true,
@@ -248,6 +266,12 @@ func ResourceIPv6FirewallNat() *schema.Resource {
 			Optional:    true,
 			Description: "Matches packets of specified size or size range in bytes.",
 		},
+		"per_connection_classifier": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "PCC matcher allows dividing traffic into equal streams with the ability to keep packets " +
+				"with a specific set of options in one particular stream.",
+		},
 		KeyPlaceBefore: PropPlaceBefore,
 		"port": {
 			Type:     schema.TypeString,
@@ -313,6 +337,11 @@ func ResourceIPv6FirewallNat() *schema.Resource {
 			Description:  "Matches source MAC address of the packet.",
 			ValidateFunc: validation.IsMACAddress,
 		},
+		"tcp_flags": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Matches specified TCP flags.",
+		},
 		"tcp_mss": {
 			Type:        schema.TypeString,
 			Optional:    true,
@@ -335,11 +364,6 @@ func ResourceIPv6FirewallNat() *schema.Resource {
 			Optional: true,
 			Description: "Replace the original port with the specified one. Applicable if action is dst-nat, " +
 				"redirect, masquerade, netmap, same, src-nat.",
-		},
-		"ttl": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "Matches packets TTL value.",
 		},
 	}
 	return &schema.Resource{

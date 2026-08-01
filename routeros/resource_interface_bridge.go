@@ -43,12 +43,48 @@ func ResourceInterfaceBridge() *schema.Resource {
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		KeyComment: PropCommentRw,
+		"dhcp_agent_circuit_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Specify the relay agent circuit-id suboption value of the option 82 to be added to the DHCP " +
+				"messages passing through the bridge. Variables written as $(NAME) are substituted by the router, the " +
+				"supported names are HOSTNAME, INTERFACE, VID and BRIDGEMAC.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+			RequiredWith:     []string{"dhcp_snooping"},
+		},
+		"dhcp_agent_remote_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Specify the relay agent remote-id suboption value of the option 82 to be added to the DHCP " +
+				"messages passing through the bridge. Variables written as $(NAME) are substituted by the router, the " +
+				"supported names are HOSTNAME, INTERFACE, VID and BRIDGEMAC.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+			RequiredWith:     []string{"dhcp_snooping"},
+		},
 		"dhcp_snooping": {
 			Type:     schema.TypeBool,
 			Optional: true,
 		},
 		KeyDisabled: PropDisabledRw,
 		KeyDynamic:  PropDynamicRo,
+		"dhcpv6_agent_circuit_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Specify the relay agent circuit-id value of the DHCPv6 option 18 to be added to the DHCPv6 " +
+				"messages passing through the bridge. Variables written as $(NAME) are substituted by the router, the " +
+				"supported names are HOSTNAME, INTERFACE, VID and BRIDGEMAC.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+			RequiredWith:     []string{"dhcpv6_snooping"},
+		},
+		"dhcpv6_agent_remote_id": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Specify the relay agent remote-id value of the DHCPv6 option 37 to be added to the DHCPv6 " +
+				"messages passing through the bridge. Variables written as $(NAME) are substituted by the router, the " +
+				"supported names are HOSTNAME, INTERFACE, VID and BRIDGEMAC.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+			RequiredWith:     []string{"dhcpv6_snooping"},
+		},
 		"dhcpv6_snooping": {
 			Type:        schema.TypeBool,
 			Optional:    true,

@@ -22,10 +22,16 @@ resource "routeros_interface_ethernet_switch_port" "test" {
 - `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `___skip___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
 - `default_vlan_id` (String) Adds a VLAN tag with the specified VLAN ID on all untagged ingress traffic on a port, should be used with ```vlan-header``` set to ```always-strip``` on a port to configure the port to be the access port. For hybrid ports ```default-vlan-id``` is used to tag untagged traffic. If two ports have the same ```default-vlan-id```, then VLAN tag is not added since the switch chip assumes that traffic is being forwarded between access ports.
+- `egress_rate` (String) Limits the data rate of the traffic leaving the port. The value is in bits per second and can be written with a suffix, for example `10M`.
+- `ingress_rate` (String) Limits the data rate of the traffic entering the port. The value is in bits per second and can be written with a suffix, for example `10M`.
 - `l3_hw_offloading` (Boolean) Level 3 hardware offloading
+- `limit_broadcasts` (Boolean) Whether to apply the `storm-rate` limit to broadcast traffic.
+- `limit_unknown_multicasts` (Boolean) Whether to apply the `storm-rate` limit to multicast traffic with an unknown destination.
+- `limit_unknown_unicasts` (Boolean) Whether to apply the `storm-rate` limit to unicast traffic with an unknown destination.
 - `mirror_egress` (Boolean) Whether to send egress packet copy to the `mirror-egress-target` port, only available on 88E6393X, 88E6191X and 88E6190 switch chips.
 - `mirror_ingress` (Boolean) Whether to send ingress packet copy to the `mirror-ingress-target` port, only available on 88E6393X, 88E6191X and 88E6190 switch chips.
 - `mirror_ingress_target` (String) Selects a single mirroring ingress target port, only available on  88E6393X, 88E6191X and 88E6190 switch chips. Mirrored packets from `mirror-ingress` will be sent to the selected port.
+- `storm_rate` (String) Limits the data rate of the traffic types selected by `limit-broadcasts`, `limit-unknown-multicasts` and `limit-unknown-unicasts`. The value is in bits per second and can be written with a suffix, for example `10M`.
 - `vlan_header` (String) Sets action which is performed on the port for egress traffic.
 - `vlan_mode` (String) Changes the VLAN lookup mechanism against the VLAN Table for ingress traffic.
 

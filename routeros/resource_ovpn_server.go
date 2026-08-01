@@ -159,6 +159,13 @@ func ResourceOpenVPNServer() *schema.Resource {
 			Description:      "Push routes to the VPN client (available since RouterOS 7.14).",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
+		"push_routes_ipv6": {
+			Type:             schema.TypeSet,
+			Optional:         true,
+			Elem:             &schema.Schema{Type: schema.TypeString},
+			Description:      "Push IPv6 routes to the VPN client.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+		},
 		"redirect_gateway": {
 			Type:     schema.TypeSet,
 			Optional: true,
@@ -202,6 +209,13 @@ func ResourceOpenVPNServer() *schema.Resource {
 			Description: "IPv6 prefix address which will be used when generating the OVPN interface on the server " +
 				"side.",
 		},
+		"user_auth_method": {
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "The method used to authenticate a connecting user.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+		},
+		KeyVrf: PropVrfRw,
 	}
 
 	return &schema.Resource{

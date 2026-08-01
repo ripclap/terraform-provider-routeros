@@ -32,7 +32,10 @@ resource "routeros_ip_dhcp_server_lease" "dhcp_lease" {
 - `disabled` (Boolean)
 - `insert_queue_before` (String) Specify where to place dynamic simple queue entries for static DCHP leases with rate-limit parameter set.
 - `lease_time` (String) Time that the client may use the address. If set to 0s lease will never expire.
+- `parent_queue` (String)
+- `queue_type` (String)
 - `rate_limit` (String) Adds a dynamic simple queue to limit IP's bandwidth to a specified rate. Requires the lease to be static.
+- `routes` (String) Routes added to the gateway when the client is connected. The route format is dst-address gateway metric (for example, `192.0.2.0/24 192.0.2.1 1`).
 - `server` (String) Server name which serves this client.
 - `use_src_mac` (Boolean) When this option is set server uses source MAC address instead of received CHADDR to assign address.
 

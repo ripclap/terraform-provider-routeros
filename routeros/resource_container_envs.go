@@ -10,15 +10,17 @@ func ResourceContainerEnvs() *schema.Resource {
 		MetaResourcePath: PropResourcePath("/container/envs"),
 		MetaId:           PropId(Id),
 
-		"name": {
-			Type:        schema.TypeString,
-			Required:    true,
-			Description: "Name of the environment variables list.",
-		},
+		KeyComment:  PropCommentRw,
+		KeyDisabled: PropDisabledRw,
 		"key": {
 			Type:        schema.TypeString,
 			Required:    true,
 			Description: "Key of the environment variable.",
+		},
+		"name": {
+			Type:        schema.TypeString,
+			Required:    true,
+			Description: "Name of the environment variables list.",
 		},
 		"value": {
 			Type:        schema.TypeString,

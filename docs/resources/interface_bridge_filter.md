@@ -70,7 +70,9 @@ resource "routeros_move_items" "bridge_filter_rules" {
 - `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
 - `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `___skip___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
+- `___ts___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
 - `___unset___` (String) <em>A set of fields that require setting/unsetting. This is an internal service field, setting a value is not required.</em>
+- `arp_dst_address` (String) ARP destination IP address.
 - `arp_dst_mac_address` (String) ARP destination MAC address
 - `arp_gratuitous` (Boolean) Matches ARP gratuitous packets.
 - `arp_hardware_type` (Number) ARP hardware type. This is normally Ethernet (Type 1).
@@ -81,8 +83,11 @@ resource "routeros_move_items" "bridge_filter_rules" {
 - `comment` (String)
 - `disabled` (Boolean)
 - `dst_address` (String) Destination IP address (only if MAC protocol is set to IP).
+- `dst_address6` (String) Destination IPv6 address (only if MAC protocol is set to IPv6). A `!` prefix negates the match.
 - `dst_mac_address` (String) Destination MAC address.
 - `dst_port` (String) List of destination port numbers or port number ranges.
+- `eight_zero_two_three_sap` (String) Matches the DSAP (Destination Service Access Point) and SSAP (Source Service Access Point) bytes of the IEEE 802.2 LLC header, the RouterOS `802.3-sap` property. The value 0xAA identifies a SNAP header.
+- `eight_zero_two_three_type` (String) Matches the Ethernet protocol type placed after the IEEE 802.2 frame header, the RouterOS `802.3-type` property. Only works if the SAP value is 0xAA (SNAP header type field).
 - `in_bridge` (String) Bridge interface through which the packet is coming in.
 - `in_bridge_list` (String) Set of bridge interfaces defined in interface list. Works the same as in-bridge.
 - `in_interface` (String) Physical interface (i.e., bridge port) through which the packet is coming in.
@@ -107,12 +112,14 @@ resource "routeros_move_items" "bridge_filter_rules" {
 	> Please check the effect of this option, as it does not work as you think!  
 	> Best way to use in conjunction with a data source. See [example](../data-sources/ip_firewall.md#example-usage).
 - `src_address` (String) Source port number or range (only for TCP or UDP protocols).
+- `src_address6` (String) Source IPv6 address (only if MAC protocol is set to IPv6). A `!` prefix negates the match.
 - `src_mac_address` (String) Source MAC address.
 - `src_port` (String) List of source port numbers or port number ranges.
 - `stp_flags` (String) Match packets with a certain packet mark.
 - `stp_forward_delay` (Number) Forward delay timer.
 - `stp_hello_time` (Number) STP hello packets time.
 - `stp_max_age` (Number) Maximal STP message age.
+- `stp_msg_age` (Number) STP message age.
 - `stp_port` (Number) STP port identifier.
 - `stp_root_address` (String) Root bridge MAC address
 - `stp_root_cost` (Number) Root bridge cost.

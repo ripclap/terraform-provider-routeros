@@ -46,7 +46,9 @@ resource "routeros_ipv6_firewall_mangle" "rule" {
 - `dst_address_type` (String) Matches destination address type.
 - `dst_limit` (String) Matches packets until a given rate is exceeded.
 - `dst_port` (String) List of destination port numbers or port number ranges.
+- `dst_prefix` (String) Matches the destination IPv6 prefix of a packet.
 - `headers` (String) Matches the presence of an IPv6 extension header, for example `hop:contains`.
+- `hop_limit` (String) IPv6 TTL. Look at the Extras tab in the v6 filter rules.
 - `icmp_options` (String) Matches ICMP type: code fields.
 - `in_bridge_port` (String) Actual interface the packet has entered the router if the incoming interface is a bridge. Works only if use-ip-firewall is enabled in bridge settings.
 - `in_bridge_port_list` (String) Set of interfaces defined in interface list. Works the same as in-bridge-port.
@@ -54,11 +56,13 @@ resource "routeros_ipv6_firewall_mangle" "rule" {
 - `in_interface_list` (String) Set of interfaces defined in interface list. Works the same as in-interface.
 - `ingress_priority` (Number) Matches the priority of an ingress packet. Priority may be derived from VLAN, WMM, DSCP, or MPLS EXP bit.
 - `ipsec_policy` (String) Matches the policy used by IPsec. Value is written in the following format: direction, policy.
+- `jump_target` (String) Name of the target chain to jump to. Applicable only if action=jump.
 - `limit` (String) Matches packets up to a limited rate (packet rate or bit rate). A rule using this matcher will match until this limit is reached. Parameters are written in the following format: rate[/time],burst:mode.
 - `log` (Boolean) Add a message to the system log.
 - `log_prefix` (String) Adds specified text at the beginning of every log message. Applicable if action=log or log=yes configured.
 - `new_connection_mark` (String) Sets a new connection-mark value.
 - `new_dscp` (Number) Sets a new DSCP value for a packet.
+- `new_hop_limit` (String) Sets a new hop limit for a packet. The value is written in the following format: action:value, for example set:64 or decrement:1.
 - `new_mss` (String) Sets a new MSS for a packet.  
 	> clamp-to-pmtu feature sets (DF) bit in the IP header to dynamically discover the PMTU of a path.  
 	> Host sends all datagrams on that path with the DF bit set until receives ICMP.  
@@ -67,7 +71,6 @@ resource "routeros_ipv6_firewall_mangle" "rule" {
 - `new_packet_mark` (String) Sets a new packet-mark value.
 - `new_priority` (String) Sets a new priority for a packet. This can be the VLAN, WMM, DSCP or MPLS EXP priority. This property can also be used to set an internal priority.
 - `new_routing_mark` (String) Sets a new routing-mark value.
-- `new_ttl` (String) Sets a new TTL for a packet.
 - `nth` (String) Matches every nth packet: nth=2,1 rule will match every first packet of 2, hence, 50% of all the traffic that is matched by the rule
 - `out_bridge_port` (String) Actual interface the packet is leaving the router if the outgoing interface is a bridge. Works only if use-ip-firewall is enabled in bridge settings.
 - `out_bridge_port_list` (String) Set of interfaces defined in interface list. Works the same as out-bridge-port.
@@ -85,16 +88,19 @@ resource "routeros_ipv6_firewall_mangle" "rule" {
 - `protocol` (String) Matches particular IP protocol specified by protocol name or number.
 - `random` (Number) Matches packets randomly with a given probability.
 - `routing_mark` (String) Matches packets marked by mangle facility with particular routing mark.
+- `sniff_id` (Number) Case identifier of the intercepted packet stream. Used by the Packet Cable protocol (action=sniff-pc) to distinguish separate sets of traffic sent to the same CALEA server.
+- `sniff_target` (String) IP address of the CALEA server (data retention server) that receives the intercepted traffic.
+- `sniff_target_port` (Number) UDP port the CALEA server (data retention server) is listening on.
 - `src_address` (String) Matches packets which source is equal to specified IP or falls into a specified IP range.
 - `src_address_list` (String) Matches source address of a packet against user-defined address list.
 - `src_address_type` (String) Matches source address type.
 - `src_mac_address` (String) Matches source MAC address of the packet.
 - `src_port` (String) List of source ports and ranges of source ports. Applicable only if a protocol is TCP or UDP.
+- `src_prefix` (String) Matches the source IPv6 prefix of a packet.
 - `tcp_flags` (String) Matches specified TCP flags.
 - `tcp_mss` (String) Matches TCP MSS value of an IP packet.
 - `time` (String) Allows to create a filter based on the packets' arrival time and date or, for locally generated packets, departure time and date.
 - `tls_host` (String) Allows matching HTTPS traffic based on TLS SNI hostname.
-- `ttl` (String) Matches packets TTL value.
 
 ### Read-Only
 

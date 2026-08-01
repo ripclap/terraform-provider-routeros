@@ -22,8 +22,10 @@ resource "routeros_ip_address" "address" {
 
 - `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
 - `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
+- `broadcast` (String) Broadcast address of the network. It is derived from the address and the netmask, and only needs to be set when a non-standard broadcast address is required.
 - `comment` (String)
 - `disabled` (Boolean)
+- `netmask` (Number) Delimits the network address part of the IP address from the host part. It is derived from the prefix length of the address when not set.
 - `network` (String) IP address for the network. For point-to-point links it should be the address of the remote end. Starting from v5RC6 this parameter is configurable only for addresses with /32 netmask (point to point links)
 - `vrf` (String) The VRF table this resource operates on.
 

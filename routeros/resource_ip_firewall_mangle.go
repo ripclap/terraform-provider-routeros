@@ -318,6 +318,11 @@ func ResourceIPFirewallMangle() *schema.Resource {
 			Optional:    true,
 			Description: "Set of interfaces defined in interface list. Works the same as out-interface.",
 		},
+		"p2p": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Matches traffic of the specified peer-to-peer protocol.",
+		},
 		"packet_mark": {
 			Type:     schema.TypeString,
 			Optional: true,
@@ -349,6 +354,13 @@ func ResourceIPFirewallMangle() *schema.Resource {
 			Description: "Matches if any (source or destination) port matches the specified list of ports or port " +
 				"ranges. Applicable only if protocol is TCP or UDP",
 		},
+		"priority": {
+			Type:     schema.TypeInt,
+			Optional: true,
+			Description: "Matches the packet's priority after a new priority has been set. Priority may be derived from " +
+				"VLAN, WMM, DSCP, MPLS EXP bit, or from the priority that has been set using the set-priority action.",
+			ValidateFunc: validation.IntBetween(0, 63),
+		},
 		"protocol": {
 			Type:        schema.TypeString,
 			Optional:    true,
@@ -366,6 +378,11 @@ func ResourceIPFirewallMangle() *schema.Resource {
 			Description:  "Matches packets randomly with a given probability.",
 			ValidateFunc: validation.IntBetween(1, 99),
 		},
+		"realm": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Matches packets by the routing realm the packet belongs to.",
+		},
 		"routing_mark": {
 			Type:        schema.TypeString,
 			Optional:    true,
@@ -376,6 +393,24 @@ func ResourceIPFirewallMangle() *schema.Resource {
 			Optional:     true,
 			Description:  "Matches packets with a specific gateway.",
 			ValidateFunc: validation.IsIPAddress,
+		},
+		"sniff_id": {
+			Type:     schema.TypeInt,
+			Optional: true,
+			Description: "Case identifier of the intercepted packet stream. Used by the Packet Cable protocol " +
+				"(action=sniff-pc) to distinguish separate sets of traffic sent to the same CALEA server.",
+		},
+		"sniff_target": {
+			Type:         schema.TypeString,
+			Optional:     true,
+			Description:  "IP address of the CALEA server (data retention server) that receives the intercepted traffic.",
+			ValidateFunc: validation.IsIPAddress,
+		},
+		"sniff_target_port": {
+			Type:         schema.TypeInt,
+			Optional:     true,
+			Description:  "UDP port the CALEA server (data retention server) is listening on.",
+			ValidateFunc: Validation64k,
 		},
 		"src_address": {
 			Type:        schema.TypeString,

@@ -35,6 +35,11 @@ func ResourceRoutingRule() *schema.Resource {
 			ValidateFunc:     validation.StringInSlice([]string{"drop", "lookup", "lookup-only-in-table", "unreachable"}, false),
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
+		"chain": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Chain name.",
+		},
 		KeyComment: PropCommentRw,
 		"dst_address": {
 			Type:        schema.TypeString,
@@ -54,6 +59,11 @@ func ResourceRoutingRule() *schema.Resource {
 			Description: "Equivalent to Linux IP rule `suppress_prefixlength`. For example to suppress the default route " +
 				"in the routing decision set the value to 0.",
 		},
+		"realm": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "The routing realm associated with the rule.",
+		},
 		"routing_mark": {
 			Type:        schema.TypeString,
 			Optional:    true,
@@ -70,6 +80,7 @@ func ResourceRoutingRule() *schema.Resource {
 			Description:      "Name of the routing table to use for lookup.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
+		KeyVrf: PropVrfRw,
 	}
 
 	return &schema.Resource{

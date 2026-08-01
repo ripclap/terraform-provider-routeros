@@ -22,8 +22,15 @@ func ResourceIpv6Pool() *schema.Resource {
 		MetaId:           PropId(Id),
 		MetaSkipFields:   PropSkipFields("expire_time"),
 
+		KeyComment: PropCommentRw,
 		KeyDynamic: PropDynamicRo,
-		KeyName:    PropName("Descriptive name of the pool."),
+		"from_pool": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Name of the pool from which prefix will be taken to construct IPv6 address taking last part " +
+				"of the address from address property.",
+		},
+		KeyName: PropName("Descriptive name of the pool."),
 		"prefix": {
 			Type:             schema.TypeString,
 			Optional:         true,

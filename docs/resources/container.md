@@ -29,28 +29,51 @@ resource "routeros_container" "busybox" {
 - `check_certificate` (Boolean) Enables trust chain validation from local certificate store.
 - `cmd` (String) The main purpose of a CMD is to provide defaults for an executing container. These defaults can include an executable, or they can omit the executable, in which case you must specify an ENTRYPOINT instruction as well.
 - `comment` (String)
+- `cpu_list` (String) The list of CPUs the container is allowed to run on. Example: 0-3
+- `default_dns` (String) Comma separated list of DNS resolvers handed to the container.
 - `devices` (Set of String) Passes through physical device to the container.
 - `dns` (String) Set custom DNS servers
 - `domain_name` (String) Container NIS domain name
 - `entrypoint` (String) An ENTRYPOINT allows to specify executable to run when starting container. Example: /bin/sh
+- `env` (String) Inline environmental variables to be used with the container. Use `envlist` to reference a list configured under /container envs instead.
 - `envlist` (String) list of environmental variables (configured under /container envs ) to be used with container
 - `file` (String) container *tar.gz tarball if the container is imported from a file
+- `healthcheck_cmd` (String) Command executed inside the container to determine whether it is healthy.
+- `healthcheck_interval` (String) Interval between health check runs.
+- `healthcheck_retries` (Number) Number of consecutive failed health checks before the container is considered unhealthy.
+- `healthcheck_start_interval` (String) Interval between health check runs during the start period.
+- `healthcheck_start_period` (String) Time given to the container to start up before failed health checks are counted.
+- `healthcheck_timeout` (String) Time after which a running health check is considered failed.
 - `hostname` (String) Container host name
+- `hosts` (String) Additional entries added to the hosts file of the container.
+- `layer_dir` (String) Container layers directory.
 - `logging` (Boolean) if set to yes, all container-generated output will be shown in the RouterOS log
 - `memory_high` (String) RAM usage limit in bytes for a specific container (string value).
+- `memory_max` (String) Hard RAM usage limit for a specific container, the device reports `unlimited` when it is not set.
+- `mount` (String) Mount to be used with this container.
+- `mountlists` (String) Name of the mount list to be used with this container.
 - `mounts` (Set of String) Mounts from /container/mounts/ sub-menu to be used with this container
 - `remote_image` (String) The container image name to be installed if an external registry is used (configured under /container/config set registry-url=...)
+- `restart_interval` (String) Interval at which the container is restarted according to the restart policy.
+- `restart_max_count` (Number) Maximum number of restart attempts before the container is left stopped.
+- `restart_policy` (String) Policy that decides when the container is restarted.
 - `root_dir` (String) Used to save container store outside main memory
 - `running` (Boolean) Container state.
+- `shell` (String) The shell used when executing commands inside the container.
+- `shm_size` (String) Size of the shared memory (/dev/shm) of the container.
 - `start_on_boot` (Boolean) Start the container on boot
+- `stop_on_unhealthy` (Boolean) if set to yes, the container will be stopped when the health check reports it as unhealthy
 - `stop_signal` (String) Signal to stop the container.
+- `stop_time` (String) Time to wait for the container to stop before it is killed.
 - `timeouts` (Block, Optional) (see [below for nested schema](#nestedblock--timeouts))
+- `tmpfs` (String) RAM backed file systems to be mounted inside the container.
 - `user` (String) Sets the username used
 - `workdir` (String) The working directory for cmd entrypoint
 
 ### Read-Only
 
 - `arch` (String) The architecture of the container image
+- `healthcheck_status` (String)
 - `id` (String) The ID of this resource.
 - `name` (String) Assign a name to the container
 - `os` (String) The OS of the container image

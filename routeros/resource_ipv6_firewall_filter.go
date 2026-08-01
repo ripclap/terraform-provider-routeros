@@ -25,6 +25,12 @@ func ResourceIPv6FirewallFilter() *schema.Resource {
 				"jump", "log", "passthrough", "reject", "return",
 			}, false),
 		},
+		"address_list": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Name of the address list to be used. Applicable if action is add-dst-to-address-list or " +
+				"add-src-to-address-list.",
+		},
 		// Mikrotik v7.7 response - 400: 'Bad Request' (invalid time value for argument address-list-timeout)
 		// request body:  {"action":"drop","address-list-timeout":"none-dynamic", ...}
 		// The default value is empty and the field is Computed.
@@ -63,7 +69,12 @@ func ResourceIPv6FirewallFilter() *schema.Resource {
 			Description: "Matches packets marked via mangle facility with particular connection mark. If no-mark is " +
 				"set, rule will match any unmarked connection.",
 		},
-		// No NAT for IPv6.
+		"connection_nat_state": {
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Can match connections that are srcnatted, dstnatted or both.",
+			ValidateDiagFunc: ValidationMultiValInSlice([]string{"srcnat", "dstnat"}, false, true),
+		},
 		// See comment for the "path_cost" field in resource_interface_bridge_port.go file.
 		"connection_rate": {
 			Type:     schema.TypeString,

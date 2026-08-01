@@ -31,6 +31,12 @@ func ResourceSystemLoggingAction() *schema.Resource {
 		MetaResourcePath: PropResourcePath("/system/logging/action"),
 		MetaId:           PropId(Id),
 
+		"add_topics_string": {
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Additional string that is added to the topics of the sent log messages.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+		},
 		"bsd_syslog": {
 			Type:        schema.TypeBool,
 			Optional:    true,
@@ -43,6 +49,17 @@ func ResourceSystemLoggingAction() *schema.Resource {
 			Description:      "Option helps remote syslog to distinguish between individual events within sent batch",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
+		"check_certificate": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Whether the certificate of the remote server is verified." +
+				"\n  * no;" +
+				"\n  * yes;" +
+				"\n  * yes-without-crl - verify the certificate but do not check the CRL.",
+			ValidateFunc:     validation.StringInSlice([]string{"no", "yes", "yes-without-crl"}, false),
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+		},
+		KeyComment: PropCommentRw,
 		KeyDefault: PropDefaultRo,
 		"disk_file_count": {
 			Type:             schema.TypeInt,
@@ -67,6 +84,11 @@ func ResourceSystemLoggingAction() *schema.Resource {
 			Optional: true,
 			Description: "Whether to stop to save log messages to disk after the specified disk-lines-per-file " +
 				"and disk-file-count number is reached, applicable only if `action=disk`.",
+		},
+		"email_cc": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Email addresses that receive a copy of the logs, applicable only if `action=email`.",
 		},
 		"email_start_tls": {
 			Type:        schema.TypeBool,
@@ -125,6 +147,11 @@ func ResourceSystemLoggingAction() *schema.Resource {
 			Description:      "Protocol for remote logging messages.",
 			ValidateFunc:     validation.StringInSlice([]string{"tcp", "udp"}, false),
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+		},
+		"script": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "A script.",
 		},
 		"src_address": {
 			Type:             schema.TypeString,

@@ -72,6 +72,7 @@ resource "routeros_ip_firewall_nat" "rule" {
 - `psd` (String) Attempts to detect TCP and UDP scans. Parameters are in the following format WeightThreshold, DelayThreshold, LowPortWeight, HighPortWeight.
 - `random` (Number) Matches packets randomly with a given probability.
 - `randomise_ports` (Boolean) Randomize to which public port connections will be mapped.
+- `realm` (String) Matches packets by the routing realm the packet belongs to.
 - `routing_mark` (String) Matches packets marked by mangle facility with particular routing mark.
 - `same_not_by_dst` (Boolean) Specifies whether to take into account or not destination IP address when selecting a new source IP address. Applicable if action=same
 - `socks5_port` (Number) Listening port of the SOCKS5 proxy server.

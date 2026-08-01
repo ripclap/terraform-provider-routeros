@@ -31,6 +31,7 @@ resource "routeros_ipv6_firewall_nat" "rule" {
 - `connection_limit` (String) Matches connections per address or address block after given value is reached. Should be used together with connection-state=new and/or with tcp-flags=syn because matcher is very resource intensive.
 - `connection_mark` (String) Matches packets marked via mangle facility with particular connection mark. If no-mark is set, rule will match any unmarked connection.
 - `connection_rate` (String) Connection Rate is a firewall matcher that allow to capture traffic based on present speed of the connection (0..4294967295).
+- `connection_state` (String) Interprets the connection tracking analysis data for a particular packet.
 - `connection_type` (String) Matches packets from related connections based on information from their connection tracking helpers.
 - `content` (String) Match packets that contain specified text.
 - `disabled` (Boolean)
@@ -40,6 +41,8 @@ resource "routeros_ipv6_firewall_nat" "rule" {
 - `dst_address_type` (String) Matches destination address type.
 - `dst_limit` (String) Matches packets until a given rate is exceeded.
 - `dst_port` (String) List of destination port numbers or port number ranges.
+- `headers` (String) Extension headers. Look at the Extras tab in the v6 filter rules.
+- `hop_limit` (String) IPv6 TTL. Look at the Extras tab in the v6 filter rules.
 - `icmp_options` (String) Matches ICMP type: code fields.
 - `in_bridge_port` (String) Actual interface the packet has entered the router if the incoming interface is a bridge. Works only if use-ip-firewall is enabled in bridge settings.
 - `in_bridge_port_list` (String) Set of interfaces defined in interface list. Works the same as in-bridge-port.
@@ -58,6 +61,7 @@ resource "routeros_ipv6_firewall_nat" "rule" {
 - `out_interface_list` (String) Set of interfaces defined in interface list. Works the same as out-interface.
 - `packet_mark` (String) Matches packets marked via mangle facility with particular packet mark. If no-mark is set, the rule will match any unmarked packet.
 - `packet_size` (String) Matches packets of specified size or size range in bytes.
+- `per_connection_classifier` (String) PCC matcher allows dividing traffic into equal streams with the ability to keep packets with a specific set of options in one particular stream.
 - `place_before` (String) Before which position the rule will be inserted.  
 	> Please check the effect of this option, as it does not work as you think!  
 	> Best way to use in conjunction with a data source. See [example](../data-sources/ip_firewall.md#example-usage).
@@ -72,11 +76,11 @@ resource "routeros_ipv6_firewall_nat" "rule" {
 - `src_address_type` (String) Matches source address type.
 - `src_mac_address` (String) Matches source MAC address of the packet.
 - `src_port` (String) List of source ports and ranges of source ports. Applicable only if a protocol is TCP or UDP.
+- `tcp_flags` (String) Matches specified TCP flags.
 - `tcp_mss` (String) Matches TCP MSS value of an IP packet.
 - `time` (String) Allows to create a filter based on the packets' arrival time and date or, for locally generated packets, departure time and date.
 - `to_address` (String) Replace original address with specified one. Applicable if action is dst-nat, netmap, same, src-nat.
 - `to_ports` (String) Replace the original port with the specified one. Applicable if action is dst-nat, redirect, masquerade, netmap, same, src-nat.
-- `ttl` (String) Matches packets TTL value.
 
 ### Read-Only
 

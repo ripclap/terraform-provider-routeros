@@ -10,6 +10,23 @@ func ResourceContainerMounts() *schema.Resource {
 		MetaResourcePath: PropResourcePath("/container/mounts"),
 		MetaId:           PropId(Name),
 
+		KeyComment:  PropCommentRw,
+		KeyDisabled: PropDisabledRw,
+		"dst": {
+			Type:        schema.TypeString,
+			Required:    true,
+			Description: "Specifies destination path of the mount, which points to defined location in container",
+		},
+		"list": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Name of the mount list the mount belongs to.",
+		},
+		"mode": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Access mode of the mount.",
+		},
 		"name": {
 			Type:        schema.TypeString,
 			Required:    true,
@@ -19,11 +36,6 @@ func ResourceContainerMounts() *schema.Resource {
 			Type:        schema.TypeString,
 			Required:    true,
 			Description: "Specifies source path of the mount, which points to a RouterOS location",
-		},
-		"dst": {
-			Type:        schema.TypeString,
-			Required:    true,
-			Description: "Specifies destination path of the mount, which points to defined location in container",
 		},
 	}
 

@@ -31,6 +31,11 @@ resource "routeros_tool_netwatch" "test" {
 - `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `___skip___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
 - `accept_icmp_time_exceeded` (Boolean) If the ICMP `time exceeded` message should be considered a valid response.
+- `certificate` (String) Name of the certificate used for the HTTPS probe.
+- `check_certificate` (String) Whether the certificate of the probed server is verified.
+  * no;
+  * yes;
+  * yes-without-crl - verify the certificate but do not check the CRL.
 - `comment` (String)
 - `disabled` (Boolean)
 - `dns_server` (String) The DNS server that the probe should send its requests to, if not specified it will use the value from `/ip dns`.
@@ -39,6 +44,9 @@ resource "routeros_tool_netwatch" "test" {
 - `early_success_detection` (Boolean) Netwatch will not wait to finish all the packets to be processed to change probe status if it is already known that host will be considered as `up`.
 - `http_code_max` (Number) Response in the range [http-code-min , http-code-max] is a probe pass/OK; outside - a probe fail. See [mozilla-http-status](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status) or [rfc7231](https://datatracker.ietf.org/doc/html/rfc7231#section-6).
 - `http_code_min` (Number) OK/fail criteria for HTTP response code.
+- `http_codes` (String) A comma separated list of the HTTP response codes that are considered a probe pass/OK, any other response code is a probe fail.
+- `ignore_initial_down` (Boolean) Do not send a notification if the host is `down` on the first probe test.
+- `ignore_initial_up` (Boolean) Do not send a notification if the host is `up` on the first probe test.
 - `interval` (String) The time interval between probe tests.
 - `name` (String) Task name.
 - `packet_count` (Number) Total count of ICMP packets to send out within a single test.

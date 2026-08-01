@@ -57,6 +57,16 @@ func ResourceContainer() *schema.Resource {
 			Description: "The main purpose of a CMD is to provide defaults for an executing container. These defaults can include an executable, or they can omit the executable, in which case you must specify an ENTRYPOINT instruction as well.",
 		},
 		KeyComment: PropCommentRw,
+		"cpu_list": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "The list of CPUs the container is allowed to run on. Example: 0-3",
+		},
+		"default_dns": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Comma separated list of DNS resolvers handed to the container.",
+		},
 		"devices": {
 			Type:        schema.TypeSet,
 			Optional:    true,
@@ -81,6 +91,11 @@ func ResourceContainer() *schema.Resource {
 			Optional:    true,
 			Description: "An ENTRYPOINT allows to specify executable to run when starting container. Example: /bin/sh",
 		},
+		"env": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Inline environmental variables to be used with the container. Use `envlist` to reference a list configured under /container envs instead.",
+		},
 		"envlist": {
 			Type:        schema.TypeString,
 			Optional:    true,
@@ -91,15 +106,63 @@ func ResourceContainer() *schema.Resource {
 			Optional:    true,
 			Description: "container *tar.gz tarball if the container is imported from a file",
 		},
+		"healthcheck_cmd": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Command executed inside the container to determine whether it is healthy.",
+		},
+		"healthcheck_interval": {
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Interval between health check runs.",
+			DiffSuppressFunc: TimeEqual,
+		},
+		"healthcheck_retries": {
+			Type:        schema.TypeInt,
+			Optional:    true,
+			Description: "Number of consecutive failed health checks before the container is considered unhealthy.",
+		},
+		"healthcheck_start_interval": {
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Interval between health check runs during the start period.",
+			DiffSuppressFunc: TimeEqual,
+		},
+		"healthcheck_start_period": {
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Time given to the container to start up before failed health checks are counted.",
+			DiffSuppressFunc: TimeEqual,
+		},
+		"healthcheck_status": {
+			Type:     schema.TypeString,
+			Computed: true,
+		},
+		"healthcheck_timeout": {
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Time after which a running health check is considered failed.",
+			DiffSuppressFunc: TimeEqual,
+		},
 		"hostname": {
 			Type:        schema.TypeString,
 			Optional:    true,
 			Description: "Container host name",
 		},
+		"hosts": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Additional entries added to the hosts file of the container.",
+		},
 		"interface": {
 			Type:        schema.TypeString,
 			Required:    true,
 			Description: "veth interface to be used with the container",
+		},
+		"layer_dir": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Container layers directory.",
 		},
 		"logging": {
 			Type:        schema.TypeBool,
@@ -111,6 +174,21 @@ func ResourceContainer() *schema.Resource {
 			Optional:         true,
 			Description:      "RAM usage limit in bytes for a specific container (string value).",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+		},
+		"memory_max": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Hard RAM usage limit for a specific container, the device reports `unlimited` when it is not set.",
+		},
+		"mount": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Mount to be used with this container.",
+		},
+		"mountlists": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Name of the mount list to be used with this container.",
 		},
 		"mounts": {
 			Type:        schema.TypeSet,
@@ -147,6 +225,22 @@ func ResourceContainer() *schema.Resource {
 				return old == new || old == new+":latest"
 			},
 		},
+		"restart_interval": {
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Interval at which the container is restarted according to the restart policy.",
+			DiffSuppressFunc: TimeEqual,
+		},
+		"restart_max_count": {
+			Type:        schema.TypeInt,
+			Optional:    true,
+			Description: "Maximum number of restart attempts before the container is left stopped.",
+		},
+		"restart_policy": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Policy that decides when the container is restarted.",
+		},
 		"root_dir": {
 			Type:             schema.TypeString,
 			Optional:         true,
@@ -159,6 +253,16 @@ func ResourceContainer() *schema.Resource {
 			Description: "Container state.",
 			Default:     true,
 		},
+		"shell": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "The shell used when executing commands inside the container.",
+		},
+		"shm_size": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Size of the shared memory (/dev/shm) of the container.",
+		},
 		"start_on_boot": {
 			Type:        schema.TypeBool,
 			Optional:    true,
@@ -169,16 +273,32 @@ func ResourceContainer() *schema.Resource {
 			Computed:    true,
 			Description: "The status of the container",
 		},
+		"stop_on_unhealthy": {
+			Type:        schema.TypeBool,
+			Optional:    true,
+			Description: "if set to yes, the container will be stopped when the health check reports it as unhealthy",
+		},
 		"stop_signal": {
 			Type:        schema.TypeString,
 			Optional:    true,
 			Description: "Signal to stop the container.",
 			Computed:    true,
 		},
+		"stop_time": {
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Time to wait for the container to stop before it is killed.",
+			DiffSuppressFunc: TimeEqual,
+		},
 		"tag": {
 			Type:        schema.TypeString,
 			Computed:    true,
 			Description: "The tag of the container image",
+		},
+		"tmpfs": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "RAM backed file systems to be mounted inside the container.",
 		},
 		"user": {
 			Type:        schema.TypeString,

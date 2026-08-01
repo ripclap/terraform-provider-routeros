@@ -157,11 +157,21 @@ func ResourceIPv6FirewallMangle() *schema.Resource {
 			Optional:    true,
 			Description: "List of destination port numbers or port number ranges.",
 		},
+		"dst_prefix": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Matches the destination IPv6 prefix of a packet.",
+		},
 		KeyDynamic: PropDynamicRo,
 		"headers": {
 			Type:        schema.TypeString,
 			Optional:    true,
 			Description: "Matches the presence of an IPv6 extension header, for example `hop:contains`.",
+		},
+		"hop_limit": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "IPv6 TTL. Look at the Extras tab in the v6 filter rules.",
 		},
 		"icmp_options": {
 			Type:        schema.TypeString,
@@ -207,6 +217,11 @@ func ResourceIPv6FirewallMangle() *schema.Resource {
 			ValidateFunc: validation.StringMatch(regexp.MustCompile(`^(in|out)\s?,\s?(ipsec|none)$`),
 				"Value must be written in the following format: direction, policy."),
 		},
+		"jump_target": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Name of the target chain to jump to. Applicable only if action=jump.",
+		},
 		"limit": {
 			Type:     schema.TypeString,
 			Optional: true,
@@ -237,6 +252,12 @@ func ResourceIPv6FirewallMangle() *schema.Resource {
 			Description:  "Sets a new DSCP value for a packet.",
 			ValidateFunc: validation.IntBetween(0, 63),
 		},
+		"new_hop_limit": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Sets a new hop limit for a packet. The value is written in the following format: " +
+				"action:value, for example set:64 or decrement:1.",
+		},
 		"new_mss": {
 			Type:     schema.TypeString,
 			Optional: true,
@@ -264,11 +285,6 @@ func ResourceIPv6FirewallMangle() *schema.Resource {
 			Type:        schema.TypeString,
 			Optional:    true,
 			Description: "Sets a new routing-mark value.",
-		},
-		"new_ttl": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "Sets a new TTL for a packet.",
 		},
 		"nth": {
 			Type:     schema.TypeString,
@@ -351,6 +367,24 @@ func ResourceIPv6FirewallMangle() *schema.Resource {
 			Optional:    true,
 			Description: "Matches packets marked by mangle facility with particular routing mark.",
 		},
+		"sniff_id": {
+			Type:     schema.TypeInt,
+			Optional: true,
+			Description: "Case identifier of the intercepted packet stream. Used by the Packet Cable protocol " +
+				"(action=sniff-pc) to distinguish separate sets of traffic sent to the same CALEA server.",
+		},
+		"sniff_target": {
+			Type:         schema.TypeString,
+			Optional:     true,
+			Description:  "IP address of the CALEA server (data retention server) that receives the intercepted traffic.",
+			ValidateFunc: validation.IsIPAddress,
+		},
+		"sniff_target_port": {
+			Type:         schema.TypeInt,
+			Optional:     true,
+			Description:  "UDP port the CALEA server (data retention server) is listening on.",
+			ValidateFunc: Validation64k,
+		},
 		"src_address": {
 			Type:             schema.TypeString,
 			Optional:         true,
@@ -379,6 +413,11 @@ func ResourceIPv6FirewallMangle() *schema.Resource {
 			Description:  "Matches source MAC address of the packet.",
 			ValidateFunc: validation.IsMACAddress,
 		},
+		"src_prefix": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Matches the source IPv6 prefix of a packet.",
+		},
 		"tcp_flags": {
 			Type:        schema.TypeString,
 			Optional:    true,
@@ -399,11 +438,6 @@ func ResourceIPv6FirewallMangle() *schema.Resource {
 			Type:        schema.TypeString,
 			Optional:    true,
 			Description: "Allows matching HTTPS traffic based on TLS SNI hostname.",
-		},
-		"ttl": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "Matches packets TTL value.",
 		},
 	}
 	return &schema.Resource{

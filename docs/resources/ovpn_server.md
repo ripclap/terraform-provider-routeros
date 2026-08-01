@@ -80,6 +80,7 @@ resource "routeros_interface_ovpn_server" "user1" {
 - `port` (Number) Port to run the server on.
 - `protocol` (String) indicates the protocol to use when connecting with the remote endpoint.
 - `push_routes` (Set of String) Push routes to the VPN client (available since RouterOS 7.14).
+- `push_routes_ipv6` (Set of String) Push IPv6 routes to the VPN client.
 - `redirect_gateway` (Set of String) Specifies what kind of routes the OVPN client must add to the routing table.
   * def1 – Use this flag to override the default gateway by using 0.0.0.0/1 and  128.0.0.0/1 rather than 0.0.0.0/0. This has the benefit of overriding  but not wiping out the original default gateway.
   * disabled - Do not send redirect-gateway flags to the OVPN client.
@@ -88,6 +89,8 @@ resource "routeros_interface_ovpn_server" "user1" {
 - `require_client_certificate` (Boolean) If set to yes, then the server checks whether the client's certificate belongs to the same certificate chain.
 - `tls_version` (String) Specifies which TLS versions to allow.
 - `tun_server_ipv6` (String) IPv6 prefix address which will be used when generating the OVPN interface on the server side.
+- `user_auth_method` (String) The method used to authenticate a connecting user.
+- `vrf` (String) The VRF table this resource operates on.
 
 ### Read-Only
 

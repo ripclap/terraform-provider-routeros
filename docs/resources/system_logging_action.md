@@ -15,12 +15,19 @@
 
 - `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
 - `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
+- `add_topics_string` (String) Additional string that is added to the topics of the sent log messages.
 - `bsd_syslog` (Boolean, Deprecated) Whether to use bsd-syslog as defined in RFC 3164.
 - `cef_event_delimiter` (String) Option helps remote syslog to distinguish between individual events within sent batch
+- `check_certificate` (String) Whether the certificate of the remote server is verified.
+  * no;
+  * yes;
+  * yes-without-crl - verify the certificate but do not check the CRL.
+- `comment` (String)
 - `disk_file_count` (Number) Specifies number of files used to store log messages, applicable only if `action=disk`.
 - `disk_file_name` (String) Name of the file used to store log messages, applicable only if `action=disk`.
 - `disk_lines_per_file` (Number) Specifies maximum size of file in lines, applicable only if `action=disk`.
 - `disk_stop_on_full` (Boolean) Whether to stop to save log messages to disk after the specified disk-lines-per-file and disk-file-count number is reached, applicable only if `action=disk`.
+- `email_cc` (String) Email addresses that receive a copy of the logs, applicable only if `action=email`.
 - `email_start_tls` (Boolean) Whether to use tls when sending email, applicable only if `action=email`.
 - `email_to` (String) Email address where logs are sent, applicable only if `action=email`.
 - `memory_lines` (Number) Number of records in local memory buffer, applicable only if `action=memory`.
@@ -34,6 +41,7 @@
     - **syslog** - logs are sent in BSD-syslog format.
 - `remote_port` (Number) Remote logging server's UDP port, applicable if `action=remote`.
 - `remote_protocol` (String) Protocol for remote logging messages.
+- `script` (String) A script.
 - `src_address` (String) Source address used when sending packets to remote server, applicable if `action=remote`.
 - `syslog_facility` (String) SYSLOG facility, applicable if `action=remote`.
 - `syslog_severity` (String) Severity level indicator defined in RFC 3164, applicable if `action=remote`.

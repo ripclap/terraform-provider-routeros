@@ -85,12 +85,39 @@ func ResourceInterfaceEthernetSwitchPort() *schema.Resource {
 			ValidateFunc:     validation.StringMatch(regexp.MustCompile(`auto|\d+`), `Value must be "auto" or integer: 0..4095`),
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
+		"egress_rate": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Limits the data rate of the traffic leaving the port. The value is in bits per second and " +
+				"can be written with a suffix, for example `10M`.",
+		},
+		"ingress_rate": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Limits the data rate of the traffic entering the port. The value is in bits per second and " +
+				"can be written with a suffix, for example `10M`.",
+		},
 		KeyInvalid: PropInvalidRo,
 		"l3_hw_offloading": {
 			Type:             schema.TypeBool,
 			Optional:         true,
 			Description:      "Level 3 hardware offloading",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+		},
+		"limit_broadcasts": {
+			Type:        schema.TypeBool,
+			Optional:    true,
+			Description: "Whether to apply the `storm-rate` limit to broadcast traffic.",
+		},
+		"limit_unknown_multicasts": {
+			Type:        schema.TypeBool,
+			Optional:    true,
+			Description: "Whether to apply the `storm-rate` limit to multicast traffic with an unknown destination.",
+		},
+		"limit_unknown_unicasts": {
+			Type:        schema.TypeBool,
+			Optional:    true,
+			Description: "Whether to apply the `storm-rate` limit to unicast traffic with an unknown destination.",
 		},
 		"mirror_egress": {
 			Type:     schema.TypeBool,
@@ -113,6 +140,13 @@ func ResourceInterfaceEthernetSwitchPort() *schema.Resource {
 		},
 		KeyName:    PropName("Port name."),
 		KeyRunning: PropRunningRo,
+		"storm_rate": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Limits the data rate of the traffic types selected by `limit-broadcasts`, " +
+				"`limit-unknown-multicasts` and `limit-unknown-unicasts`. The value is in bits per second and can be " +
+				"written with a suffix, for example `10M`.",
+		},
 		"switch": {
 			Type:        schema.TypeString,
 			Computed:    true,

@@ -35,11 +35,26 @@ func ResourceIPAddress() *schema.Resource {
 			Computed:    true,
 			Description: "Name of the actual interface the logical one is bound to.",
 		},
+		"broadcast": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Computed: true,
+			Description: "Broadcast address of the network. It is derived from the address and the netmask, and only " +
+				"needs to be set when a non-standard broadcast address is required.",
+			ValidateFunc: validation.IsIPAddress,
+		},
 		KeyComment:   PropCommentRw,
 		KeyDisabled:  PropDisabledRw,
 		KeyDynamic:   PropDynamicRo,
 		KeyInterface: PropInterfaceRw,
 		KeyInvalid:   PropInvalidRo,
+		"netmask": {
+			Type:     schema.TypeInt,
+			Optional: true,
+			Description: "Delimits the network address part of the IP address from the host part. It is derived from " +
+				"the prefix length of the address when not set.",
+			ValidateFunc: validation.IntBetween(0, 32),
+		},
 		"network": {
 			Type:     schema.TypeString,
 			Optional: true,

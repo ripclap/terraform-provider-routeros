@@ -316,6 +316,11 @@ func ResourceIPFirewallNat() *schema.Resource {
 			Description:      "Randomize to which public port connections will be mapped.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
+		"realm": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Matches packets by the routing realm the packet belongs to.",
+		},
 		"routing_mark": {
 			Type:        schema.TypeString,
 			Optional:    true,

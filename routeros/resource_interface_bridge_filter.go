@@ -48,14 +48,17 @@ func ResourceInterfaceBridgeFilter() *schema.Resource {
 		MetaResourcePath: PropResourcePath("/interface/bridge/filter"),
 		MetaId:           PropId(Id),
 		MetaSkipFields:   PropSkipFields("bytes", "packets", "invalid"),
-		MetaSetUnsetFields: PropSetUnsetFields("arp_dst_mac_address", "arp_gratuitous", "arp_hardware_type",
-			"arp_opcode", "arp_packet_type", "arp_src_address", "arp_src_mac_address", "dst_address", "dst_mac_address",
-			"dst_port", "in_bridge", "in_bridge_list", "in_interface", "in_interface_list", "ingress_priority",
-			"ip_protocol", "limit", "mac_protocol", "new_packet_mark", "new_priority", "out_bridge", "out_bridge_list",
-			"out_interface", "out_interface_list", "packet_mark", "packet_type", "src_address", "src_mac_address",
-			"src_port", "stp_flags", "stp_forward_delay", "stp_hello_time", "stp_max_age", "stp_root_address",
-			"stp_port", "stp_root_cost", "stp_root_priority", "stp_sender_address", "stp_sender_priority", "stp_type",
-			"tls_host", "vlan_encap", "vlan_id", "vlan_priority"),
+		MetaTransformSet: PropTransformSet("eight_zero_two_three_sap:802.3-sap", "eight_zero_two_three_type:802.3-type"),
+		MetaSetUnsetFields: PropSetUnsetFields("arp_dst_address", "arp_dst_mac_address", "arp_gratuitous",
+			"arp_hardware_type", "arp_opcode", "arp_packet_type", "arp_src_address", "arp_src_mac_address",
+			"dst_address", "dst_address6", "dst_mac_address", "dst_port", "eight_zero_two_three_sap",
+			"eight_zero_two_three_type", "in_bridge", "in_bridge_list", "in_interface", "in_interface_list",
+			"ingress_priority", "ip_protocol", "limit", "mac_protocol", "new_packet_mark", "new_priority",
+			"out_bridge", "out_bridge_list", "out_interface", "out_interface_list", "packet_mark", "packet_type",
+			"src_address", "src_address6", "src_mac_address", "src_port", "stp_flags", "stp_forward_delay",
+			"stp_hello_time", "stp_max_age", "stp_msg_age", "stp_root_address", "stp_port", "stp_root_cost",
+			"stp_root_priority", "stp_sender_address", "stp_sender_priority", "stp_type", "tls_host", "vlan_encap",
+			"vlan_id", "vlan_priority"),
 
 		"action": {
 			Type:        schema.TypeString,
@@ -64,6 +67,12 @@ func ResourceInterfaceBridgeFilter() *schema.Resource {
 			ValidateFunc: validation.StringInSlice([]string{
 				"accept", "drop", "mark-packet", "jump", "log", "passthrough", "set-priority", "return",
 			}, false),
+		},
+		"arp_dst_address": {
+			Type:         schema.TypeString,
+			Optional:     true,
+			Description:  "ARP destination IP address.",
+			ValidateFunc: ValidationIpAddress,
 		},
 		"arp_dst_mac_address": {
 			Type:         schema.TypeString,
@@ -121,6 +130,12 @@ func ResourceInterfaceBridgeFilter() *schema.Resource {
 			Description:  "Destination IP address (only if MAC protocol is set to IP).",
 			ValidateFunc: ValidationIpAddress,
 		},
+		"dst_address6": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Destination IPv6 address (only if MAC protocol is set to IPv6). A `!` prefix negates the " +
+				"match.",
+		},
 		"dst_mac_address": {
 			Type:         schema.TypeString,
 			Optional:     true,
@@ -134,6 +149,19 @@ func ResourceInterfaceBridgeFilter() *schema.Resource {
 		},
 		KeyDisabled: PropDisabledRw,
 		KeyDynamic:  PropDynamicRo,
+		"eight_zero_two_three_sap": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Matches the DSAP (Destination Service Access Point) and SSAP (Source Service Access Point) " +
+				"bytes of the IEEE 802.2 LLC header, the RouterOS `802.3-sap` property. The value 0xAA identifies a " +
+				"SNAP header.",
+		},
+		"eight_zero_two_three_type": {
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Matches the Ethernet protocol type placed after the IEEE 802.2 frame header, the RouterOS " +
+				"`802.3-type` property. Only works if the SAP value is 0xAA (SNAP header type field).",
+		},
 		"in_bridge": {
 			Type:        schema.TypeString,
 			Optional:    true,
@@ -263,6 +291,11 @@ func ResourceInterfaceBridgeFilter() *schema.Resource {
 			Description:  "Source port number or range (only for TCP or UDP protocols).",
 			ValidateFunc: ValidationIpAddress,
 		},
+		"src_address6": {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "Source IPv6 address (only if MAC protocol is set to IPv6). A `!` prefix negates the match.",
+		},
 		"src_mac_address": {
 			Type:         schema.TypeString,
 			Optional:     true,
@@ -296,6 +329,12 @@ func ResourceInterfaceBridgeFilter() *schema.Resource {
 			Type:         schema.TypeInt,
 			Optional:     true,
 			Description:  "Maximal STP message age.",
+			ValidateFunc: Validation64k,
+		},
+		"stp_msg_age": {
+			Type:         schema.TypeInt,
+			Optional:     true,
+			Description:  "STP message age.",
 			ValidateFunc: Validation64k,
 		},
 		"stp_root_address": {

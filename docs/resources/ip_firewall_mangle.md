@@ -77,6 +77,7 @@ resource "routeros_ip_firewall_mangle" "rule" {
 - `out_bridge_port_list` (String) Set of interfaces defined in interface list. Works the same as out-bridge-port.
 - `out_interface` (String) Interface the packet is leaving the router.
 - `out_interface_list` (String) Set of interfaces defined in interface list. Works the same as out-interface.
+- `p2p` (String) Matches traffic of the specified peer-to-peer protocol.
 - `packet_mark` (String) Matches packets marked via mangle facility with particular packet mark. If no-mark is set, the rule will match any unmarked packet.
 - `packet_size` (String) Matches packets of specified size or size range in bytes.
 - `passthrough` (Boolean) Whether to let the packet to pass further (like action passthrough) into the firewall or not (property only valid some actions).
@@ -85,11 +86,16 @@ resource "routeros_ip_firewall_mangle" "rule" {
 	> Please check the effect of this option, as it does not work as you think!  
 	> Best way to use in conjunction with a data source. See [example](../data-sources/ip_firewall.md#example-usage).
 - `port` (String) Matches if any (source or destination) port matches the specified list of ports or port ranges. Applicable only if protocol is TCP or UDP
+- `priority` (Number) Matches the packet's priority after a new priority has been set. Priority may be derived from VLAN, WMM, DSCP, MPLS EXP bit, or from the priority that has been set using the set-priority action.
 - `protocol` (String) Matches particular IP protocol specified by protocol name or number.
 - `psd` (String) Attempts to detect TCP and UDP scans. Parameters are in the following format WeightThreshold, DelayThreshold, LowPortWeight, HighPortWeight.
 - `random` (Number) Matches packets randomly with a given probability.
+- `realm` (String) Matches packets by the routing realm the packet belongs to.
 - `route_dst` (String) Matches packets with a specific gateway.
 - `routing_mark` (String) Matches packets marked by mangle facility with particular routing mark.
+- `sniff_id` (Number) Case identifier of the intercepted packet stream. Used by the Packet Cable protocol (action=sniff-pc) to distinguish separate sets of traffic sent to the same CALEA server.
+- `sniff_target` (String) IP address of the CALEA server (data retention server) that receives the intercepted traffic.
+- `sniff_target_port` (Number) UDP port the CALEA server (data retention server) is listening on.
 - `src_address` (String) Matches packets which source is equal to specified IP or falls into a specified IP range.
 - `src_address_list` (String) Matches source address of a packet against user-defined address list.
 - `src_address_type` (String) Matches source address type.

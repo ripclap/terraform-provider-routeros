@@ -113,6 +113,7 @@ func Provider() *schema.Provider {
 
 			// IP objects
 			"routeros_ip_address":                      ResourceIPAddress(),
+			"routeros_ip_arp":                          ResourceIpArp(),
 			"routeros_ip_dhcp_client":                  ResourceDhcpClient(),
 			"routeros_ip_dhcp_client_option":           ResourceDhcpClientOption(),
 			"routeros_ip_dhcp_relay":                   ResourceDhcpRelay(),
@@ -216,6 +217,7 @@ func Provider() *schema.Provider {
 			"routeros_interface_l2tp_server":                    ResourceInterfaceL2tpServer(),
 			"routeros_interface_macvlan":                        ResourceInterfaceMacVlan(),
 			"routeros_interface_sstp_client":                    ResourceInterfaceSSTPClient(),
+			"routeros_interface_sstp_server_interface":          ResourceInterfaceSstpServerInterface(),
 			"routeros_interface_sstp_server":                    ResourceInterfaceSSTPServer(),
 			"routeros_interface_ovpn_client":                    ResourceOpenVPNClient(),
 			"routeros_interface_ovpn_server":                    ResourceInterfaceOpenVPNServer(),
@@ -435,6 +437,8 @@ func Provider() *schema.Provider {
 			"routeros_interface_ethernet_switch_l3hw_settings":             ResourceInterfaceEthernetSwitchL3HwSettings(),
 			"routeros_interface_ethernet_switch_l3hw_settings_advanced":    ResourceInterfaceEthernetSwitchL3HwSettingsAdvanced(),
 			"routeros_interface_ethernet_switch_qos_map":                   ResourceInterfaceEthernetSwitchQosMap(),
+			"routeros_interface_ethernet_switch_qos_map_ip":                ResourceInterfaceEthernetSwitchQosMapIp(),
+			"routeros_interface_ethernet_switch_qos_map_vlan":              ResourceInterfaceEthernetSwitchQosMapVlan(),
 			"routeros_interface_ethernet_switch_qos_port":                  ResourceInterfaceEthernetSwitchQosPort(),
 			"routeros_interface_ethernet_switch_qos_priority_flow_control": ResourceInterfaceEthernetSwitchQosPriorityFlowControl(),
 			"routeros_interface_ethernet_switch_qos_profile":               ResourceInterfaceEthernetSwitchQosProfile(),
