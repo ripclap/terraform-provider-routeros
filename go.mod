@@ -7,7 +7,7 @@ require (
 	github.com/go-routeros/routeros/v3 v3.0.1
 	github.com/hashicorp/go-cty v1.5.0
 	github.com/hashicorp/terraform-plugin-docs v0.24.0
-	github.com/hashicorp/terraform-plugin-log v0.10.0
+	github.com/hashicorp/terraform-plugin-log v0.11.0
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.40.0
 	github.com/sirupsen/logrus v1.9.4
 	github.com/sourcegraph/go-diff-patch v0.0.0-20240223163233-798fd1e94a8e
