@@ -8,8 +8,6 @@ updates:
       interval: weekly
       day: monday
       time: "03:00"
-    labels:
-      - dependencies
     groups:
       actions:
         patterns:
@@ -21,8 +19,6 @@ updates:
       interval: weekly
       day: monday
       time: "03:00"
-    labels:
-      - dependencies
     groups:
       go-modules:
         patterns:
