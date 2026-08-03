@@ -144,9 +144,41 @@ jobs:
             exit 1
           fi
 
+  # Compiling all thirteen release targets takes around six minutes, which is
+  # most of this workflow. A pull request gets a representative subset instead:
+  # one target per OS, plus 386, which is the one that catches people out
+  # because a uint32 range in a validator overflows int there and nowhere else.
+  # The full matrix still runs on every push to the branch, and again against
+  # the tagged commit before a release is signed.
+  crossbuild:
+    name: Cross-compile
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+
+      - name: Set up Go
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Compile a target per OS, and 386
+        run: |
+          set -uo pipefail
+          fail=0
+          for target in linux/amd64 linux/386 darwin/arm64 windows/amd64 freebsd/amd64; do
+            if ! GOOS="${target%/*}" GOARCH="${target#*/}" go build -o /dev/null . ; then
+              echo "::error::build failed for ${target}"
+              fail=1
+            fi
+          done
+          exit "$fail"
+
   build:
     name: Build every release platform
     runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
     steps:
       - name: Checkout
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
@@ -158,8 +190,7 @@ jobs:
 
       # The same build a release performs, minus signing and uploading, so a
       # break confined to one platform surfaces here rather than part way
-      # through publishing. 386 is the one that catches people out: a uint32
-      # range in a validator overflows int there and nowhere else.
+      # through publishing.
       - name: GoReleaser (snapshot)
         uses: goreleaser/goreleaser-action@f06c13b6b1a9625abc9e6e439d9c05a8f2190e94 # v7.2.3
         with:
@@ -180,9 +211,7 @@ jobs:
 
       # Unsigned, and not what a release publishes, but enough to install from a
       # filesystem mirror and try against a device before tagging anything.
-      # Pull requests skip it: nobody installs a proposed change.
       - name: Keep the archives
-        if: github.event_name != 'pull_request'
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: snapshot-${{ github.sha }}

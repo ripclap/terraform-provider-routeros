@@ -1,15 +1,33 @@
 version: 2
 updates:
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  # Grouped into one pull request per ecosystem. Ungrouped daily updates open a
+  # pull request per dependency, and each one costs a full CI run.
+  - package-ecosystem: github-actions
+    directory: /
     schedule:
-      interval: "daily"
+      interval: weekly
+      day: monday
       time: "03:00"
     labels:
-      - "dependencies"
+      - dependencies
+    groups:
+      actions:
+        patterns:
+          - "*"
+
   - package-ecosystem: gomod
     directory: /
     schedule:
-      interval: daily
+      interval: weekly
+      day: monday
+      time: "03:00"
     labels:
-      - "dependencies"
+      - dependencies
+    groups:
+      go-modules:
+        patterns:
+          - "*"
+        # A major bump gets its own pull request so it is reviewed on its own.
+        update-types:
+          - minor
+          - patch
