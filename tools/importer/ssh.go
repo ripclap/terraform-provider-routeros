@@ -3,29 +3,58 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
 	"golang.org/x/crypto/ssh"
+	"golang.org/x/crypto/ssh/knownhosts"
 )
 
 type SshConnection struct {
 	client *ssh.Client
 }
 
+// hostKeyCallback verifies the device against the user's known_hosts file.
+//
+// This connection carries the router password and returns the full exported
+// configuration, so accepting any host key would let anything on the path
+// between here and the device collect both. There is deliberately no flag to
+// turn the check off: record the key once with ssh or ssh-keyscan instead.
+func hostKeyCallback() (ssh.HostKeyCallback, error) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return nil, fmt.Errorf("cannot locate the home directory to read known_hosts: %v", err)
+	}
+
+	path := filepath.Join(home, ".ssh", "known_hosts")
+	cb, err := knownhosts.New(path)
+	if err != nil {
+		return nil, fmt.Errorf("cannot verify the host key from %v: %v\n"+
+			"connect once with ssh, or run: ssh-keyscan -H <host> >> %v", path, err, path)
+	}
+
+	return cb, nil
+}
+
 func NewSsh(host, username, password string) (*SshConnection, error) {
-	// var hostKey ssh.PublicKey
 	// An SSH client is represented with a ClientConn.
 	//
 	// To authenticate with the remote server you must pass at least one
 	// implementation of AuthMethod via the Auth field in ClientConfig,
 	// and provide a HostKeyCallback.
+	callback, err := hostKeyCallback()
+	if err != nil {
+		return nil, err
+	}
+
 	config := &ssh.ClientConfig{
 		User: username,
 		Auth: []ssh.AuthMethod{
 			ssh.Password(password),
 		},
-		HostKeyCallback: ssh.InsecureIgnoreHostKey(), //ssh.FixedHostKey(hostKey),
+		HostKeyCallback: callback,
 		Timeout:         10 * time.Second,
 	}
 	client, err := ssh.Dial("tcp", host, config)
