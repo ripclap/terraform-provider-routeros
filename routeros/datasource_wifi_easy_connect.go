@@ -3,7 +3,7 @@ package routeros
 import (
 	"bytes"
 	"context"
-	"crypto/sha1"
+	"crypto/sha256"
 	"fmt"
 	"regexp"
 
@@ -105,7 +105,9 @@ func datasourceQRGenerate(ctx context.Context, d *schema.ResourceData, m interfa
 
 	text += ";"
 
-	d.SetId(fmt.Sprintf("%x", sha1.Sum([]byte(text))))
+	// The string being hashed contains the network passphrase, so it is not a
+	// candidate for a weak digest even though the result is only an id.
+	d.SetId(fmt.Sprintf("%x", sha256.Sum256([]byte(text))))
 
 	buf := bytes.NewBuffer(nil)
 	qrterminal.GenerateWithConfig(text, qrterminal.Config{
