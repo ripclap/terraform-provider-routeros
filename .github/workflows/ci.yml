@@ -29,6 +29,14 @@ concurrency:
 permissions:
   contents: read
 
+env:
+  # Newest patch of the Go 1.25 line. The standard library ships inside the
+  # binary, so the toolchain patch level is a property of the release: pinning
+  # an exact patch here would leave published archives linking a standard
+  # library with known advisories until somebody edited this by hand. go.mod
+  # records 1.25.12 as the floor that clears the currently known ones.
+  GO_VERSION: '1.25.x'
+
 jobs:
   lint:
     name: Lint
@@ -40,7 +48,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
         with:
-          go-version-file: go.mod
+          go-version: ${{ env.GO_VERSION }}
 
       # Configured by .golangci.yml. Covers gofmt and go vet, so neither is run
       # separately.
@@ -81,8 +89,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
         with:
-          # Follows the go directive rather than a second copy of the version.
-          go-version-file: go.mod
+          go-version: ${{ env.GO_VERSION }}
 
       - name: Unit tests
         # TF_ACC is unset, so an acceptance test skips once it reaches
@@ -147,7 +154,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
         with:
-          go-version-file: go.mod
+          go-version: ${{ env.GO_VERSION }}
 
       # The same build a release performs, minus signing and uploading, so a
       # break confined to one platform surfaces here rather than part way
