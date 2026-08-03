@@ -105,9 +105,15 @@ func datasourceQRGenerate(ctx context.Context, d *schema.ResourceData, m interfa
 
 	text += ";"
 
-	// The string being hashed contains the network passphrase, so it is not a
-	// candidate for a weak digest even though the result is only an id.
-	d.SetId(fmt.Sprintf("%x", sha256.Sum256([]byte(text))))
+	// The id identifies the network, not its credentials, so it is derived from
+	// the SSID and how the network is joined rather than from the payload. The
+	// payload carries the passphrase in clear text - that is what the QR code is
+	// for - so putting it through a digest would protect nothing while making
+	// the id depend on a secret. A data source is read on every plan, so
+	// `qr_code` still follows a password change even though the id does not.
+	identity := fmt.Sprintf("%v;%v;%v",
+		d.Get("ssid").(string), d.Get("type").(string), d.Get("hidden").(bool))
+	d.SetId(fmt.Sprintf("%x", sha256.Sum256([]byte(identity))))
 
 	buf := bytes.NewBuffer(nil)
 	qrterminal.GenerateWithConfig(text, qrterminal.Config{
