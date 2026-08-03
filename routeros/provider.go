@@ -18,7 +18,7 @@ var (
 //
 //go:generate go run ../tools/drift/main.go
 func Provider() *schema.Provider {
-	return &schema.Provider{
+	p := &schema.Provider{
 		Schema: map[string]*schema.Schema{
 			"hosturl": {
 				Type:     schema.TypeString,
@@ -594,6 +594,13 @@ func Provider() *schema.Provider {
 		},
 		ConfigureContextFunc: NewClient,
 	}
+
+	// Every list menu also gets a read-only data source named after its
+	// resource. Terraform keeps the two namespaces apart, so
+	// `data.routeros_ip_address` and `resource.routeros_ip_address` coexist.
+	registerDerivedDatasources(p)
+
+	return p
 }
 
 func NewProvider() *schema.Provider {

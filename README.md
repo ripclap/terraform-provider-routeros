@@ -18,6 +18,19 @@ It registers **415 resources** covering 388 RouterOS menus, against 254
 upstream, so a whole device can be held in state and drift detected across all
 of it rather than a subset. [COVERAGE.md](COVERAGE.md) lists what it adds.
 
+Every list menu also has a **data source** of the same name — 308 in total —
+returning the menu's entries under `entries`, narrowed by an optional `filter`:
+
+```terraform
+data "routeros_interface_bridge_port" "ports" {
+  filter = { bridge = "bridge" }
+}
+
+output "member_interfaces" {
+  value = data.routeros_interface_bridge_port.ports.entries[*].interface
+}
+```
+
 ## Using the provider
 
 Enable the REST API on the router first: create a certificate under

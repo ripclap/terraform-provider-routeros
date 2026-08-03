@@ -1,5 +1,13 @@
 ## [Unreleased](https://github.com/ripclap/terraform-provider-routeros/compare/v2.0.3...HEAD)
 
+### Features
+
+* **datasources:** a data source of the same name over every list menu, 16 to
+  308. Entries are returned under `entries` and narrowed by an optional
+  `filter`; the schema mirrors the resource, so no menu can drift between the
+  two. Settings menus are excluded, as are menus whose resource declares a
+  transform set, which the data source serializer does not apply.
+
 ### Bug Fixes
 
 * **provider:** advertise `registry.opentofu.org/ripclap/routeros` rather than upstream's

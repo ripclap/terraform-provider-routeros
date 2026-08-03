@@ -15,7 +15,7 @@ Enable the REST API on the router first: create a certificate under `/certificat
 
 This is a community fork of [`terraform-routeros/terraform-provider-routeros`](https://github.com/terraform-routeros/terraform-provider-routeros), licensed under MPL-2.0. It is **not affiliated with or endorsed by** the upstream project or its maintainers.
 
-It represents a complete RouterOS 7.23 configuration as OpenTofu state, so drift is detectable across the whole device rather than a subset. It registers **415 resources** covering 388 RouterOS menus, against 254 resources upstream. It is published to the [OpenTofu Registry](https://search.opentofu.org/provider/ripclap/routeros); use it under OpenTofu with `source = "ripclap/routeros"`. It is not published to the HashiCorp Terraform Registry.
+It represents a complete RouterOS 7.23 configuration as OpenTofu state, so drift is detectable across the whole device rather than a subset. It registers **415 resources** covering 388 RouterOS menus, against 254 resources upstream, and a data source of the same name over every list menu — 308 in total, returning the menu's entries under `entries` and narrowed by an optional `filter`. It is published to the [OpenTofu Registry](https://search.opentofu.org/provider/ripclap/routeros); use it under OpenTofu with `source = "ripclap/routeros"`. It is not published to the HashiCorp Terraform Registry.
 
 Because it is rebased on upstream, most resources behave identically. The notable behavioural differences are:
 
