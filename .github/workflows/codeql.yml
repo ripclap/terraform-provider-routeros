@@ -22,6 +22,14 @@ concurrency:
 permissions:
   contents: read
 
+env:
+  # Newest patch of the Go 1.25 line. The standard library ships inside the
+  # binary, so the toolchain patch level is a property of the release: pinning
+  # an exact patch here would leave published archives linking a standard
+  # library with known advisories until somebody edited this by hand. go.mod
+  # records 1.25.12 as the floor that clears the currently known ones.
+  GO_VERSION: '1.25.x'
+
 jobs:
   analyze:
     name: Analyze Go
@@ -36,7 +44,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
         with:
-          go-version-file: go.mod
+          go-version: ${{ env.GO_VERSION }}
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@f205ea1c3313d32999d8d6a48b4f6530d4437b38 # v4
