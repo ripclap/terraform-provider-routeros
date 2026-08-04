@@ -293,8 +293,14 @@ func testCheckMenu(t *testing.T, path string) {
 	if host == nil {
 		t.Skip("ROS_HOSTURL not parseable")
 	}
+
+	// The probe always speaks REST, so it needs the REST port even when the
+	// suite is running over the binary API and ROS_HOSTURL carries no port at
+	// all. ROS_REST_PORT overrides, mirroring ROS_API_PORT.
 	port := ""
-	if m := rePort.FindStringSubmatch(origHostURL); m != nil {
+	if v := os.Getenv("ROS_REST_PORT"); v != "" {
+		port = ":" + v
+	} else if m := rePort.FindStringSubmatch(origHostURL); m != nil {
 		port = ":" + m[1]
 	}
 
@@ -310,7 +316,11 @@ func testCheckMenu(t *testing.T, path string) {
 	}
 	res, err := cl.Do(req)
 	if err != nil {
-		t.Skipf("cannot probe %s: %v", path, err)
+		// Not evidence the menu is absent: the check itself did not run. Said
+		// plainly so it is not read as a device without the menu. Set
+		// ROS_REST_PORT when the suite runs over the binary API.
+		t.Skipf("menu check for %s did not run, REST probe failed (coverage lost, not a missing menu): %v",
+			path, err)
 	}
 	defer res.Body.Close()
 

@@ -66,7 +66,25 @@ export TF_ACC=1 TF_ACC_TERRAFORM_PATH="$(command -v terraform)"
 go test ./routeros/ -count=1 -v -timeout 180m
 ```
 
+Every test runs twice, once per transport, as `<Test>/API` and `<Test>/REST`. Restrict a
+run to one with `-run '<Test>/API'`; the API transport is the quieter of the two under
+sustained load.
+
+Two ports are derived from `ROS_HOSTURL` and can be overridden when it does not carry
+them:
+
+| variable | for |
+|---|---|
+| `ROS_API_PORT` | binary API, default 8729 |
+| `ROS_REST_PORT` | REST, used by the menu probe that decides whether a menu exists |
+
+`ROS_REST_PORT` matters when running over `apis://`: the probe always speaks REST, and
+without a reachable REST port it cannot tell an absent menu from an unreachable one, so
+twelve tests skip rather than run.
+
 Run tests individually with a per-test timeout and clean up created objects between them.
 The device needs an interface named `bridge` and two spare ethernet or veth interfaces.
 
-Resources that manage disks, packages or the watchdog are not covered by the suite.
+Resources that manage disks, packages or the watchdog are not covered by the suite. Tests
+that create bridges have been seen to provoke a device-side `action timed out ... send a
+supout file`, so run them where an interruption is tolerable.
