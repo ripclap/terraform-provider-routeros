@@ -23,6 +23,11 @@ func ResourceWifiSecurityMultiPassphrase() *schema.Resource {
 
 		KeyComment:  PropCommentRw,
 		KeyDisabled: PropDisabledRw,
+		"expired": {
+			Type:        schema.TypeBool,
+			Computed:    true,
+			Description: "Whether this passphrase has passed its expiry time.",
+		},
 		"expires": {
 			Type:     schema.TypeString,
 			Optional: true,

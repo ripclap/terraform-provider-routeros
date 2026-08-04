@@ -34,6 +34,7 @@ resource "routeros_routing_ospf_instance" "test_routing_ospf_instance" {
 - `redistribute` (Set of String) Enable redistribution of specific route types.
 - `router_id` (String) OSPF Router ID. Can be set explicitly as an IP address, or as the name of the router-id instance.
 - `routing_table` (String) Name of the routing table in use.
+- `use_dn` (Boolean) Whether to consider the OSPF DN bit when importing routes from a PE router. Not present before RouterOS 7.10.
 - `version` (Number) OSPF version this instance will be running (v2 for IPv4, v3 for IPv6).
 - `vrf` (String) The VRF table this resource operates on.
 

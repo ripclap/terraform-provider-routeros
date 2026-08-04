@@ -35,6 +35,7 @@ output "ip_ipsec_profile" {
 
 Read-Only:
 
+- `default` (Boolean)
 - `dh_group` (Set of String)
 - `dpd_interval` (String)
 - `dpd_maximum_failures` (Number)

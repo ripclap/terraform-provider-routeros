@@ -42,6 +42,7 @@ func ResourceRoutingOspfAreaRange() *schema.Resource {
 				"used (i.e. routes that fall within this range).",
 		},
 		KeyDisabled: PropDisabledRw,
+		KeyInactive: PropInactiveRo,
 		"prefix": {
 			Type:         schema.TypeString,
 			Optional:     true,

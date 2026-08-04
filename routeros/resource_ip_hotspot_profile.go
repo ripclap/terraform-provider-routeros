@@ -84,6 +84,11 @@ func ResourceIpHotspotProfile() *schema.Resource {
 				"url. Since certificate domain name will mismatch, often this leads to errors, so you can set this parameter " +
 				"to `no` and all https requests will simply be rejected and user will have to visit a http page.",
 		},
+		"install_hotspot_queue": {
+			Type:        schema.TypeBool,
+			Optional:    true,
+			Description: "Whether to install a dynamic simple queue for the HotSpot interface.",
+		},
 		"login_by": {
 			Type:     schema.TypeSet,
 			Optional: true,

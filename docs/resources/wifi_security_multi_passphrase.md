@@ -29,6 +29,7 @@ resource "routeros_wifi_security_multi_passphrase" "test" {
 
 ### Read-Only
 
+- `expired` (Boolean) Whether this passphrase has passed its expiry time.
 - `id` (String) The ID of this resource.
 
 ## Import

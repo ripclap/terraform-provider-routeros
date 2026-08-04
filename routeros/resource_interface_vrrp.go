@@ -123,8 +123,13 @@ func ResourceInterfaceVrrp() *schema.Resource {
 			Computed: true,
 		},
 		KeyMacAddress: PropMacAddressRo,
-		KeyMtu:        PropL2MtuRo,
-		KeyName:       PropNameForceNewRw,
+		"master": {
+			Type:        schema.TypeBool,
+			Computed:    true,
+			Description: "Whether this router is currently the VRRP master for the group.",
+		},
+		KeyMtu:  PropL2MtuRo,
+		KeyName: PropNameForceNewRw,
 		"on_fail": {
 			Type:        schema.TypeString,
 			Optional:    true,

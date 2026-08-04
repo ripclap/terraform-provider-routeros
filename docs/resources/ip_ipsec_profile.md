@@ -40,6 +40,7 @@ resource "routeros_ip_ipsec_profile" "test" {
 
 ### Read-Only
 
+- `default` (Boolean) It's the default item.
 - `id` (String) The ID of this resource.
 
 ## Import

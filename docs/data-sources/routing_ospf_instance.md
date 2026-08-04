@@ -51,6 +51,7 @@ Read-Only:
 - `redistribute` (Set of String)
 - `router_id` (String)
 - `routing_table` (String)
+- `use_dn` (Boolean)
 - `version` (Number)
 - `vrf` (String)
 

@@ -27,6 +27,7 @@ func ResourceIpIpsecProfile() *schema.Resource {
 		MetaResourcePath: PropResourcePath("/ip/ipsec/profile"),
 		MetaId:           PropId(Id),
 
+		KeyDefault: PropDefaultRo,
 		"dh_group": {
 			Type:        schema.TypeSet,
 			Optional:    true,

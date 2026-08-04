@@ -51,6 +51,13 @@ func ResourceRoutingOspfInstance() *schema.Resource {
 			Optional:    true,
 			Description: "name of the routing filter chain used for incoming prefixes",
 		},
+		"use_dn": {
+			Type:     schema.TypeBool,
+			Optional: true,
+			Description: "Whether to consider the OSPF DN bit when importing routes from a PE router. " +
+				"Not present before RouterOS 7.10.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+		},
 		"mpls_te_address": {
 			Type:        schema.TypeString,
 			Optional:    true,

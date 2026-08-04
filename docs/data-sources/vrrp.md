@@ -49,6 +49,7 @@ Read-Only:
 - `interval` (String)
 - `invalid` (Boolean)
 - `mac_address` (String)
+- `master` (Boolean)
 - `mtu` (Number)
 - `name` (String)
 - `on_backup` (String)

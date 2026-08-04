@@ -31,6 +31,7 @@ resource "routeros_routing_ospf_area_range" "test" {
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+- `inactive` (Boolean)
 
 ## Import
 Import is supported using the following syntax:

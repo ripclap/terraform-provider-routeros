@@ -37,6 +37,7 @@ Read-Only:
 
 - `comment` (String)
 - `disabled` (Boolean)
+- `expired` (Boolean)
 - `expires` (String)
 - `group` (String)
 - `id` (String)

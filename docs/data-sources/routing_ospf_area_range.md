@@ -41,6 +41,7 @@ Read-Only:
 - `cost` (Number)
 - `disabled` (Boolean)
 - `id` (String)
+- `inactive` (Boolean)
 - `prefix` (String)
 
 

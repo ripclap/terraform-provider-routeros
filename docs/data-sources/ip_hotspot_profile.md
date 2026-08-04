@@ -43,6 +43,7 @@ Read-Only:
 - `http_proxy` (String)
 - `https_redirect` (Boolean)
 - `id` (String)
+- `install_hotspot_queue` (Boolean)
 - `login_by` (Set of String)
 - `mac_auth_mode` (String)
 - `mac_auth_password` (String)
