@@ -154,6 +154,7 @@ func ResourceInterfaceWirelessSecurityProfiles() *schema.Resource {
 			Optional: true,
 			Description: "Password to use for authentication when `eap-ttls-mschapv2` or `peap` authentication method is " +
 				"being used. This property only has effect on Stations.",
+			Sensitive: true,
 		},
 		"mschapv2_username": {
 			Type:     schema.TypeString,

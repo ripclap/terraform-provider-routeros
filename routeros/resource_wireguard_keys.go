@@ -50,6 +50,7 @@ func ResourceWireguardKeys() *schema.Resource {
 							Type:        schema.TypeString,
 							Computed:    true,
 							Description: "Pre-shared secret key.",
+							Sensitive:   true,
 						},
 						"private": {
 							Type:        schema.TypeString,

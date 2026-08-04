@@ -30,6 +30,7 @@ func ResourceDhcpServerConfig() *schema.Resource {
 			Default:      "empty",
 			Description:  "An option to set the password parameter for the RADIUS server. This option is available in RouterOS starting from version 7.0.",
 			ValidateFunc: validation.StringInSlice([]string{"empty", "same-as-user"}, false),
+			Sensitive:    true,
 		},
 		"store_leases_disk": {
 			Type:             schema.TypeString,

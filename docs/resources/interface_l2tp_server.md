@@ -22,7 +22,7 @@ resource "routeros_interface_l2tp_server" "test" {
 - `caller_id_type` (String) If same source IP address is used for multiple clients set id type to number.
 - `default_profile` (String) Default profile to use.
 - `enabled` (Boolean) Enables/disables service.
-- `ipsec_secret` (String) Preshared key used when use-ipsec is enabled.
+- `ipsec_secret` (String, Sensitive) Preshared key used when use-ipsec is enabled.
 - `keepalive_timeout` (String) Sets keepalive timeout in seconds.
 - `l2tpv3_circuit_id` (String) Set the virtual circuit identifier to bind the one end of the L2TPv3 control channel.
 - `l2tpv3_cookie_length` (String) Configures an L2TP pseudowire static session cookie.

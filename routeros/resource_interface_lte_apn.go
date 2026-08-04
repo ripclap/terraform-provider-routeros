@@ -99,6 +99,7 @@ func ResourceInterfaceLteApn() *schema.Resource {
 			Optional:         true,
 			Description:      "Password used if any of the authentication protocols are active.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+			Sensitive:        true,
 		},
 		"use_network_apn": {
 			Type:     schema.TypeBool,

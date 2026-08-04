@@ -39,6 +39,7 @@ func ResourceUserManagerAdvanced() *schema.Resource {
 			Type:        schema.TypeString,
 			Optional:    true,
 			Description: "The password of the PayPal API account.",
+			Sensitive:   true,
 		},
 		"paypal_signature": {
 			Type:        schema.TypeString,
@@ -60,6 +61,7 @@ func ResourceUserManagerAdvanced() *schema.Resource {
 			Type:        schema.TypeString,
 			Optional:    true,
 			Description: "The password for accessing `/um/PRIVATE/` section over HTTP.",
+			Sensitive:   true,
 		},
 		"web_private_username": {
 			Type:        schema.TypeString,

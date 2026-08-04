@@ -88,6 +88,7 @@ func ResourceWifiAccessList() *schema.Resource {
 			Type:        schema.TypeString,
 			Optional:    true,
 			Description: "PSK passphrase for the client if some PSK authentication algorithm is used.",
+			Sensitive:   true,
 		},
 		"radius_accounting": {
 			Type:        schema.TypeBool,

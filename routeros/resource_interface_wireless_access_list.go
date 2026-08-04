@@ -80,6 +80,7 @@ func ResourceInterfaceWirelessAccessList() *schema.Resource {
 			Type:        schema.TypeString,
 			Description: "Management protection shared secret.",
 			Optional:    true,
+			Sensitive:   true,
 		},
 		"private_algo": {
 			Type:             schema.TypeString,
@@ -92,11 +93,13 @@ func ResourceInterfaceWirelessAccessList() *schema.Resource {
 			Type:        schema.TypeString,
 			Optional:    true,
 			Description: "Only for `WEP` modes (HEX).",
+			Sensitive:   true,
 		},
 		"private_pre_shared_key": {
 			Type:        schema.TypeString,
 			Optional:    true,
 			Description: "Used in `WPA PSK` mode.",
+			Sensitive:   true,
 		},
 		"signal_range": {
 			Type:     schema.TypeString,

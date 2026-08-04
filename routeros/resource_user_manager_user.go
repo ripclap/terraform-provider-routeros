@@ -49,11 +49,13 @@ func ResourceUserManagerUser() *schema.Resource {
 			Type:        schema.TypeString,
 			Optional:    true,
 			Description: "A token of a one-time code that will be attached to the password.",
+			Sensitive:   true,
 		},
 		"password": {
 			Type:        schema.TypeString,
 			Optional:    true,
 			Description: "The password of the user for session authentication.",
+			Sensitive:   true,
 		},
 		"shared_users": {
 			Type:        schema.TypeInt,

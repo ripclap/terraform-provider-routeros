@@ -38,6 +38,7 @@ func ResourceSystemNtpClientServer() *schema.Resource {
 			Description: "The NTP symmetric key used for the authentication between the NTP client and the server. " +
 				"References an entry of `/system/ntp/key`; `none` disables the authentication.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+			Sensitive:        true,
 		},
 		KeyComment:  PropCommentRw,
 		KeyDisabled: PropDisabledRw,

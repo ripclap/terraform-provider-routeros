@@ -344,8 +344,9 @@ func ResourceSystemCertificate() *schema.Resource {
 			Description: "Subject Key Identifier.",
 		},
 		"smart_card_key": {
-			Type:     schema.TypeString,
-			Computed: true,
+			Type:      schema.TypeString,
+			Computed:  true,
+			Sensitive: true,
 		},
 		"state": {
 			Type:             schema.TypeString,

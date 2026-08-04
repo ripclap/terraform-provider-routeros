@@ -114,6 +114,7 @@ func ResourceWifiSecurity() *schema.Resource {
 			Type:        schema.TypeString,
 			Optional:    true,
 			Description: "Password to use when the chosen EAP method requires one.",
+			Sensitive:   true,
 		},
 		"eap_tls_certificate": {
 			Type:        schema.TypeString,
@@ -214,6 +215,7 @@ func ResourceWifiSecurity() *schema.Resource {
 			Type:        schema.TypeString,
 			Optional:    true,
 			Description: "Passphrase to use for PSK authentication types.",
+			Sensitive:   true,
 		},
 		"sae_anti_clogging_threshold": {
 			Type:        schema.TypeString,

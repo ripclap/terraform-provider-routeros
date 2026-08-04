@@ -27,10 +27,10 @@ resource "routeros_interface_wireless_access_list" "test" {
   *true - Client can send frames to other stations on the same access point.
 - `interface` (String) Rules with interface=any are used for any wireless interface and the `interface = all` defines interface-list `all` name. To make rule that applies only to one wireless interface, specify that interface as a value of this property.
 - `mac_address` (String) Rule matches client with the specified MAC address. Value 00:00:00:00:00:00 matches always.
-- `management_protection_key` (String) Management protection shared secret.
+- `management_protection_key` (String, Sensitive) Management protection shared secret.
 - `private_algo` (String) Only for `WEP` modes.
-- `private_key` (String) Only for `WEP` modes (HEX).
-- `private_pre_shared_key` (String) Used in `WPA PSK` mode.
+- `private_key` (String, Sensitive) Only for `WEP` modes (HEX).
+- `private_pre_shared_key` (String, Sensitive) Used in `WPA PSK` mode.
 - `signal_range` (String) Rule matches if signal strength of the station is within the range.If signal strength of the station will go out of the range that is specified in the rule, access point will disconnect that station.
 - `time` (String) Rule will match only during specified time.Station will be disconnected after specified time ends. Both start and end time is expressed as time since midnight, 00:00. Rule will match only during specified days of the week. Ex: "3h3m-5h,mon,tue,wed,thu,fri"
 - `vlan_id` (Number) VLAN ID to use if doing VLAN tagging.

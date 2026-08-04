@@ -156,7 +156,7 @@ EOT
 - `scep_url` (String)
 - `serial_number` (String)
 - `skid` (String) Subject Key Identifier.
-- `smart_card_key` (String)
+- `smart_card_key` (String, Sensitive)
 - `status` (String) Shows current status of scep client.
 
 <a id="nestedblock--import"></a>

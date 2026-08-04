@@ -47,7 +47,7 @@ resource "routeros_ipv6_dhcp_server_binding" "binding" {
 - `invalid` (Boolean)
 - `last_seen` (String) Time elapsed since the client was last heard from.
 - `radius` (Boolean) Shows whether this dynamic binding was authenticated by RADIUS.
-- `reconfigure_key` (String) Key used to authenticate the DHCPv6 Reconfigure messages sent to this client. Field presence confirmed on ROS 7.23, the exact value format was not observable (no bindings on RouterOS 7.23).
+- `reconfigure_key` (String, Sensitive) Key used to authenticate the DHCPv6 Reconfigure messages sent to this client. Field presence confirmed on ROS 7.23, the exact value format was not observable (no bindings on RouterOS 7.23).
 - `reconfigure_last_sent` (String) When the last DHCPv6 Reconfigure message was sent to this client. Field presence confirmed on ROS 7.23, the exact value format was not observable (no bindings on RouterOS 7.23).
 - `reconfigure_status` (String) Result of the last DHCPv6 Reconfigure exchange with this client. Field presence confirmed on ROS 7.23, the set of possible values was not observable (no bindings on RouterOS 7.23).
 - `status` (String) Binding status (`waiting`, `offered`, `bound`).

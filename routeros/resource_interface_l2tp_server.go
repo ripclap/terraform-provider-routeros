@@ -95,6 +95,7 @@ func ResourceInterfaceL2tpServer() *schema.Resource {
 			Optional:         true,
 			Description:      "Preshared key used when use-ipsec is enabled.",
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+			Sensitive:        true,
 		},
 		"accept_proto_version": {
 			Type:             schema.TypeString,

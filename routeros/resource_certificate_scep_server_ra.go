@@ -94,6 +94,7 @@ func ResourceCertificateScepServerRa() *schema.Resource {
 			Type:        schema.TypeString,
 			Computed:    true,
 			Description: "The smart card key that holds the RA private key when `on_smart_card` is enabled.",
+			Sensitive:   true,
 		},
 		"status": {
 			Type:        schema.TypeString,

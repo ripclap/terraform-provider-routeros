@@ -126,6 +126,7 @@ func ResourceIPv6DhcpServerBinding() *schema.Resource {
 			Description: "Key used to authenticate the DHCPv6 Reconfigure messages sent to this client. " +
 				"Field presence confirmed on ROS 7.23, the exact value format was not observable " +
 				"(no bindings on RouterOS 7.23).",
+			Sensitive: true,
 		},
 		"reconfigure_last_sent": {
 			Type:     schema.TypeString,

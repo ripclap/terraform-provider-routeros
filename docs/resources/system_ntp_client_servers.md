@@ -21,7 +21,7 @@ resource "routeros_system_ntp_client_servers" "servers" {
 
 - `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
 - `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
-- `auth_key` (String) The NTP symmetric key used for the authentication between the NTP client and the server. References an entry of `/system/ntp/key`; `none` disables the authentication.
+- `auth_key` (String, Sensitive) The NTP symmetric key used for the authentication between the NTP client and the server. References an entry of `/system/ntp/key`; `none` disables the authentication.
 - `comment` (String)
 - `disabled` (Boolean)
 - `iburst` (Boolean) Sends a burst of packets when the association is first initialized, which speeds up the initial synchronization.

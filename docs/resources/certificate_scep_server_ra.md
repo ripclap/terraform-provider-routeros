@@ -39,7 +39,7 @@ resource "routeros_certificate_scep_server_ra" "ra" {
 - `ca_fingerprint` (String) The fingerprint of the CA certificate received from the upstream SCEP server.
 - `id` (String) The ID of this resource.
 - `req_fingerprint` (String) The fingerprint of the pending enrollment request.
-- `smart_card_key` (String) The smart card key that holds the RA private key when `on_smart_card` is enabled.
+- `smart_card_key` (String, Sensitive) The smart card key that holds the RA private key when `on_smart_card` is enabled.
 - `status` (String) The current state of the registration authority.
 
 ## Import

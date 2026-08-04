@@ -46,8 +46,8 @@ resource "routeros_user_manager_user" "test" {
 - `comment` (String)
 - `disabled` (Boolean)
 - `group` (String) Name of the group the user is associated with.
-- `otp_secret` (String) A token of a one-time code that will be attached to the password.
-- `password` (String) The password of the user for session authentication.
+- `otp_secret` (String, Sensitive) A token of a one-time code that will be attached to the password.
+- `password` (String, Sensitive) The password of the user for session authentication.
 - `shared_users` (Number) The total amount of sessions the user can simultaneously establish.
 
 ### Read-Only

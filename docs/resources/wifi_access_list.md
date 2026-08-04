@@ -25,7 +25,7 @@ resource "routeros_wifi_access_list" "radius" {
 - `interface` (String) Interface name to compare with an interface to which the client actually connects to.
 - `mac_address` (String) MAC address of the client.
 - `mac_address_mask` (String) MAC address mask to apply when comparing clients' addresses.
-- `passphrase` (String) PSK passphrase for the client if some PSK authentication algorithm is used.
+- `passphrase` (String, Sensitive) PSK passphrase for the client if some PSK authentication algorithm is used.
 - `place_before` (String) Before which position the rule will be inserted.  
 	> Please check the effect of this option, as it does not work as you think!  
 	> Best way to use in conjunction with a data source. See [example](../data-sources/ip_firewall.md#example-usage).

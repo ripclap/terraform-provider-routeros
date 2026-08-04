@@ -2,6 +2,12 @@
 
 ### Features
 
+* **security:** mark 22 credential-bearing attributes `Sensitive`, so Terraform redacts
+  them in plan output and state: WireGuard and wireless private keys, WPA and EAP
+  passphrases, IPsec and L2TP pre-shared secrets, RADIUS, LTE, user-manager and PayPal
+  passwords, OTP secrets, NTP symmetric keys and SCEP smart-card keys. A test asserts it
+  for every schema, resource and data source alike.
+
 * **datasources:** a data source of the same name over every list menu, 16 to
   308. Entries are returned under `entries` and narrowed by an optional
   `filter`; the schema mirrors the resource, so no menu can drift between the
