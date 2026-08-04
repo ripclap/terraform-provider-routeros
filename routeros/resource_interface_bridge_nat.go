@@ -72,7 +72,7 @@ func ResourceInterfaceBridgeNat() *schema.Resource {
 			Type:         schema.TypeString,
 			Optional:     true,
 			Description:  "ARP destination MAC address.",
-			ValidateFunc: ValidationMacAddress,
+			ValidateFunc: ValidationMacAddressWithMask,
 		},
 		"arp_gratuitous": {
 			Type:        schema.TypeBool,
@@ -110,7 +110,7 @@ func ResourceInterfaceBridgeNat() *schema.Resource {
 			Type:         schema.TypeString,
 			Optional:     true,
 			Description:  "ARP source MAC address.",
-			ValidateFunc: ValidationMacAddress,
+			ValidateFunc: ValidationMacAddressWithMask,
 		},
 		"chain": {
 			Type:     schema.TypeString,
@@ -282,7 +282,7 @@ func ResourceInterfaceBridgeNat() *schema.Resource {
 			Type:         schema.TypeString,
 			Optional:     true,
 			Description:  "Source MAC address.",
-			ValidateFunc: ValidationMacAddress,
+			ValidateFunc: ValidationMacAddressWithMask,
 		},
 		"src_port": {
 			Type:        schema.TypeString,
