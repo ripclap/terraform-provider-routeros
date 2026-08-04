@@ -39,9 +39,10 @@ func ResourceSystemNtpServer() *schema.Resource {
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"broadcast_addresses": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "Set broadcast address to use for NTP server broadcast mode.",
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Set broadcast address to use for NTP server broadcast mode.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		KeyEnabled: PropEnabled("Enable NTP server."),
 		"local_clock_stratum": {
