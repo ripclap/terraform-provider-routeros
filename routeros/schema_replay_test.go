@@ -9,6 +9,9 @@ import (
 	"sort"
 	"strings"
 	"testing"
+
+	"github.com/hashicorp/go-cty/cty"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 // Each resource file opens with a response captured from a device. Replaying
@@ -268,5 +271,81 @@ func TestCapturedResponsesHaveNoUnknownFields(t *testing.T) {
 		"schema, so they are dropped on read and drift in them is invisible:", len(gaps))
 	for _, g := range gaps {
 		t.Errorf("    %s", g)
+	}
+}
+
+// unvalidatableSampleValues are captured values that are not device values.
+// Both are placeholders in a hand-written sample rather than something a
+// device produced: a redacted key, and an ARP opcode of 0, which is not one
+// of the ten the protocol defines.
+var unvalidatableSampleValues = map[string]struct{}{
+	"routeros_interface_wireless_security_profiles.wpa2_pre_shared_key": {},
+	"routeros_interface_bridge_filter.arp_opcode":                       {},
+}
+
+// TestValidationAcceptsCapturedValues runs each attribute's own validator over
+// the value the device returned for it.
+//
+// Validation does not run on reads - the SDK applies it to configuration, so a
+// value that arrives from the device reaches state either way. What it costs
+// is expressiveness: a value the device holds and reports cannot be written in
+// HCL, so after an import there is no configuration that matches state.
+//
+// That bites hardest on an attribute carrying DiffSuppressFunc, where omitting
+// it leaves the device value in place. If the sentinel that clears the field
+// also fails validation, there is no way to clear it at all.
+func TestValidationAcceptsCapturedValues(t *testing.T) {
+	withRouterOSVersion(t)
+	samples := deviceSamples(t)
+	p := NewProvider()
+
+	var rejected []string
+	checked := 0
+
+	for name, res := range p.ResourcesMap {
+		sample, ok := samples[name]
+		if !ok {
+			continue
+		}
+		for field, value := range sample.item {
+			if strings.HasPrefix(field, ".") || value == "" {
+				continue
+			}
+			attr, ok := res.Schema[KebabToSnake(field)]
+			if !ok || attr.Type != schema.TypeString {
+				continue
+			}
+			if _, skip := unvalidatableSampleValues[name+"."+KebabToSnake(field)]; skip {
+				continue
+			}
+
+			switch {
+			case attr.ValidateFunc != nil:
+				checked++
+				if _, errs := attr.ValidateFunc(value, KebabToSnake(field)); len(errs) > 0 {
+					rejected = append(rejected, fmt.Sprintf("%s.%s rejects %q: %v",
+						name, KebabToSnake(field), value, errs[0]))
+				}
+			case attr.ValidateDiagFunc != nil:
+				checked++
+				for _, d := range attr.ValidateDiagFunc(value, cty.GetAttrPath(KebabToSnake(field))) {
+					if d.Severity != 0 {
+						continue
+					}
+					rejected = append(rejected, fmt.Sprintf("%s.%s rejects %q: %s",
+						name, KebabToSnake(field), value, d.Summary))
+				}
+			}
+		}
+	}
+
+	t.Logf("ran %d validators over captured values", checked)
+	if len(rejected) == 0 {
+		return
+	}
+	sort.Strings(rejected)
+	t.Errorf("%d attributes reject a value the device returned:", len(rejected))
+	for _, r := range rejected {
+		t.Errorf("    %s", r)
 	}
 }
