@@ -43,11 +43,13 @@ func ResourceIpSettings() *schema.Resource {
 			Optional: true,
 			Description: "Whether to accept ICMP redirect messages. Typically should be enabled on the host and disabled " +
 				"on routers.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"accept_source_route": {
-			Type:        schema.TypeBool,
-			Optional:    true,
-			Description: "Whether to accept packets with the SRR option. Typically should be enabled on the router.",
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Description:      "Whether to accept packets with the SRR option. Typically should be enabled on the router.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"allow_fast_path": {
 			Type:             schema.TypeBool,
@@ -73,6 +75,7 @@ func ResourceIpSettings() *schema.Resource {
 			Description: "If enabled, the ICMP error message reply will be sent with the source address equal to primary " +
 				"address of the receiving interface that caused the error . This feature can be useful for complex network " +
 				"debugging.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"icmp_rate_limit": {
 			Type:     schema.TypeInt,
