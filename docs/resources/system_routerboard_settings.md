@@ -32,7 +32,7 @@ resource "routeros_system_routerboard_settings" "settings" {
 - `memory_data_rate` (String) An option to change the memory data rate of the device. Values depend on the model.
 - `memory_frequency` (String) An option to change the memory frequency of the device. Values depend on the model.
 - `preboot_etherboot` (String) An option to enable preboot `etherboot`, which runs before the regular boot device.
-- `preboot_etherboot_server` (String) An option to instruct `preboot-etherboot` to accept only from the specified Netinstall server.
+- `preboot_etherboot_server` (String) An option to instruct `preboot-etherboot` to accept only from the specified Netinstall server, or `any` to accept from any server.
 - `protected_routerboot` (String) An option to disable any access to the RouterBOOT configuration settings over a console cable and disables the operation of the reset button to change the boot mode (Netinstall will be disabled). Possible values: `disabled`, `enabled`.
 - `reformat_hold_button` (String) An option to enable resetting everything by pressing the button at power-on for longer than the specified time but less than `reformat_hold_button_max.`
 - `reformat_hold_button_max` (String) See `reformat_hold_button`.

@@ -2,6 +2,7 @@ package routeros
 
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 /*
@@ -26,19 +27,32 @@ func ResourceInterface6to4() *schema.Resource {
 		MetaResourcePath: PropResourcePath("/interface/6to4"),
 		MetaId:           PropId(Id),
 
-		KeyActualMtu:     PropActualMtuRo,
-		KeyClampTcpMss:   PropClampTcpMssRw,
-		KeyComment:       PropCommentRw,
-		KeyDisabled:      PropDisabledRw,
-		KeyDontFragment:  PropDontFragmentRw,
-		KeyDscp:          PropDscpRw,
-		KeyIpsecSecret:   PropIpsecSecretRw,
-		KeyKeepalive:     PropKeepaliveRw,
-		KeyLocalAddress:  PropLocalAddressRw,
-		KeyMtu:           PropMtuRw(),
-		KeyName:          PropName("Interface name."),
-		KeyRemoteAddress: PropRemoteAddressRw,
-		KeyRunning:       PropRunningRo,
+		KeyActualMtu:    PropActualMtuRo,
+		KeyClampTcpMss:  PropClampTcpMssRw,
+		KeyComment:      PropCommentRw,
+		KeyDisabled:     PropDisabledRw,
+		KeyDontFragment: PropDontFragmentRw,
+		KeyDscp:         PropDscpRw,
+		KeyIpsecSecret:  PropIpsecSecretRw,
+		KeyKeepalive:    PropKeepaliveRw,
+		KeyLocalAddress: PropLocalAddressRw,
+		KeyMtu:          PropMtuRw(),
+		KeyName:         PropName("Interface name."),
+		// Not PropRemoteAddressRw: this menu reports `unspecified` when no remote
+		// end is set, and that is also how the value is cleared. An attribute
+		// validated as an IP address alone cannot express it, so a tunnel that
+		// once had a remote could not be returned to having none.
+		KeyRemoteAddress: {
+			Type:        schema.TypeString,
+			Optional:    true,
+			Description: "IP address of the remote end of the tunnel, or `unspecified`.",
+			ValidateFunc: validation.Any(
+				validation.IsIPAddress,
+				validation.StringInSlice([]string{"unspecified"}, false),
+			),
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+		},
+		KeyRunning: PropRunningRo,
 	}
 
 	return &schema.Resource{

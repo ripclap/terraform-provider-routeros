@@ -132,10 +132,14 @@ func ResourceSystemRouterboardSettings() *schema.Resource {
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"preboot_etherboot_server": {
-			Type:             schema.TypeString,
-			Optional:         true,
-			Description:      "An option to instruct `preboot-etherboot` to accept only from the specified Netinstall server.",
-			ValidateFunc:     validation.IsIPv4Address,
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "An option to instruct `preboot-etherboot` to accept only from the specified " +
+				"Netinstall server, or `any` to accept from any server.",
+			ValidateFunc: validation.Any(
+				validation.IsIPv4Address,
+				validation.StringInSlice([]string{"any"}, false),
+			),
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"protected_routerboot": {
