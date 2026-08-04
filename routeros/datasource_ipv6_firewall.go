@@ -7,12 +7,14 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-var ipv6firewallSections = []string{"rules"}
+var ipv6firewallSections = []string{"mangle", "nat", "rules"}
 
 func DatasourceIPv6Firewall() *schema.Resource {
 	return &schema.Resource{
 		ReadContext: datasourceIPv6FirewallFilterRead,
 		Description: `This datasource contains all supported firewall resources:
+- mangle
+- nat
 - rules (aka filter)
 `,
 		Schema: map[string]*schema.Schema{
