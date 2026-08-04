@@ -29,13 +29,10 @@ linters:
       locale: US
       # RouterOS spells these this way. They appear only as schema attribute
       # names mirroring a device property, so "correcting" one would rename a
-      # user-facing attribute or break value validation. `ip-total-lenght` is
-      # MikroTik's own misspelling of the IPFIX field and must be reproduced
-      # exactly for the field to bind.
+      # user-facing attribute or break value validation.
       ignore-rules:
         - addressess
         - ageing
-        - lenght
         - randomise
         - routeros
 

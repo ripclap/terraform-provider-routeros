@@ -34,6 +34,7 @@ resource "routeros_routing_bgp_connection" "test" {
 - `add_path_out` (String, Deprecated) Enables BGP Additional Paths (RFC 7911) advertisement for all address families. Removed in RouterOS v7.20, use the 'output.add_path' attribute instead.
 - `address_families` (String, Deprecated) List of address families about which this peer will exchange routing information. The remote peer must support (they usually do) BGP capabilities optional parameter to negotiate any other families than IP. Renamed to 'afi' in RouterOS v7.20.
 - `afi` (String) List of address families about which this peer will exchange routing information. The remote peer must support (they usually do) the BGP capabilities optional parameter to negotiate any other families than IP. Replaces 'address_families' since RouterOS v7.20.
+- `as_override` (Boolean) If set, then all instances of the remote peer's AS number in the BGP AS-PATH attribute are replaced with the local AS number before sending a route update to that peer. Happens before routing filters and prepending.
 - `cisco_vpls_nlri_len_fmt` (String) VPLS NLRI length format type. Used for compatibility with Cisco VPLS.
 - `cluster_id` (String, Deprecated) In case this instance is a route reflector: the cluster ID of the router reflector cluster to this instance belongs. This attribute helps to recognize routing updates that come from another route reflector in this cluster and avoid routing information looping. Note that normally there is only one route reflector in a cluster; in this case, 'cluster-id' does not need to be configured and BGP router ID is used instead.
 - `comment` (String)
@@ -49,6 +50,7 @@ resource "routeros_routing_bgp_connection" "test" {
 - `nexthop_choice` (String) Affects the outgoing NEXT_HOP attribute selection. Note that next-hops set in filters always take precedence. Also note that the next-hop is not changed on route reflection, except when it's set in the filter. default - select the next-hop as described in RFC 4271 force-self - always use a local address of the interface that is used to connect to the peer as the next-hop; propagate - try to propagate further the next-hop received; i.e. if the route has BGP NEXT_HOP attribute, then use it as the next-hop, otherwise, fall back to the default case.
 - `output` (Block List, Max: 1) A group of parameters associated with BGP output. (see [below for nested schema](#nestedblock--output))
 - `remote` (Block List, Max: 1) A group of parameters associated with BGP input. (see [below for nested schema](#nestedblock--remote))
+- `remove_private_as` (Boolean) If set, then the BGP AS-PATH attribute is removed before sending out route updates if the attribute contains only private AS numbers. The removal process happens before routing filters are applied and before the local, AS number is prepended to the AS path.
 - `router_id` (String, Deprecated) BGP Router ID to be used. Use the ID from the /routing/router-id configuration by specifying the reference name, or set the ID directly by specifying IP. Equal router-ids are also used to group peers into one instance.
 - `routing_table` (String) Name of the routing table, to install routes in.
 - `save_to` (String) Filename to be used to save BGP protocol-specific packet content (Exported PDU) into pcap file. This method allows much simpler peer-specific packet capturing for debugging purposes. Pcap files in this format can also be loaded to create virtual BGP peers to recreate conditions that happened at the time when packet capture was running.
@@ -111,7 +113,6 @@ Optional:
 
 - `add_path` (String) A list of address families for which BGP Additional Paths (RFC 7911) are advertised to the peer. Available since RouterOS v7.20.
 - `affinity` (String) Configure output multicore processing. Read more in Routing Protocol Multi-core Support article. alone - input and output of each session is processed in its own process, the most likely best option when there are a lot of cores and a lot of peers afi, instance, vrf, remote-as - try to run input/output of new session in process with similar parameters main - run input/output in the main process (could potentially increase performance on single-core even possibly on multicore devices with small amount of cores) input - run output in the same process as input (can be set only for output affinity).
-- `as_override` (Boolean) If set, then all instances of the remote peer's AS number in the BGP AS-PATH attribute are replaced with the local AS number before sending a route update to that peer. Happens before routing filters and prepending.
 - `default_originate` (String) Specifies default route (0.0.0.0/0) distribution method.
 - `default_prepend` (Number) The count of AS prepended to the AS path.
 - `filter_chain` (String) Name of the routing filter chain to be used on the output prefixes. If the chain is not specified, then BGP by default accepts everything.
@@ -121,7 +122,6 @@ Optional:
 - `no_client_to_client_reflection` (Boolean) Disable client-to-client route reflection in Route Reflector setups.
 - `no_early_cut` (Boolean) The early cut is the mechanism, to guess (based on default RFC behavior) what would happen with the sent NPLRI when received by the remote peer. If the algorithm determines that the NLRI is going to be dropped, a peer will not even try to send it. However such behavior may not be desired in specific scenarios, then then this option should be used to disable the early cut feature.
 - `redistribute` (String) Enable redistribution of specified route types.
-- `remove_private_as` (Boolean) If set, then the BGP AS-PATH attribute is removed before sending out route updates if the attribute contains only private AS numbers. The removal process happens before routing filters are applied and before the local, AS number is prepended to the AS path.
 
 
 <a id="nestedblock--remote"></a>

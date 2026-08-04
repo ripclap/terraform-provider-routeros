@@ -28,7 +28,7 @@ import (
     "ft-mobility-domain": "0x1",
     "ft-nas-identifier": "ssid",
     "ft-over-ds": "true",
-    "ft-preserve-vlanid ": "true",
+    "ft-preserve-vlanid": "true",
     "ft-r0-key-lifetime": "10m",
     "ft-reassociation-deadline": "10s",
     "group-encryption": "tkip",

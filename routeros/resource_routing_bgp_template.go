@@ -124,6 +124,7 @@ func ResourceRoutingBgpTemplate() *schema.Resource {
 				"is lower than any other value) infinity - never expire the connection and never send " +
 				"keepalive messages.",
 		},
+		KeyInactive: PropInactiveRo,
 		"input": {
 			Type:        schema.TypeList,
 			Optional:    true,
@@ -140,7 +141,7 @@ func ResourceRoutingBgpTemplate() *schema.Resource {
 							"accepted from the peer. Available since RouterOS v7.20.",
 						ValidateDiagFunc: ValidationMultiValInSlice([]string{"ip", "ipv6"}, false, false),
 					},
-					"accept_comunities": {
+					"accept_communities": {
 						Type:     schema.TypeString,
 						Optional: true,
 						Description: "A quick way to filter incoming updates with specific communities. It allows filtering " +
@@ -159,7 +160,7 @@ func ResourceRoutingBgpTemplate() *schema.Resource {
 							"/routing route table as 'not active, filtered'. Changes to be applied required session " +
 							"refresh.",
 					},
-					"accept_large_comunities": {
+					"accept_large_communities": {
 						Type:     schema.TypeString,
 						Optional: true,
 						Description: "A quick way to filter incoming updates with specific large communities. It allows " +

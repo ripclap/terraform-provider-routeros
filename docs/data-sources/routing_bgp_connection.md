@@ -39,6 +39,7 @@ Read-Only:
 - `address_families` (String)
 - `afi` (String)
 - `as` (String)
+- `as_override` (Boolean)
 - `cisco_vpls_nlri_len_fmt` (String)
 - `cluster_id` (String)
 - `comment` (String)
@@ -57,6 +58,7 @@ Read-Only:
 - `nexthop_choice` (String)
 - `output` (List of Object) (see [below for nested schema](#nestedobjatt--entries--output))
 - `remote` (List of Object) (see [below for nested schema](#nestedobjatt--entries--remote))
+- `remove_private_as` (Boolean)
 - `router_id` (String)
 - `routing_table` (String)
 - `save_to` (String)
@@ -108,7 +110,6 @@ Read-Only:
 
 - `add_path` (String)
 - `affinity` (String)
-- `as_override` (Boolean)
 - `default_originate` (String)
 - `default_prepend` (Number)
 - `filter_chain` (String)
@@ -118,7 +119,6 @@ Read-Only:
 - `no_client_to_client_reflection` (Boolean)
 - `no_early_cut` (Boolean)
 - `redistribute` (String)
-- `remove_private_as` (Boolean)
 
 
 <a id="nestedobjatt--entries--remote"></a>

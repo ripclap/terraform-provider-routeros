@@ -46,6 +46,7 @@ Read-Only:
 - `disabled` (Boolean)
 - `hold_time` (String)
 - `id` (String)
+- `inactive` (Boolean)
 - `input` (List of Object) (see [below for nested schema](#nestedobjatt--entries--input))
 - `keepalive_time` (String)
 - `multihop` (Boolean)
@@ -65,9 +66,9 @@ Read-Only:
 
 Read-Only:
 
-- `accept_comunities` (String)
+- `accept_communities` (String)
 - `accept_ext_communities` (String)
-- `accept_large_comunities` (String)
+- `accept_large_communities` (String)
 - `accept_nlri` (String)
 - `accept_unknown` (String)
 - `add_path` (String)

@@ -111,6 +111,14 @@ func ResourceRoutingBgpConnection() *schema.Resource {
 				"format: confederation_as/as . For example, if your AS is 34 and your confederation AS is " +
 				"43, then as configuration should be as =43/34.",
 		},
+		"as_override": {
+			Type:     schema.TypeBool,
+			Optional: true,
+			Description: "If set, then all instances of the remote peer's AS number in the BGP AS-PATH attribute " +
+				"are replaced with the local AS number before sending a route update to that peer. " +
+				"Happens before routing filters and prepending.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+		},
 		"cisco_vpls_nlri_len_fmt": {
 			Type:         schema.TypeString,
 			Optional:     true,
@@ -454,14 +462,6 @@ func ResourceRoutingBgpConnection() *schema.Resource {
 							"cores) input - run output in the same process as input (can be set only for output " +
 							"affinity).",
 					},
-					"as_override": {
-						Type:     schema.TypeBool,
-						Optional: true,
-						Description: "If set, then all instances of the remote peer's AS number in the BGP AS-PATH attribute " +
-							"are replaced with the local AS number before sending a route update to that peer. " +
-							"Happens before routing filters and prepending.",
-						DiffSuppressFunc: AlwaysPresentNotUserProvided,
-					},
 					"default_originate": {
 						Type:        schema.TypeString,
 						Optional:    true,
@@ -524,14 +524,6 @@ func ResourceRoutingBgpConnection() *schema.Resource {
 							"bgp", "connected", "bgp-mpls-vpn", "dhcp", "fantasy", "modem", "ospf", "rip", "static", "vpn",
 						}, false, false),
 					},
-					"remove_private_as": {
-						Type:     schema.TypeBool,
-						Optional: true,
-						Description: "If set, then the BGP AS-PATH attribute is removed before sending out route updates if " +
-							"the attribute contains only private AS numbers. The removal process happens before " +
-							"routing filters are applied and before the local, AS number is prepended to the AS path.",
-						DiffSuppressFunc: AlwaysPresentNotUserProvided,
-					},
 				},
 			},
 		},
@@ -576,6 +568,14 @@ func ResourceRoutingBgpConnection() *schema.Resource {
 					},
 				},
 			},
+		},
+		"remove_private_as": {
+			Type:     schema.TypeBool,
+			Optional: true,
+			Description: "If set, then the BGP AS-PATH attribute is removed before sending out route updates if " +
+				"the attribute contains only private AS numbers. The removal process happens before " +
+				"routing filters are applied and before the local, AS number is prepended to the AS path.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"router_id": {
 			Type:     schema.TypeString,

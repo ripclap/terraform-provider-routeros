@@ -44,7 +44,7 @@ func ResourceWifiInterworking() *schema.Resource {
 	resSchema := map[string]*schema.Schema{
 		MetaResourcePath: PropResourcePath("/interface/wifi/interworking"),
 		MetaId:           PropId(Id),
-		MetaTransformSet: PropTransformSet("three_gpp_info:3gpp_info", "three_gpp_raw:3gpp_raw"),
+		MetaTransformSet: PropTransformSet("three_gpp_info:3gpp-info", "three_gpp_raw:3gpp-raw"),
 
 		"three_gpp_info": {
 			Type:        schema.TypeList,
