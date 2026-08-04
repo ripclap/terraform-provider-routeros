@@ -17,6 +17,13 @@
   silently disagreeing with the device.
 * **build:** define the `version` and `commit` symbols the release `-ldflags` write to.
   They were being discarded, so `-version` reported nothing.
+* **ip-settings:** `accept_redirects`, `accept_source_route` and
+  `icmp_errors_use_inbound_interface_address` lacked `AlwaysPresentNotUserProvided`,
+  which every other optional attribute in the resource has. The device always returns
+  them, so a configuration setting only `allow_fast_path` never reached an empty plan.
+* **system-ntp-server:** `broadcast_addresses` lacked the same suppression, which the
+  other six optional attributes in the resource have. A device with a broadcast address
+  set never reached an empty plan.
 
 ### Security
 
