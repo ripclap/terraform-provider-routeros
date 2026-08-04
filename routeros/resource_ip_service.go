@@ -37,6 +37,8 @@ func ResourceIpService() *schema.Resource {
 		MetaResourcePath: PropResourcePath("/ip/service"),
 		MetaId:           PropId(Name),
 
+		KeyLockoutAck: PropLockoutAck,
+
 		"address": {
 			Type:        schema.TypeString,
 			Optional:    true,
@@ -101,6 +103,10 @@ func ResourceIpService() *schema.Resource {
 
 	resCreateUpdate := func(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 		item, metadata := TerraformResourceDataToMikrotik(resSchema, d)
+
+		if err := CheckLockout(metadata.Path, item, resSchema, d); err != nil {
+			return diag.FromErr(err)
+		}
 
 		d.SetId(d.Get("numbers").(string))
 

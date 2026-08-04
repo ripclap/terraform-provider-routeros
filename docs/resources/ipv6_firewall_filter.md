@@ -56,6 +56,7 @@ resource "routeros_ipv6_firewall_filter" "rule" {
 - `ipsec_policy` (String) Matches the policy used by IPsec. Value is written in the following format: direction, policy.
 - `jump_target` (String) Name of the target chain to jump to. Applicable only if action=jump.
 - `limit` (String) Matches packets up to a limited rate (packet rate or bit rate). A rule using this matcher will match until this limit is reached. Parameters are written in the following format: rate[/time],burst:mode.
+- `lockout_ack` (Boolean) Proceed with a change this provider would otherwise refuse for severing management access. Applies only to the guard on this resource; it does not disable validation.
 - `log` (Boolean) Add a message to the system log.
 - `log_prefix` (String) Adds specified text at the beginning of every log message. Applicable if action=log or log=yes configured.
 - `nth` (String) Matches every nth packet: nth=2,1 rule will match every first packet of 2, hence, 50% of all the traffic that is matched by the rule

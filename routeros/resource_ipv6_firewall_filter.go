@@ -12,7 +12,9 @@ func ResourceIPv6FirewallFilter() *schema.Resource {
 	resSchema := map[string]*schema.Schema{
 		MetaResourcePath: PropResourcePath("/ipv6/firewall/filter"),
 		MetaId:           PropId(Id),
-		MetaSkipFields:   PropSkipFields("bytes", "packets"),
+
+		KeyLockoutAck:  PropLockoutAck,
+		MetaSkipFields: PropSkipFields("bytes", "packets"),
 		MetaSetUnsetFields: PropSetUnsetFields("dst_address_list", "src_address_list", "in_interface_list",
 			"out_interface_list", "in_bridge_port_list", "out_bridge_port_list", "protocol"),
 

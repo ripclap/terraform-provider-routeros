@@ -75,7 +75,9 @@ func datasourceFromResource(res *schema.Resource) *schema.Resource {
 		},
 	}
 	for name, attr := range res.Schema {
-		if isMetaAttribute(name) || name == "id" {
+		// lockout_ack controls whether a write is refused; there is nothing to
+		// acknowledge when reading.
+		if isMetaAttribute(name) || name == "id" || name == KeyLockoutAck {
 			continue
 		}
 		entry[name] = computedSchema(attr)

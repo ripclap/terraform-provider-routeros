@@ -61,6 +61,10 @@ func ctxGetCrudMethod(ctx context.Context) crudMethod {
 func ResourceCreate(ctx context.Context, s map[string]*schema.Schema, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	item, metadata := TerraformResourceDataToMikrotik(s, d)
 
+	if err := CheckLockout(metadata.Path, item, s, d); err != nil {
+		return diag.FromErr(err)
+	}
+
 	res, err := CreateItem(ctx, item, metadata.Path, m.(Client))
 	if err != nil {
 		ColorizedDebug(ctx, fmt.Sprintf(ErrorMsgPut, err))
@@ -259,6 +263,10 @@ func ResourceRead(ctx context.Context, s map[string]*schema.Schema, d *schema.Re
 func ResourceUpdate(ctx context.Context, s map[string]*schema.Schema, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	item, metadata := TerraformResourceDataToMikrotik(s, d)
 
+	if err := CheckLockout(metadata.Path, item, s, d); err != nil {
+		return diag.FromErr(err)
+	}
+
 	// d.Id() can be the name of a resource or its identifier.
 	// Mikrotik only operates on resource ID!
 	id, err := dynamicIdLookup(metadata.IdType, metadata.Path, m.(Client), d)
@@ -328,6 +336,10 @@ func SystemResourceRead(ctx context.Context, s map[string]*schema.Schema, d *sch
 // SystemResourceCreateUpdate A resource cannot be created, it can only be changed.
 func SystemResourceCreateUpdate(ctx context.Context, s map[string]*schema.Schema, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	item, metadata := TerraformResourceDataToMikrotik(s, d)
+
+	if err := CheckLockout(metadata.Path, item, s, d); err != nil {
+		return diag.FromErr(err)
+	}
 
 	var resUrl string
 	if m.(Client).GetTransport() == TransportREST {

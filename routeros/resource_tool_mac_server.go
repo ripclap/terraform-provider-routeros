@@ -16,6 +16,8 @@ func ResourceToolMacServer() *schema.Resource {
 		MetaResourcePath: PropResourcePath("/tool/mac-server"),
 		MetaId:           PropId(Id),
 
+		KeyLockoutAck: PropLockoutAck,
+
 		"allowed_interface_list": {
 			Type:        schema.TypeString,
 			Required:    true,
