@@ -161,9 +161,10 @@ func ResourceIpTrafficFlowIpfix() *schema.Resource {
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"nat_events": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "Events related to Network Address Translation for the flow.",
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Events related to Network Address Translation for the flow.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"nat_src_address": {
 			Type:             schema.TypeString,

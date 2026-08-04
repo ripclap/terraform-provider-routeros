@@ -19,18 +19,20 @@ func ResourceSystemUserSettings() *schema.Resource {
 		MetaId:           PropId(Id),
 
 		"minimum_categories": {
-			Type:         schema.TypeInt,
-			Optional:     true,
-			Default:      0,
-			Description:  "An option specifies the complexity requirements of the password, with categories being uppercase, lowercase, digit, and symbol.",
-			ValidateFunc: validation.IntBetween(0, 4),
+			Type:             schema.TypeInt,
+			Optional:         true,
+			Default:          0,
+			Description:      "An option specifies the complexity requirements of the password, with categories being uppercase, lowercase, digit, and symbol.",
+			ValidateFunc:     validation.IntBetween(0, 4),
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"minimum_password_length": {
-			Type:         schema.TypeInt,
-			Optional:     true,
-			Default:      0,
-			Description:  "An option specifies the minimum length of the password.",
-			ValidateFunc: validation.IntAtLeast(0),
+			Type:             schema.TypeInt,
+			Optional:         true,
+			Default:          0,
+			Description:      "An option specifies the minimum length of the password.",
+			ValidateFunc:     validation.IntAtLeast(0),
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 	}
 

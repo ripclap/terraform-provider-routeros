@@ -52,19 +52,22 @@ func ResourceIpTrafficFlow() *schema.Resource {
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"packet_sampling": {
-			Type:        schema.TypeBool,
-			Optional:    true,
-			Description: "Enable or disable packet sampling feature.",
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Description:      "Enable or disable packet sampling feature.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"sampling_interval": {
-			Type:        schema.TypeInt,
-			Optional:    true,
-			Description: "The number of packets that are consecutively sampled.",
+			Type:             schema.TypeInt,
+			Optional:         true,
+			Description:      "The number of packets that are consecutively sampled.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"sampling_space": {
-			Type:        schema.TypeInt,
-			Optional:    true,
-			Description: "The number of packets that are consecutively omitted.",
+			Type:             schema.TypeInt,
+			Optional:         true,
+			Description:      "The number of packets that are consecutively omitted.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 	}
 

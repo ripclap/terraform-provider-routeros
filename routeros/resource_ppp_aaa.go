@@ -20,10 +20,11 @@ func ResourcePppAaa() *schema.Resource {
 		MetaId:           PropId(Id),
 
 		"accounting": {
-			Type:        schema.TypeBool,
-			Optional:    true,
-			Default:     true,
-			Description: "An option that enables accounting for users.",
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Default:          true,
+			Description:      "An option that enables accounting for users.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"enable_ipv6_accounting": {
 			Type:             schema.TypeBool,
@@ -39,15 +40,17 @@ func ResourcePppAaa() *schema.Resource {
 			DiffSuppressFunc: TimeEqual,
 		},
 		"use_circuit_id_in_nas_port_id": {
-			Type:     schema.TypeBool,
-			Optional: true,
-			Default:  false,
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Default:          false,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"use_radius": {
-			Type:        schema.TypeBool,
-			Optional:    true,
-			Default:     false,
-			Description: "An option whether to use RADIUS server.",
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Default:          false,
+			Description:      "An option whether to use RADIUS server.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 	}
 

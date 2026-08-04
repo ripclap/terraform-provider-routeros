@@ -22,16 +22,18 @@ func ResourceIpSSHServer() *schema.Resource {
 		MetaId:           PropId(Id),
 
 		"allow_none_crypto": {
-			Type:         schema.TypeBool,
-			Optional:     true,
-			Description:  "Whether to allow connection if cryptographic algorithms are set to none.",
-			ExactlyOneOf: []string{"allow_none_crypto", "strong_crypto"},
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Description:      "Whether to allow connection if cryptographic algorithms are set to none.",
+			ExactlyOneOf:     []string{"allow_none_crypto", "strong_crypto"},
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"always_allow_password_login": {
 			Type:     schema.TypeBool,
 			Optional: true,
 			Description: "Whether to allow password login at the same time when public key authorization is " +
 				"configured for a user.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"ciphers": {
 			Type:             schema.TypeString,
@@ -77,10 +79,11 @@ func ResourceIpSSHServer() *schema.Resource {
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"strong_crypto": {
-			Type:         schema.TypeBool,
-			Optional:     true,
-			Description:  "Use stronger encryption.",
-			ExactlyOneOf: []string{"allow_none_crypto", "strong_crypto"},
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Description:      "Use stronger encryption.",
+			ExactlyOneOf:     []string{"allow_none_crypto", "strong_crypto"},
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 	}
 

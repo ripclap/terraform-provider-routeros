@@ -47,6 +47,7 @@ func ResourceIpCloud() *schema.Resource {
 				"DDNS record for this device and send a response to the device. Every minute the IP/Cloud " +
 				"service on the router will check if WAN IP address matches the one sent to MikroTik's " +
 				"Cloud server and will send encrypted update to cloud server if IP address changes.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"ddns_update_interval": {
 			Type:     schema.TypeString,

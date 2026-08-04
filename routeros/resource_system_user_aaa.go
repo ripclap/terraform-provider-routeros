@@ -21,22 +21,25 @@ func ResourceUserAaa() *schema.Resource {
 		MetaId:           PropId(Id),
 
 		"accounting": {
-			Type:        schema.TypeBool,
-			Optional:    true,
-			Default:     true,
-			Description: "An option that enables accounting for users.",
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Default:          true,
+			Description:      "An option that enables accounting for users.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"default_group": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Default:     "read",
-			Description: "The user group that is used by default for users authenticated via a RADIUS server.",
+			Type:             schema.TypeString,
+			Optional:         true,
+			Default:          "read",
+			Description:      "The user group that is used by default for users authenticated via a RADIUS server.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"exclude_groups": {
-			Type:        schema.TypeSet,
-			Optional:    true,
-			Elem:        &schema.Schema{Type: schema.TypeString},
-			Description: "A set of groups that are not allowed for users authenticated by RADIUS.",
+			Type:             schema.TypeSet,
+			Optional:         true,
+			Elem:             &schema.Schema{Type: schema.TypeString},
+			Description:      "A set of groups that are not allowed for users authenticated by RADIUS.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"interim_update": {
 			Type:             schema.TypeString,
@@ -46,10 +49,11 @@ func ResourceUserAaa() *schema.Resource {
 			DiffSuppressFunc: TimeEqual,
 		},
 		"use_radius": {
-			Type:        schema.TypeBool,
-			Optional:    true,
-			Default:     false,
-			Description: "An option whether to use RADIUS server.",
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Default:          false,
+			Description:      "An option whether to use RADIUS server.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 	}
 

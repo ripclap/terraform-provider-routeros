@@ -42,9 +42,10 @@ func ResourceDns() *schema.Resource {
 			},
 		},
 		"allow_remote_requests": {
-			Type:        schema.TypeBool,
-			Optional:    true,
-			Description: "Specifies whether to allow network requests.",
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Description:      "Specifies whether to allow network requests.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"cache_max_ttl": {
 			Type:     schema.TypeString,
@@ -139,10 +140,11 @@ func ResourceDns() *schema.Resource {
 			DiffSuppressFunc: TimeEqual,
 		},
 		"servers": {
-			Type:        schema.TypeList,
-			Optional:    true,
-			Elem:        &schema.Schema{Type: schema.TypeString},
-			Description: "List of DNS server IPv4/IPv6 addresses.",
+			Type:             schema.TypeList,
+			Optional:         true,
+			Elem:             &schema.Schema{Type: schema.TypeString},
+			Description:      "List of DNS server IPv4/IPv6 addresses.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		KeyVrf: PropVrfRw,
 		"use_doh_server": {
@@ -153,11 +155,13 @@ func ResourceDns() *schema.Resource {
 	Use the Certificate Authority's own website.
 
 	> RouterOS prioritize DoH over DNS server if both are configured on the device.`,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"verify_doh_cert": {
-			Type:        schema.TypeBool,
-			Optional:    true,
-			Description: "DoH certificate verification. [See docs](https://wiki.mikrotik.com/wiki/Manual:IP/DNS#DNS_over_HTTPS).",
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Description:      "DoH certificate verification. [See docs](https://wiki.mikrotik.com/wiki/Manual:IP/DNS#DNS_over_HTTPS).",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 	}
 

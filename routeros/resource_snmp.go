@@ -28,9 +28,10 @@ func ResourceSNMP() *schema.Resource {
 		MetaId:           PropId(Id),
 
 		"contact": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "Contact information.",
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Contact information.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		KeyEnabled: PropEnabled("Used to disable/enable SNMP service"),
 		"engine_id": {
@@ -41,14 +42,16 @@ func ResourceSNMP() *schema.Resource {
 				"this prefix hex have to be  used 0x80003a8c04",
 		},
 		"engine_id_suffix": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "Unique identifier for an SNMPv3 engine by configuring the suffix of the engine ID.",
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Unique identifier for an SNMPv3 engine by configuring the suffix of the engine ID.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"location": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "Location information.",
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Location information.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"trap_community": {
 			Type:      schema.TypeString,
@@ -79,6 +82,7 @@ func ResourceSNMP() *schema.Resource {
 				Type:         schema.TypeString,
 				ValidateFunc: validation.IsIPAddress,
 			},
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"trap_version": {
 			Type:         schema.TypeInt,

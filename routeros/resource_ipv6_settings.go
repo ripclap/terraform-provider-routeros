@@ -68,9 +68,10 @@ func ResourceIpv6Settings() *schema.Resource {
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"disable_ipv6": {
-			Type:        schema.TypeBool,
-			Optional:    true,
-			Description: "Enable/disable system wide IPv6 settings (prevents LL address generation).",
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Description:      "Enable/disable system wide IPv6 settings (prevents LL address generation).",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"disable_link_local_address": {
 			Type:     schema.TypeBool,

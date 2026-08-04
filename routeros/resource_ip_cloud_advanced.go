@@ -17,10 +17,11 @@ func ResourceIpCloudAdvanced() *schema.Resource {
 		MetaId:           PropId(Id),
 
 		"use_local_address": {
-			Type:        schema.TypeBool,
-			Optional:    true,
-			Default:     false,
-			Description: "An option whether to assign an internal router address to the dynamic DNS name.",
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Default:          false,
+			Description:      "An option whether to assign an internal router address to the dynamic DNS name.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 	}
 

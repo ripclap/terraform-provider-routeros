@@ -64,14 +64,16 @@ func ResourceToolSniffer() *schema.Resource {
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"file_name": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "Name of the file where sniffed packets will be saved.",
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Name of the file where sniffed packets will be saved.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"filter_cpu": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "CPU core used as a filter.",
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "CPU core used as a filter.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"filter_direction": {
 			Type:             schema.TypeString,
@@ -88,7 +90,8 @@ func ResourceToolSniffer() *schema.Resource {
 				Type:         schema.TypeString,
 				ValidateFunc: validation.IsMACAddress,
 			},
-			MaxItems: 16,
+			MaxItems:         16,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"filter_dst_ip_address": {
 			Type:        schema.TypeSet,
@@ -98,7 +101,8 @@ func ResourceToolSniffer() *schema.Resource {
 				Type:         schema.TypeString,
 				ValidateFunc: validation.IsCIDR,
 			},
-			MaxItems: 16,
+			MaxItems:         16,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"filter_dst_ipv6_address": {
 			Type:        schema.TypeSet,
@@ -108,7 +112,8 @@ func ResourceToolSniffer() *schema.Resource {
 				Type:         schema.TypeString,
 				ValidateFunc: validation.IsCIDR,
 			},
-			MaxItems: 16,
+			MaxItems:         16,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"filter_dst_port": {
 			Type:     schema.TypeSet,
@@ -118,7 +123,8 @@ func ResourceToolSniffer() *schema.Resource {
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
-			MaxItems: 16,
+			MaxItems:         16,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"filter_interface": {
 			Type:     schema.TypeSet,
@@ -128,7 +134,8 @@ func ResourceToolSniffer() *schema.Resource {
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
-			MaxItems: 16,
+			MaxItems:         16,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"filter_ip_address": {
 			Type:        schema.TypeSet,
@@ -138,7 +145,8 @@ func ResourceToolSniffer() *schema.Resource {
 				Type:         schema.TypeString,
 				ValidateFunc: validation.IsCIDR,
 			},
-			MaxItems: 16,
+			MaxItems:         16,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"filter_ipv6_address": {
 			Type:        schema.TypeSet,
@@ -148,7 +156,8 @@ func ResourceToolSniffer() *schema.Resource {
 				Type:         schema.TypeString,
 				ValidateFunc: validation.IsCIDR,
 			},
-			MaxItems: 16,
+			MaxItems:         16,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"filter_ip_protocol": {
 			Type:     schema.TypeSet,
@@ -186,7 +195,8 @@ func ResourceToolSniffer() *schema.Resource {
 				Type:             schema.TypeString,
 				ValidateDiagFunc: ValidationValInSlice([]string{}, false, true),
 			},
-			MaxItems: 16,
+			MaxItems:         16,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"filter_mac_address": {
 			Type:        schema.TypeSet,
@@ -196,7 +206,8 @@ func ResourceToolSniffer() *schema.Resource {
 				Type:         schema.TypeString,
 				ValidateFunc: validation.IsMACAddress,
 			},
-			MaxItems: 16,
+			MaxItems:         16,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"filter_mac_protocol": {
 			Type:     schema.TypeSet,
@@ -223,7 +234,8 @@ func ResourceToolSniffer() *schema.Resource {
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
-			MaxItems: 16,
+			MaxItems:         16,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"filter_operator_between_entries": {
 			Type:             schema.TypeString,
@@ -240,13 +252,15 @@ func ResourceToolSniffer() *schema.Resource {
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
-			MaxItems: 16,
+			MaxItems:         16,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		// Type attribute string instead of number because MT returns an empty string value.
 		"filter_size": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "Filters packets of specified size or size range in bytes.",
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Filters packets of specified size or size range in bytes.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"filter_src_mac_address": {
 			Type:        schema.TypeSet,
@@ -256,7 +270,8 @@ func ResourceToolSniffer() *schema.Resource {
 				Type:         schema.TypeString,
 				ValidateFunc: validation.IsMACAddress,
 			},
-			MaxItems: 16,
+			MaxItems:         16,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"filter_src_ip_address": {
 			Type:        schema.TypeSet,
@@ -266,7 +281,8 @@ func ResourceToolSniffer() *schema.Resource {
 				Type:         schema.TypeString,
 				ValidateFunc: validation.IsCIDR,
 			},
-			MaxItems: 16,
+			MaxItems:         16,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"filter_src_ipv6_address": {
 			Type:        schema.TypeSet,
@@ -276,7 +292,8 @@ func ResourceToolSniffer() *schema.Resource {
 				Type:         schema.TypeString,
 				ValidateFunc: validation.IsCIDR,
 			},
-			MaxItems: 16,
+			MaxItems:         16,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"filter_src_port": {
 			Type:     schema.TypeSet,
@@ -286,7 +303,8 @@ func ResourceToolSniffer() *schema.Resource {
 			Elem: &schema.Schema{
 				Type: schema.TypeString,
 			},
-			MaxItems: 16,
+			MaxItems:         16,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"filter_stream": {
 			Type:             schema.TypeBool,
@@ -302,6 +320,7 @@ func ResourceToolSniffer() *schema.Resource {
 				Type:         schema.TypeInt,
 				ValidateFunc: validation.IntBetween(0, 4095),
 			},
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"max_packet_size": {
 			Type:             schema.TypeInt,
@@ -322,15 +341,17 @@ func ResourceToolSniffer() *schema.Resource {
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"only_headers": {
-			Type:        schema.TypeBool,
-			Optional:    true,
-			Description: "Save in the memory only the packet's headers, not the whole packet.",
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Description:      "Save in the memory only the packet's headers, not the whole packet.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		KeyRunning: PropRunningRo,
 		"streaming_enabled": {
-			Type:        schema.TypeBool,
-			Optional:    true,
-			Description: "Defines whether to send sniffed packets to the streaming server.",
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Description:      "Defines whether to send sniffed packets to the streaming server.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"streaming_server": {
 			Type:             schema.TypeString,

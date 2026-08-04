@@ -38,10 +38,11 @@ func ResourceToolEmail() *schema.Resource {
 			Computed: true,
 		},
 		"password": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Sensitive:   true,
-			Description: "Password used for authenticating to an SMTP server.",
+			Type:             schema.TypeString,
+			Optional:         true,
+			Sensitive:        true,
+			Description:      "Password used for authenticating to an SMTP server.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"port": {
 			Type:             schema.TypeString,
@@ -66,9 +67,10 @@ func ResourceToolEmail() *schema.Resource {
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"user": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "The username used for authenticating to an SMTP server.",
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "The username used for authenticating to an SMTP server.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"vrf": PropVrfRw,
 	}

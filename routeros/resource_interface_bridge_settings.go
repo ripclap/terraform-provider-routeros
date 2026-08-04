@@ -32,6 +32,7 @@ func ResourceInterfaceBridgeSettings() *schema.Resource {
 				"of IP routing ( Packet Flow). This does not apply to routed traffic. This property is required in " +
 				"case you want to assign Simple Queues or global Queue Tree to traffic in a bridge. Property " +
 				"use-ip-firewall-for-vlan is required in case bridge vlan-filtering is used.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"use_ip_firewall_for_pppoe": {
 			Type:     schema.TypeBool,
@@ -41,6 +42,7 @@ func ResourceInterfaceBridgeSettings() *schema.Resource {
 				"property only has effect when use-ip-firewall is set to yes. This property is required " +
 				"in case you want to assign Simple Queues or global Queue Tree to PPPoE traffic in a " +
 				"bridge.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"use_ip_firewall_for_vlan": {
 			Type:     schema.TypeBool,
@@ -49,12 +51,14 @@ func ResourceInterfaceBridgeSettings() *schema.Resource {
 			Description: "Send bridged VLAN traffic to also be processed by IP/Firewall. This property only has " +
 				"effect when use-ip-firewall is set to yes. This property is required in case you want " +
 				"to assign Simple Queues or global Queue Tree to VLAN traffic in a bridge.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"allow_fast_path": {
-			Type:        schema.TypeBool,
-			Optional:    true,
-			Default:     true,
-			Description: "Whether to enable a bridge FastPath globally.",
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Default:          true,
+			Description:      "Whether to enable a bridge FastPath globally.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"bridge_fast_path_active": {
 			Type:     schema.TypeBool,

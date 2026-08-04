@@ -60,6 +60,7 @@ func ResourceInterfaceEthernetSwitchCrs() *schema.Resource {
 			},
 			Description: "Protocols that are excluded from Ingress Port Policing. (arp, dhcpv4, dhcpv6, eapol, igmp, " +
 				"mld, nd, pppoe-discovery, ripv1).",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"bypass_l2_security_check_filter_for": {
 			Type:     schema.TypeSet,
@@ -79,6 +80,7 @@ func ResourceInterfaceEthernetSwitchCrs() *schema.Resource {
 			},
 			Description: "Protocols that are excluded from Ingress VLAN filtering. These protocols are not dropped if " +
 				"they have invalid VLAN. (arp, dhcpv4, dhcpv6,eapol, igmp, mld, nd, pppoe-discovery, ripv1).",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"drop_if_invalid_or_src_port_not_member_of_vlan_on_ports": {
 			Type:     schema.TypeSet,
@@ -97,6 +99,7 @@ func ResourceInterfaceEthernetSwitchCrs() *schema.Resource {
 			},
 			Description: "Ports which drop frames if no MAC-based, Protocol-based VLAN assignment or Ingress VLAN Translation " +
 				"is applied.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"egress_mirror_ratio": {
 			Type:             schema.TypeString,
@@ -206,6 +209,7 @@ func ResourceInterfaceEthernetSwitchCrs() *schema.Resource {
 			Optional: true,
 			Description: "When a packet is applied to both ingress and egress mirroring, only ingress mirroring is performed " +
 				"on the packet, if this setting is disabled. If this setting is enabled both mirroring types are applied.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"mirror_target": {
 			Type:     schema.TypeString,
@@ -215,9 +219,10 @@ func ResourceInterfaceEthernetSwitchCrs() *schema.Resource {
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"mirror_tx_on_mirror_port": {
-			Type:        schema.TypeBool,
-			Optional:    true,
-			Description: "",
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Description:      "",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"mirrored_packet_drop_precedence": {
 			Type:     schema.TypeString,
@@ -254,6 +259,7 @@ func ResourceInterfaceEthernetSwitchCrs() *schema.Resource {
 			Optional: true,
 			Description: "Enable or disable to override existing entry which has the lowest aging value when UFDB is " +
 				"full.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"qos_hw_offloading": {
 			Type:        schema.TypeBool,
@@ -306,9 +312,10 @@ func ResourceInterfaceEthernetSwitchCrs() *schema.Resource {
 			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"use_svid_in_one2one_vlan_lookup": {
-			Type:        schema.TypeBool,
-			Optional:    true,
-			Description: "Whether to use service VLAN ID for 1:1 VLAN switching lookup.",
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Description:      "Whether to use service VLAN ID for 1:1 VLAN switching lookup.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"vlan_uses": {
 			Type:             schema.TypeString,

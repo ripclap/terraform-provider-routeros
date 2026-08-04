@@ -26,14 +26,16 @@ func ResourceWifiCapsman() *schema.Resource {
 		MetaId:           PropId(Name),
 
 		"ca_certificate": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "Device CA certificate.",
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Device CA certificate.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"certificate": {
-			Type:        schema.TypeString,
-			Optional:    true,
-			Description: "Device certificate.",
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Device certificate.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		KeyEnabled: PropEnabled("Disable or enable CAPsMAN functionality."),
 		"generated_ca_certificate": {
@@ -47,10 +49,11 @@ func ResourceWifiCapsman() *schema.Resource {
 			Description: "Generated CAPsMAN certificate.",
 		},
 		"interfaces": {
-			Type:        schema.TypeList,
-			Optional:    true,
-			Elem:        &schema.Schema{Type: schema.TypeString},
-			Description: "List of interfaces on which CAPsMAN will listen for CAP connections.",
+			Type:             schema.TypeList,
+			Optional:         true,
+			Elem:             &schema.Schema{Type: schema.TypeString},
+			Description:      "List of interfaces on which CAPsMAN will listen for CAP connections.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"package_path": {
 			Type:     schema.TypeString,
@@ -58,17 +61,20 @@ func ResourceWifiCapsman() *schema.Resource {
 			Description: "Folder location for the RouterOS packages. For example, use '/upgrade' to specify the " +
 				"upgrade folder from the files section. If empty string is set, CAPsMAN can use built-in RouterOS " +
 				"packages, note that in this case only CAPs with the same architecture as CAPsMAN will be upgraded.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"require_peer_certificate": {
-			Type:        schema.TypeBool,
-			Optional:    true,
-			Description: "Require all connecting CAPs to have a valid certificate.",
+			Type:             schema.TypeBool,
+			Optional:         true,
+			Description:      "Require all connecting CAPs to have a valid certificate.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"upgrade_policy": {
-			Type:         schema.TypeString,
-			Optional:     true,
-			Description:  "Upgrade policy options.",
-			ValidateFunc: validation.StringInSlice([]string{"none", "require-same-version", "suggest-same-version"}, false),
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "Upgrade policy options.",
+			ValidateFunc:     validation.StringInSlice([]string{"none", "require-same-version", "suggest-same-version"}, false),
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 	}
 

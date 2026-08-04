@@ -2,6 +2,12 @@
 
 ### Features
 
+* **settings menus:** add `AlwaysPresentNotUserProvided` to 96 attributes across 20
+  settings resources. A settings menu returns its whole object on every read, so an
+  optional attribute without diff suppression proposed removing a device value on every
+  plan. A test now asserts this from the captured device response each resource file
+  carries, so the class is caught without hardware.
+
 * **security:** mark 22 credential-bearing attributes `Sensitive`, so Terraform redacts
   them in plan output and state: WireGuard and wireless private keys, WPA and EAP
   passphrases, IPsec and L2TP pre-shared secrets, RADIUS, LTE, user-manager and PayPal
