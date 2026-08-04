@@ -37,7 +37,7 @@ resource "routeros_capsman_datapath" "test_datapath" {
 - `arp` (String) ARP mode. See [docs](https://wiki.mikrotik.com/wiki/Manual:IP/ARP#ARP_Modes) for info.
 - `bridge` (String) Bridge to which particular interface should be automatically added as port. Required only when local-forwarding is not used.
 - `bridge_cost` (Number) Bridge port cost to use when adding as bridge port.
-- `bridge_horizon` (Number) Bridge horizon to use when adding as bridge port.
+- `bridge_horizon` (String) Bridge horizon to use when adding as bridge port. A number, or `none` when no horizon is set, which is what the device reports by default.
 - `client_to_client_forwarding` (Boolean) Controls if client-to-client forwarding between wireless clients connected to interface should be allowed, in local forwarding mode this function is performed by CAP, otherwise it is performed by CAPsMAN.
 - `comment` (String)
 - `interface_list` (String) Interface list name.

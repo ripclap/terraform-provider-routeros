@@ -1,6 +1,8 @@
 package routeros
 
 import (
+	"regexp"
+
 	"context"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -110,7 +112,16 @@ func ResourceWifiAccessList() *schema.Resource {
 			Optional:    true,
 			Description: "Time of the day and days of the week when the rule is applicable.",
 		},
-		KeyVlanId: PropVlanIdRw("VLAN ID to use for VLAN tagging or `none`.", false),
+		// Not PropVlanIdRw: this menu accepts `none` as well as a number, and
+		// the device reports `none` when no VLAN is assigned, which an integer
+		// attribute cannot hold.
+		KeyVlanId: {
+			Type:             schema.TypeString,
+			Optional:         true,
+			Description:      "VLAN ID to use for VLAN tagging, or `none`.",
+			ValidateFunc:     validation.StringMatch(regexp.MustCompile(`^(none|[0-9]{1,4})$`), "a VLAN ID or `none`"),
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
+		},
 	}
 
 	return &schema.Resource{

@@ -38,7 +38,7 @@ Read-Only:
 - `arp` (String)
 - `bridge` (String)
 - `bridge_cost` (Number)
-- `bridge_horizon` (Number)
+- `bridge_horizon` (String)
 - `client_to_client_forwarding` (Boolean)
 - `comment` (String)
 - `id` (String)

@@ -20,15 +20,15 @@ resource "routeros_ip_hotspot_user" "test" {
 - `___id___` (Number) <em>Resource ID type (.id / name). This is an internal service field, setting a value is not required.</em>
 - `___path___` (String) <em>Resource path for CRUD operations. This is an internal service field, setting a value is not required.</em>
 - `___skip___` (String) <em>A set of transformations for field names. This is an internal service field, setting a value is not required.</em>
-- `address` (Number) IP address, when specified client will get the address from the HotSpot one-to-one NAT translations. Address does not restrict HotSpot login only from this address.
+- `address` (String) IP address, when specified client will get the address from the HotSpot one-to-one NAT translations. Address does not restrict HotSpot login only from this address.
 - `comment` (String)
 - `disabled` (Boolean)
 - `email` (String) HotSpot client's e-mail, informational value for the HotSpot user.
 - `limit_bytes_in` (Number) Maximal amount of bytes that can be received from the user. User is disconnected from HotSpot after the limit is reached.
 - `limit_bytes_out` (Number) Maximal amount of bytes that can be transmitted from the user. User is disconnected from HotSpot after the limit is reached.
 - `limit_bytes_total` (Number) (limit-bytes-in+limit-bytes-out). User is disconnected from HotSpot after the limit is reached.
-- `limit_uptime` (Number) Uptime limit for the HotSpot client, user is disconnected from HotSpot as soon as uptime is reached.
-- `mac_address` (Number) Client is allowed to login only from the specified MAC-address. If value is 00:00:00:00:00:00, any mac address is allowed.
+- `limit_uptime` (String) Uptime limit for the HotSpot client, user is disconnected from HotSpot as soon as uptime is reached. A duration, such as `1m` or `1d12h`.
+- `mac_address` (String) Client is allowed to login only from the specified MAC-address. If value is 00:00:00:00:00:00, any mac address is allowed.
 - `password` (String, Sensitive) User password.
 - `profile` (String) User profile configured in `/ip hotspot user profile`.
 - `routes` (String) Routes added to HotSpot gateway when client is connected. The route format dst-address gateway metric (for example, `192.168.1.0/24 192.168.0.1 1`).

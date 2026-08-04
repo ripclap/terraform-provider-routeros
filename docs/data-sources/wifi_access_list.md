@@ -53,6 +53,6 @@ Read-Only:
 - `signal_range` (String)
 - `ssid_regexp` (String)
 - `time` (String)
-- `vlan_id` (Number)
+- `vlan_id` (String)
 
 

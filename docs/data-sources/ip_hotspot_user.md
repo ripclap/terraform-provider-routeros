@@ -36,7 +36,7 @@ output "ip_hotspot_user" {
 
 Read-Only:
 
-- `address` (Number)
+- `address` (String)
 - `comment` (String)
 - `default` (Boolean)
 - `disabled` (Boolean)
@@ -46,8 +46,8 @@ Read-Only:
 - `limit_bytes_in` (Number)
 - `limit_bytes_out` (Number)
 - `limit_bytes_total` (Number)
-- `limit_uptime` (Number)
-- `mac_address` (Number)
+- `limit_uptime` (String)
+- `mac_address` (String)
 - `name` (String)
 - `password` (String)
 - `profile` (String)

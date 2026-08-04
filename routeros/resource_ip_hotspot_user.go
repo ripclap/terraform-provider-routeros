@@ -2,6 +2,7 @@ package routeros
 
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 /*
@@ -36,10 +37,12 @@ func ResourceIpHotspotUser() *schema.Resource {
 		MetaSkipFields:   PropSkipFields("bytes_in", "bytes_out", "packets_in", "packets_out", "uptime"),
 
 		"address": {
-			Type:     schema.TypeInt,
+			Type:     schema.TypeString,
 			Optional: true,
 			Description: "IP address, when specified client will get the address from the HotSpot one-to-one NAT translations. " +
 				"Address does not restrict HotSpot login only from this address.",
+			ValidateFunc:     validation.IsIPAddress,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		KeyComment:  PropCommentRw,
 		KeyDefault:  PropDefaultRo,
@@ -68,16 +71,19 @@ func ResourceIpHotspotUser() *schema.Resource {
 			Description: "(limit-bytes-in+limit-bytes-out). User is disconnected from HotSpot after the limit is reached.",
 		},
 		"limit_uptime": {
-			Type:     schema.TypeInt,
+			Type:     schema.TypeString,
 			Optional: true,
 			Description: "Uptime limit for the HotSpot client, user is disconnected from HotSpot as soon as uptime is " +
-				"reached.",
+				"reached. A duration, such as `1m` or `1d12h`.",
+			DiffSuppressFunc: TimeEqual,
 		},
 		"mac_address": {
-			Type:     schema.TypeInt,
+			Type:     schema.TypeString,
 			Optional: true,
 			Description: "Client is allowed to login only from the specified MAC-address. If value is 00:00:00:00:00:00, " +
 				"any mac address is allowed.",
+			ValidateFunc:     validation.IsMACAddress,
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		KeyName: PropName("HotSpot login page username, when MAC-address authentication is used name is configured as " +
 			"client's MAC-address."),

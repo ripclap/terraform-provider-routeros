@@ -48,9 +48,11 @@ func ResourceCapsManDatapath() *schema.Resource {
 			Description: "Bridge port cost to use when adding as bridge port.",
 		},
 		"bridge_horizon": {
-			Type:        schema.TypeInt,
-			Optional:    true,
-			Description: "Bridge horizon to use when adding as bridge port.",
+			Type:     schema.TypeString,
+			Optional: true,
+			Description: "Bridge horizon to use when adding as bridge port. A number, or `none` when no " +
+				"horizon is set, which is what the device reports by default.",
+			DiffSuppressFunc: AlwaysPresentNotUserProvided,
 		},
 		"client_to_client_forwarding": {
 			Type:     schema.TypeBool,
