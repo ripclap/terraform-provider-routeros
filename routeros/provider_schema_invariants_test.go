@@ -2,6 +2,7 @@ package routeros
 
 import (
 	"regexp"
+	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -153,4 +154,41 @@ func min(a, b int) int {
 		return a
 	}
 	return b
+}
+
+// TestTransformSetUsesKebabOnTheMikrotikSide enforces the contract stated on
+// loadTransformSet: the right-hand side of a transform pair is the device's own
+// name, in kebab notation.
+//
+// The two directions disagree when it is written in snake. Serialization runs
+// the mapped name through SnakeToKebab, so a write still reaches the right
+// property; deserialization matches the raw incoming kebab name against the
+// same map and misses. The attribute then accepts a value, sends it, and never
+// reads it back, which shows up as a diff that will not settle.
+func TestTransformSetUsesKebabOnTheMikrotikSide(t *testing.T) {
+	p := NewProvider()
+
+	check := func(kind string, m map[string]*schema.Resource) {
+		for name, res := range m {
+			ts, ok := res.Schema[MetaTransformSet]
+			if !ok {
+				continue
+			}
+			def, ok := ts.Default.(string)
+			if !ok {
+				continue
+			}
+			for tf, mt := range loadTransformSet(def, false) {
+				if strings.Contains(mt, "_") {
+					t.Errorf("%s %s: transform %q -> %q names the device side in snake; "+
+						"write converts it to kebab but read does not, so the value is "+
+						"dropped on read. Use %q.",
+						kind, name, tf, mt, strings.ReplaceAll(mt, "_", "-"))
+				}
+			}
+		}
+	}
+
+	check("resource", p.ResourcesMap)
+	check("data source", p.DataSourcesMap)
 }
