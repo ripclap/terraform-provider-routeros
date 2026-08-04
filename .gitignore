@@ -12,3 +12,14 @@ main.exe
 dist/
 
 vendor/
+
+# The acceptance suite is driven by ROS_HOSTURL/ROS_USERNAME/ROS_PASSWORD. Keep
+# any file holding them, or Terraform state and variables describing a real
+# device, out of the repository.
+.env
+.env.*
+*.env
+*.tfvars
+*.tfvars.json
+.terraform/
+crash.log
