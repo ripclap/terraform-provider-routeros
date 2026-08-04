@@ -436,17 +436,26 @@ func MikrotikResourceDataToTerraform(item MikrotikItem, s map[string]*schema.Sch
 			err = d.Set(terraformSnakeName, mikrotikValue)
 
 		case schema.TypeFloat:
+			// RouterOS reports a numeric field that is not set as an empty
+			// string. That is absence, not a malformed number, and erroring on
+			// it fails the whole read.
+			if mikrotikValue == "" {
+				break
+			}
 			f, e := strconv.ParseFloat(mikrotikValue, 64)
 			if e != nil {
-				diags = diag.Errorf("%v for '%v' field", e, terraformSnakeName)
+				diags = append(diags, diag.Errorf("%v for '%v' field", e, terraformSnakeName)...)
 				break
 			}
 			err = d.Set(terraformSnakeName, f)
 
 		case schema.TypeInt:
+			if mikrotikValue == "" {
+				break
+			}
 			i, e := strconv.Atoi(mikrotikValue)
 			if e != nil {
-				diags = diag.Errorf("%v for '%v' field", e, terraformSnakeName)
+				diags = append(diags, diag.Errorf("%v for '%v' field", e, terraformSnakeName)...)
 				break
 			}
 			err = d.Set(terraformSnakeName, i)
@@ -478,7 +487,7 @@ func MikrotikResourceDataToTerraform(item MikrotikItem, s map[string]*schema.Sch
 					case schema.TypeFloat:
 						f, err := strconv.ParseFloat(v, 64)
 						if err != nil {
-							diags = diag.Errorf("%v for '%v' field", err, terraformSnakeName)
+							diags = append(diags, diag.Errorf("%v for '%v' field", err, terraformSnakeName)...)
 							continue
 						}
 						l = append(l, f)
@@ -486,7 +495,7 @@ func MikrotikResourceDataToTerraform(item MikrotikItem, s map[string]*schema.Sch
 					case schema.TypeInt:
 						i, err := strconv.Atoi(v)
 						if err != nil {
-							diags = diag.Errorf("%v for '%v' field", err, terraformSnakeName)
+							diags = append(diags, diag.Errorf("%v for '%v' field", err, terraformSnakeName)...)
 							continue
 						}
 						l = append(l, i)
@@ -524,12 +533,12 @@ func MikrotikResourceDataToTerraform(item MikrotikItem, s map[string]*schema.Sch
 					case schema.TypeFloat:
 						v, err = strconv.ParseFloat(mikrotikValue, 64)
 						if err != nil {
-							diags = diag.Errorf("%v for '%v.%v' field", err, terraformSnakeName, subFieldSnakeName)
+							diags = append(diags, diag.Errorf("%v for '%v.%v' field", err, terraformSnakeName, subFieldSnakeName)...)
 						}
 					case schema.TypeInt:
 						v, err = strconv.Atoi(mikrotikValue)
 						if err != nil {
-							diags = diag.Errorf("%v for '%v.%v' field", err, terraformSnakeName, subFieldSnakeName)
+							diags = append(diags, diag.Errorf("%v for '%v.%v' field", err, terraformSnakeName, subFieldSnakeName)...)
 						}
 					case schema.TypeBool:
 						v = BoolFromMikrotikJSON(mikrotikValue)
@@ -541,7 +550,7 @@ func MikrotikResourceDataToTerraform(item MikrotikItem, s map[string]*schema.Sch
 							case schema.TypeFloat:
 								f, err := strconv.ParseFloat(v, 64)
 								if err != nil {
-									diags = diag.Errorf("%v for '%v' field", err, terraformSnakeName)
+									diags = append(diags, diag.Errorf("%v for '%v' field", err, terraformSnakeName)...)
 									continue
 								}
 								nl = append(nl, f)
@@ -549,7 +558,7 @@ func MikrotikResourceDataToTerraform(item MikrotikItem, s map[string]*schema.Sch
 							case schema.TypeInt:
 								i, err := strconv.Atoi(v)
 								if err != nil {
-									diags = diag.Errorf("%v for '%v' field", err, terraformSnakeName)
+									diags = append(diags, diag.Errorf("%v for '%v' field", err, terraformSnakeName)...)
 									continue
 								}
 								nl = append(nl, i)
@@ -728,6 +737,10 @@ func MikrotikResourceDataToTerraformDatasource(items *[]MikrotikItem, resourceDa
 				propValue = mikrotikValue
 
 			case schema.TypeFloat:
+				// An unset numeric comes back as an empty string.
+				if mikrotikValue == "" {
+					continue
+				}
 				f, err := strconv.ParseFloat(mikrotikValue, 64)
 				if err != nil {
 					diags = append(diags, diag.Errorf("%v for '%v' field", err, terraformSnakeName)...)
@@ -736,6 +749,9 @@ func MikrotikResourceDataToTerraformDatasource(items *[]MikrotikItem, resourceDa
 				propValue = f
 
 			case schema.TypeInt:
+				if mikrotikValue == "" {
+					continue
+				}
 				i, err := strconv.Atoi(mikrotikValue)
 				if err != nil {
 					diags = append(diags, diag.Errorf("%v for '%v' field", err, terraformSnakeName)...)
