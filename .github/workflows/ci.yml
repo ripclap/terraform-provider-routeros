@@ -30,8 +30,8 @@ permissions:
   contents: read
 
 env:
-  # Pin the exact patch that clears the currently reachable standard-library
-  # advisories caught by govulncheck in CI.
+  # Pin to the first patched release after GO-2026-6603/6605/6607/6608.
+  # setup-go resolved 1.26.x to 1.26.8 in CI, which fails govulncheck.
   GO_VERSION: '1.26.9'
 
 jobs:
