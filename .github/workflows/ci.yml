@@ -30,12 +30,9 @@ permissions:
   contents: read
 
 env:
-  # Newest patch of the Go 1.26 line. The standard library ships inside the
-  # binary, so the toolchain patch level is a property of the release: pinning
-  # an exact patch here would leave published archives linking a standard
-  # library with known advisories until somebody edited this by hand. go.mod
-  # records 1.26.0 as the floor that clears the currently known ones.
-  GO_VERSION: '1.26.x'
+  # Pin to the first patched release after GO-2026-6603/6605/6607/6608.
+  # setup-go resolved 1.26.x to 1.26.8 in CI, which fails govulncheck.
+  GO_VERSION: '1.26.9'
 
 jobs:
   lint:
