@@ -35,6 +35,9 @@ jobs:
   preflight:
     name: Preflight
     runs-on: ubuntu-latest
+    permissions:
+      # GitHub only exposes draft releases to callers with write access.
+      contents: write
     outputs:
       version: ${{ steps.checks.outputs.version }}
       draft_exists: ${{ steps.checks.outputs.draft_exists }}
@@ -215,6 +218,9 @@ jobs:
     name: Verify the draft
     needs: [preflight, build]
     runs-on: ubuntu-latest
+    permissions:
+      # Downloading an unpublished draft requires write access too.
+      contents: write
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:

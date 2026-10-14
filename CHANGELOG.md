@@ -83,6 +83,8 @@
 
 ### Miscellaneous
 
+* **release:** grant preflight and verification jobs access to draft releases, so an
+  existing draft is detected and its assets can be downloaded for verification.
 * **ci:** add `golangci-lint`, `govulncheck`, dependency review and CodeQL. Releases now
   ship a CycloneDX SBOM per archive and a build provenance attestation. Pull requests
   build a reduced platform matrix; pushes and releases retain the full matrix.
