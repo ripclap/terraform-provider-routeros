@@ -1,55 +1,101 @@
-## [Unreleased](https://github.com/ripclap/terraform-provider-routeros/compare/v2.0.3...HEAD)
+## [Unreleased](https://github.com/ripclap/terraform-provider-routeros/compare/v2.0.4...HEAD)
+
+## [2.0.4](https://github.com/ripclap/terraform-provider-routeros/compare/v2.0.3...v2.0.4) (2026-10-13)
+
+### ⚠ BREAKING CHANGES
+
+* **schema:** correct attribute names that did not bind to the device. Configurations
+  must rename `ip_total_lenght` to `ip_total_length` in `ip_traffic_flow_ipfix`, and
+  `input.accept_comunities` / `input.accept_large_comunities` to
+  `input.accept_communities` / `input.accept_large_communities` in
+  `routing_bgp_template`. In `routing_bgp_connection`, move `as_override` and
+  `remove_private_as` from the `output` block to the top level.
+* **ipv6-firewall:** remove `ttl` from mangle and NAT, and `new_ttl` from mangle.
+  RouterOS rejects these IPv4 parameters on IPv6 menus. Use `hop_limit` for matching
+  the IPv6 hop limit and `new_hop_limit` to change it in mangle rules.
 
 ### Features
 
-* **settings menus:** add `AlwaysPresentNotUserProvided` to 96 attributes across 20
-  settings resources. A settings menu returns its whole object on every read, so an
-  optional attribute without diff suppression proposed removing a device value on every
-  plan. A test now asserts this from the captured device response each resource file
-  carries, so the class is caught without hardware.
-
-* **security:** mark 22 credential-bearing attributes `Sensitive`, so Terraform redacts
-  them in plan output and state: WireGuard and wireless private keys, WPA and EAP
-  passphrases, IPsec and L2TP pre-shared secrets, RADIUS, LTE, user-manager and PayPal
-  passwords, OTP secrets, NTP symmetric keys and SCEP smart-card keys. A test asserts it
-  for every schema, resource and data source alike.
-
-* **datasources:** a data source of the same name over every list menu, 16 to
-  308. Entries are returned under `entries` and narrowed by an optional
-  `filter`; the schema mirrors the resource, so no menu can drift between the
-  two. Settings menus are excluded, as are menus whose resource declares a
-  transform set, which the data source serializer does not apply.
+* **resources:** add `routeros_ip_arp`, `routeros_interface_sstp_server_interface`,
+  `routeros_interface_ethernet_switch_qos_map_ip` and
+  `routeros_interface_ethernet_switch_qos_map_vlan`.
+* **schema:** expand RouterOS 7.23 coverage across bridge, firewall, container,
+  ethernet switch, netwatch, logging, OVPN, DHCP lease, VXLAN, IP address, routing rule
+  and IPv6 pool resources. Add previously dropped device fields including VRRP
+  `master`, BGP template and OSPF area range `inactive`, WiFi multi-passphrase
+  `expired`, IPsec profile `default`, HotSpot profile `install_hotspot_queue` and OSPF
+  instance `use_dn`.
+* **datasources:** expand from 16 to 308 data sources, adding a data source of the same
+  name over supported list menus. Entries are returned under `entries` and narrowed
+  by an optional `filter`; the schema is derived from the resource. Settings menus
+  and menus whose resource declares a transform set are excluded.
+* **guards:** refuse unconditional `drop`, `reject` and `tarpit` rules in the IPv4 and
+  IPv6 firewall `input` and `forward` chains, disabling management services in
+  `ip_service`, and clearing `allowed_interface_list` in `tool_mac_server`. Set
+  `lockout_ack = true` on the affected resource to acknowledge an intentional change.
+  Firewall rules with match conditions are allowed.
 
 ### Bug Fixes
 
+* **settings menus:** suppress permanent diffs on 96 always-reported attributes across
+  20 settings resources. Optional attributes omitted from configuration no longer
+  propose removing values returned by the device on every plan.
+* **ip-settings:** suppress permanent diffs on `accept_redirects`,
+  `accept_source_route` and `icmp_errors_use_inbound_interface_address` when omitted
+  from configuration.
+* **system-ntp-server:** suppress the same permanent diff on `broadcast_addresses`.
+* **read:** treat empty numeric fields as unset instead of failing the entire resource
+  or data source read. Preserve earlier diagnostics when additional conversions fail.
+* **schema:** use strings for CAPsMAN datapath `bridge_horizon` and WiFi access-list
+  `vlan_id`, which can report `none`, and HotSpot user `address`, `mac_address` and
+  `limit_uptime`, which report addresses and durations rather than integers.
+* **schema:** correct the RouterOS parameter mappings for WiFi interworking
+  `three_gpp_info` / `three_gpp_raw` and IPv6 ND prefix `six_to_four_interface`.
+* **bridge:** accept MAC address masks on the filter and NAT match attributes. Gate
+  DHCP agent fields on their corresponding snooping toggle.
+* **validators:** accept `unspecified` for 6to4 `remote_address` and `any` for
+  RouterBOARD `preboot_etherboot_server`, so previously set values can be cleared.
+* **ipv6-firewall:** read the `mangle` and `nat` sections declared by the data source.
+  Queries for either section alone previously failed with no section given, and
+  queries alongside `rules` returned no entries for them.
 * **provider:** advertise `registry.opentofu.org/ripclap/routeros` rather than upstream's
   address, so a debug-mode reattach resolves to this provider.
 * **provider:** report errors from `d.Set` in the x509 and Easy Connect data sources and
   in the container, ethernet switch, move and sniffer resources. A failed set left state
   silently disagreeing with the device.
-* **build:** define the `version` and `commit` symbols the release `-ldflags` write to.
-  They were being discarded, so `-version` reported nothing.
-* **ip-settings:** `accept_redirects`, `accept_source_route` and
-  `icmp_errors_use_inbound_interface_address` lacked `AlwaysPresentNotUserProvided`,
-  which every other optional attribute in the resource has. The device always returns
-  them, so a configuration setting only `allow_fast_path` never reached an empty plan.
-* **system-ntp-server:** `broadcast_addresses` lacked the same suppression, which the
-  other six optional attributes in the resource have. A device with a broadcast address
-  set never reached an empty plan.
+* **build:** define the `version` and `commit` symbols used by the release `-ldflags`
+  and add `-version` to print the provider version and commit.
 
 ### Security
 
-* **deps:** upgrade `grpc`, `x/crypto`, `x/net` and `x/text` to the versions that fix the
-  nine advisories `govulncheck` reported as reachable from this code.
+* **schema:** mark 22 credential-bearing attributes `Sensitive`, so Terraform redacts
+  them in plan and display output: WireGuard and wireless private keys, WPA and EAP
+  passphrases, IPsec and L2TP pre-shared secrets, RADIUS, LTE, user-manager and PayPal
+  passwords, OTP secrets, NTP symmetric keys and SCEP smart-card keys. These values
+  remain stored in state.
+* **importer:** verify SSH host keys against `~/.ssh/known_hosts` instead of accepting
+  any key when connecting to export a router's configuration.
+* **wifi-easy-connect:** derive the data source ID from the SSID, authentication type
+  and hidden flag using SHA-256, instead of hashing the passphrase with SHA-1.
+* **deps:** update `grpc`, `x/crypto`, `x/net`, `x/text` and other Go dependencies to
+  address reported vulnerabilities. Raise the Go baseline to 1.26 and use patched
+  toolchains in CI and release builds.
 
 ### Miscellaneous
 
 * **ci:** add `golangci-lint`, `govulncheck`, dependency review and CodeQL. Releases now
-  ship a CycloneDX SBOM per archive and a build provenance attestation.
+  ship a CycloneDX SBOM per archive and a build provenance attestation. Pull requests
+  build a reduced platform matrix; pushes and releases retain the full matrix.
+* **tests:** replay captured device responses through the deserializer and validators,
+  and check settings convergence, sensitive attributes, derived data source schemas
+  and management-access guards without hardware. Menu probes distinguish connection
+  failures from absent menus and support `ROS_REST_PORT`.
+* **docs:** add resource and data source examples, a generated `COVERAGE.md`,
+  `CONTRIBUTING.md`, and contribution templates. Regenerate schema documentation and
+  replace device-specific sample values.
 * **docs:** correct the REST API setup instructions, which named `/system/certificates`,
   `/ip/services` and `web-ssl`. The menus are `/certificate` and `/ip/service`, and the
   service is `www-ssl`.
-* **docs:** add `CONTRIBUTING.md`.
 
 ## [2.0.3](https://github.com/ripclap/terraform-provider-routeros/compare/v2.0.2...v2.0.3) (2026-07-31)
 
