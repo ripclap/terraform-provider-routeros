@@ -30,9 +30,8 @@ permissions:
   contents: read
 
 env:
-  # Pin to the first patched release after GO-2026-6603/6605/6607/6608.
-  # setup-go resolved 1.26.x to 1.26.8 in CI, which fails govulncheck.
-  GO_VERSION: '1.26.9'
+  # Pin to the first patched release after GO-2026-6809 (x509.Certificate.Verify).
+  GO_VERSION: '1.26.10'
 
 jobs:
   lint:
